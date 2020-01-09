@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { render } from "react-dom";
 import { VtlEditor } from "./editor";
 import "./application.scss";
+import "./vtl-tokens.scss";
 
 const fetchContent = () => fetch("/rule.vtl").then(response => response.text());
 

@@ -9,9 +9,10 @@ import Token from "./token";
  */
 const computeTokenValue = (rowStart, valueRow, token) => {
   const { start, stop, value } = token;
+
   return value.substr(
     Math.max(0, rowStart - start),
-    Math.min(valueRow.length, stop - start)
+    Math.min(valueRow.length, stop - start + 1)
   );
 };
 
