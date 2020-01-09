@@ -25,6 +25,15 @@ const reduceChangeVerticalScrollrange = (state, { payload: { range } }) => ({
   verticalScrollrange: range
 });
 
+const reduceChangeScrollrange = (
+  state,
+  { payload: { vertical, horizontal } }
+) => ({
+  ...state,
+  verticalScrollrange: vertical,
+  horizontalScrollrange: horizontal
+});
+
 /** */
 const reducer = (state, action) => {
   switch (action.type) {
@@ -33,6 +42,9 @@ const reducer = (state, action) => {
     }
     case actions.CHANGE_VERTICAL_SCROLLRANGE: {
       return reduceChangeVerticalScrollrange(state, action);
+    }
+    case actions.CHANGE_SCROLLRANGE: {
+      return reduceChangeScrollrange(state, action);
     }
     default:
       return state;

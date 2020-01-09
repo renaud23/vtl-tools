@@ -6,18 +6,22 @@ import FontMetric from "./font-metric";
 
 const TEMPLATE_FONT_METRIC = "font_FONT\t";
 
-/**
- *
- * @param {*} parentEl
- * @param {*} rowHeight
- */
-const computeVerticalScrollrange = (parentEl, rowHeight) => {
-  const { height } = parentEl.getBoundingClientRect();
-  const offset = Math.round(height / rowHeight);
+const computeVerticalScrollrange = (height, fontMetric) => {
+  const offset = Math.round(height / fontMetric.height);
   return { start: 0, stop: offset - 1, offset };
 };
+const computeHorizontalScrollrange = (width, fontMetric) => {
+  const offset = Math.round(width / fontMetric.width);
+  return { start: 5, stop: 5 + offset - 1, offset };
+};
 
-const computeHorizontaleScrollrange = (parentel, charWidth) => {};
+const computeScrollrange = (parentEl, fontMetric) => {
+  const { height, width } = parentEl.getBoundingClientRect();
+  return {
+    verticalScrollrange: computeVerticalScrollrange(height, fontMetric),
+    horizontalScrollrange: computeHorizontalScrollrange(width, fontMetric)
+  };
+};
 
 /** */
 function EditorContainer({ content, fontMetric }) {
@@ -35,13 +39,15 @@ function EditorContainer({ content, fontMetric }) {
 
   useEffect(() => {
     if (containerEl.current) {
+      const { verticalScrollrange, horizontalScrollrange } = computeScrollrange(
+        containerEl.current,
+        fontMetric
+      );
       dispatch(
-        actions.changeVerticalScrollrange(
-          computeVerticalScrollrange(containerEl.current, 22)
-        )
+        actions.changeScrollrange(verticalScrollrange, horizontalScrollrange)
       );
     }
-  }, [containerEl]);
+  }, [containerEl, fontMetric]);
   return (
     <EditorContext.Provider value={{ state, dispatch }}>
       <Editor content={content} ref={containerEl} />

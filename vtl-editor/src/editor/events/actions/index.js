@@ -12,3 +12,10 @@ export const changeVerticalScrollrange = range => ({
   type: CHANGE_VERTICAL_SCROLLRANGE,
   payload: { range }
 });
+
+/** */
+export const CHANGE_SCROLLRANGE = "vtl-editor/change-scrollrange";
+export const changeScrollrange = (vertical, horizontal) => ({
+  type: CHANGE_SCROLLRANGE,
+  payload: { vertical, horizontal }
+});

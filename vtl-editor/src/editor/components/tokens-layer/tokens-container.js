@@ -45,18 +45,25 @@ const consumeTokens = (l, tokens) => {
   return [l, rest];
 };
 
+const filterTokensOutoffHRange = line => hRange => {
+  return line;
+};
+
 /**
  *
  * @param {*} lines
  * @param {*} tokens
  */
-const fillLinesWithTokens = (lines, tokens) => {
+const fillLinesWithTokens = (lines, tokens, hRange) => {
   if (tokens.length) {
     return lines.reduce(
       ({ stack, toks }, l) => {
         const [lineWithToken, tokensLeft] = consumeTokens(l, toks);
 
-        return { stack: [...stack, lineWithToken], toks: tokensLeft };
+        return {
+          stack: [...stack, filterTokensOutoffHRange(lineWithToken)(hRange)],
+          toks: tokensLeft
+        };
       },
       { stack: [], toks: [...tokens] }
     ).stack;
@@ -70,7 +77,7 @@ const fillLinesWithTokens = (lines, tokens) => {
  * @param {*} vRange
  * @param {*} tokens
  */
-const getTokensLines = (lines, vRange, tokens) => {
+const getTokensLines = (lines, vRange, hRange, tokens) => {
   const visibles = lines.reduce(
     ({ stack, next }, l, i) => ({
       stack: isInRange(i, vRange)
@@ -89,21 +96,28 @@ const getTokensLines = (lines, vRange, tokens) => {
     { stack: [], next: 0 }
   ).stack;
 
-  return fillLinesWithTokens(visibles, tokens);
+  return fillLinesWithTokens(visibles, tokens, hRange);
 };
 
 function TokensContainer() {
   const { state } = useContext(EditorContext);
-  const { verticalScrollrange, lines, tokens } = state;
+  const { verticalScrollrange, horizontalScrollrange, lines, tokens } = state;
   const [visibles, setVisibles] = useState([]);
 
   useEffect(() => {
-    setVisibles(getTokensLines(lines, verticalScrollrange, tokens));
-  }, [lines, verticalScrollrange, tokens]);
+    setVisibles(
+      getTokensLines(lines, verticalScrollrange, horizontalScrollrange, tokens)
+    );
+  }, [lines, verticalScrollrange, horizontalScrollrange, tokens]);
   return (
     <Tokens>
       {visibles.map((line, i) => (
-        <Row key={i} {...line} />
+        <Row
+          key={i}
+          {...line}
+          columnStart={horizontalScrollrange.start}
+          columnStop={horizontalScrollrange.stop}
+        />
       ))}
     </Tokens>
   );
