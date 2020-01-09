@@ -1,0 +1,33 @@
+.vtl-editor {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  .vtl-editor-container {
+    font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro,
+      monospace;
+    white-space: pre-wrap;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .vtl-editor-overlay {
+      background-color: transparent;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .vtl-editor-tokens {
+      background-color: black;
+      color: snow;
+      width: 100%;
+      height: 100%;
+      .row {
+        height: 22px;
+      }
+    }
+  }
+}
