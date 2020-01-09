@@ -3,9 +3,20 @@
   padding: 0;
   width: 100%;
   height: 100%;
+
+  line-height: 22px;
+  font-size: 14px;
+  font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro,
+    monospace;
+
+  .font-metric {
+    padding: 0;
+    overflow-y: hidden;
+    height: 22px;
+    display: inline-block;
+  }
+
   .vtl-editor-container {
-    font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro,
-      monospace;
     white-space: pre-wrap;
     position: relative;
     width: 100%;
@@ -23,9 +34,11 @@
     .vtl-editor-tokens {
       background-color: black;
       color: snow;
+
       width: 100%;
       height: 100%;
       .row {
+        overflow-y: hidden;
         height: 22px;
       }
     }
