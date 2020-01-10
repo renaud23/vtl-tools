@@ -1,1 +1,1 @@
-export { default as TokensLayer } from "./tokens-container";
+export { default } from "./tokens-layer-container";

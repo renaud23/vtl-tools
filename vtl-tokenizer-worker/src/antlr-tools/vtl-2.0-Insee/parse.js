@@ -2,11 +2,10 @@ import antlr4 from "antlr4";
 import { VtlParser, VtlLexer, VtlListener } from "./parser-vtl";
 import getTokens from "./get-tokens";
 
-const parse = code => {
+const parse = (code, level = "start") => {
   try {
     const chars = new antlr4.InputStream(code);
     const lexer = new VtlLexer(chars);
-    // lexer.skip = () => {};
     const tokenstream = new antlr4.CommonTokenStream(lexer);
     const parser = new VtlParser(tokenstream);
     parser.buildParseTrees = true;
@@ -14,7 +13,7 @@ const parse = code => {
     parser.removeErrorListeners();
     const errorsListener = new VtlErrorsListener();
     parser.addErrorListener(errorsListener);
-    const tree = parser.start();
+    const tree = level in parser ? parser[level]() : parser.start();
     const inspector = new VtlInspector();
     antlr4.tree.ParseTreeWalker.DEFAULT.walk(inspector, tree);
 

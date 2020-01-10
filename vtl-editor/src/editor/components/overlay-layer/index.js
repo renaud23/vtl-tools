@@ -1,1 +1,1 @@
-export { default as OverlayLayer } from "./overlay-container";
+export { default } from "./overlay-container";

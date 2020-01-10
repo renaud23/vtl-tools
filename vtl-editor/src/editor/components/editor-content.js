@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { TokensLayer } from "./tokens-layer";
-import { OverlayLayer } from "./overlay-layer";
+import TokensLayer from "./tokens-layer";
+import OverlayLayer from "./overlay-layer";
 
 function EditorContent({ content, fontMetric }) {
   return (
@@ -17,10 +17,6 @@ function EditorContent({ content, fontMetric }) {
 
 EditorContent.propTypes = {
   content: PropTypes.string
-  // fontMetric: PropTypes.shape({
-  //   width: PropTypes.number.isRequired,
-  //   height: PropTypes.number.isRequired
-  // }).isRequired
 };
 EditorContent.defaultProps = { content: "" };
 

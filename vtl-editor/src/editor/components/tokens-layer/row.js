@@ -7,24 +7,21 @@ import Token from "./token";
  * @param {*} valueRow
  * @param {*} token
  */
-const computeTokenValue = (rowStart, valueRow, token, columnStart = 1) => {
-  const { start, stop, value } = token;
+// const computeTokenValue = ({ value: rowValue, start: rowStart }) => token => {
+//   const { start, stop, value } = token;
 
-  return value.substr(
-    Math.max(0, rowStart - start),
-    Math.min(valueRow.length, stop - start + 1)
-  );
-};
+//   return value.substr(
+//     Math.max(0, rowStart - start),
+//     Math.min(rowValue.length, stop - start + 1)
+//   );
+// };
 
-function Row({ value, start, tokens, columnStart, columnStop }) {
+function Row({ line }) {
+  // const compute = computeTokenValue(line);
   return (
     <div className="row">
-      {tokens.map((t, i) => (
-        <Token
-          key={i}
-          value={computeTokenValue(start, value, t, columnStart)}
-          className={t.className}
-        />
+      {line.tokenParts.map((t, i) => (
+        <Token key={i} value={t.value} className={t.className} />
       ))}
     </div>
   );

@@ -4,7 +4,7 @@ import { tokenizerWorker } from "../tokenizer";
 import { reducers, initialState, EditorContext, actions } from "../events";
 import FontMetric from "./font-metric";
 
-const TEMPLATE_FONT_METRIC = "font_FONT\t";
+const TEMPLATE_FONT_METRIC = "font_FONTyuyiyoproorot***@Mm";
 
 const computeVerticalScrollrange = (height, fontMetric) => {
   const offset = Math.round(height / fontMetric.height);
@@ -12,7 +12,7 @@ const computeVerticalScrollrange = (height, fontMetric) => {
 };
 const computeHorizontalScrollrange = (width, fontMetric) => {
   const offset = Math.round(width / fontMetric.width);
-  return { start: 5, stop: 5 + offset - 1, offset };
+  return { start: 0, stop: offset - 1, offset };
 };
 
 const computeScrollrange = (parentEl, fontMetric) => {
@@ -64,6 +64,8 @@ function EditorRoot({ content }) {
       setFontMetric({ width: width / TEMPLATE_FONT_METRIC.length, height });
     }
   }, [fontMetric, containerEl]);
+  // return <FontMetric value={TEMPLATE_FONT_METRIC} ref={containerEl} />;
+
   return fontMetric ? (
     <EditorContainer content={content} fontMetric={fontMetric} />
   ) : (

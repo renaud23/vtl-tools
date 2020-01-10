@@ -10,14 +10,18 @@
     monospace;
 
   .font-metric {
+    line-height: 22px;
+    font-size: 14px;
+    font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro,
+      monospace;
     padding: 0;
     overflow-y: hidden;
-    height: 22px;
     display: inline-block;
   }
 
   .vtl-editor-container {
-    white-space: pre-wrap;
+    overflow-y: hidden;
+    white-space: pre;
     position: relative;
     width: 100%;
     height: 100%;
@@ -39,6 +43,7 @@
       height: 100%;
       .row {
         overflow-y: hidden;
+        overflow-x: hidden;
         height: 22px;
       }
     }
