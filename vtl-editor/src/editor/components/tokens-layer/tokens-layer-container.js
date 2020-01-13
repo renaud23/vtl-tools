@@ -104,11 +104,9 @@ const filterLineTokens = hRange => line => {
     const max = Math.max(hRange.stop, tStop);
 
     if (max - min + 1 < hRange.offset + tWidth) {
-      const partStart = Math.max(hRange.start - tStart, 0);
-      const partLength = Math.min(
-        hRange.stop - partStart + 1,
-        tStop - partStart + 1
-      );
+      const posTok = Math.max(line.start - t.start, 0);
+      const partStart = Math.max(hRange.start - tStart, posTok);
+      const partLength = Math.min(tStop, hRange.stop) - tStart + 1;
       return [
         ...a,
         {
@@ -119,6 +117,15 @@ const filterLineTokens = hRange => line => {
     }
     return a;
   }, []);
+
+  // const tokenParts = line.tokens
+  //   .reduce((a, t) => {
+  //     return a;
+  //   }, [])
+  //   .reduce((a, t) => {
+  //     return a;
+  //   }, []);
+
   return { ...line, tokenParts };
 };
 
