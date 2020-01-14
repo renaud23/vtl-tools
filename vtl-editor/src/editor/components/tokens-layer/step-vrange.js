@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import { EditorContext } from "../../events";
 import { getLineSeparator } from "../../tools";
 import StepFilterTokens from "./step-filter-tokens";
-import stringHash from "string-hash";
 
 /**
  *
@@ -46,9 +45,4 @@ function StepVRange({ lines }) {
   return <StepFilterTokens lines={visibles} />;
 }
 
-export default React.memo(StepVRange, (n, p) => {
-  const one = stringHash(n.lines.join());
-  const two = stringHash(p.lines.join());
-
-  return one === two;
-});
+export default StepVRange;

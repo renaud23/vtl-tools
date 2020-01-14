@@ -13,7 +13,7 @@ const computeVerticalScrollrange = (height, fontMetric) => {
 
 const computeHorizontalScrollrange = (width, fontMetric) => {
   const offset = Math.round(width / fontMetric.width);
-  return { start: 0, stop: offset - 1, offset };
+  return { start: 1, stop: 1 + offset - 1, offset };
 };
 
 const computeScrollrange = (parentEl, fontMetric) => {
