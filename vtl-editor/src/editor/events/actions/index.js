@@ -14,6 +14,14 @@ export const changeVerticalScrollrange = range => ({
 });
 
 /** */
+export const CHANGE_HORIZONTAL_SCROLLRANGE =
+  "vtl-editor/change-horizontal-scrollrange";
+export const changeHorizontalScrollrange = range => ({
+  type: CHANGE_HORIZONTAL_SCROLLRANGE,
+  payload: { range }
+});
+
+/** */
 export const CHANGE_SCROLLRANGE = "vtl-editor/change-scrollrange";
 export const changeScrollrange = (vertical, horizontal) => ({
   type: CHANGE_SCROLLRANGE,

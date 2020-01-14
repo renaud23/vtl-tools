@@ -10,6 +10,7 @@ const computeVerticalScrollrange = (height, fontMetric) => {
   const offset = Math.round(height / fontMetric.height);
   return { start: 0, stop: offset - 1, offset };
 };
+
 const computeHorizontalScrollrange = (width, fontMetric) => {
   const offset = Math.round(width / fontMetric.width);
   return { start: 0, stop: offset - 1, offset };
@@ -64,7 +65,6 @@ function EditorRoot({ content }) {
       setFontMetric({ width: width / TEMPLATE_FONT_METRIC.length, height });
     }
   }, [fontMetric, containerEl]);
-  // return <FontMetric value={TEMPLATE_FONT_METRIC} ref={containerEl} />;
 
   return fontMetric ? (
     <EditorContainer content={content} fontMetric={fontMetric} />

@@ -3,5 +3,6 @@ export default {
   lines: [""],
   tokens: [],
   verticalScrollrange: { start: 0, stop: 0, offset: 1 },
-  fontMetric: undefined
+  fontMetric: undefined,
+  maxLengthRow: 0
 };

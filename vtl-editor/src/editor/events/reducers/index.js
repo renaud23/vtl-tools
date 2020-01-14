@@ -11,18 +11,29 @@ import { splitLines } from "../../tools";
 //   );
 
 const reduceParsingEnd = (state, { payload: { source, errors, tokens } }) => {
+  const lines = splitLines(source);
+  const maxLengthRow = lines.reduce(
+    (max, line) => (line.length > max ? line.length : max),
+    0
+  );
   return {
     ...state,
     source,
-    lines: splitLines(source),
+    lines,
     errors,
-    tokens
+    tokens,
+    maxLengthRow
   };
 };
 
 const reduceChangeVerticalScrollrange = (state, { payload: { range } }) => ({
   ...state,
   verticalScrollrange: range
+});
+
+const reduceChangeHorizontalScrollrange = (state, { payload: { range } }) => ({
+  ...state,
+  horizontalScrollrange: range
 });
 
 const reduceChangeScrollrange = (
@@ -46,6 +57,9 @@ const reducer = (state, action) => {
     case actions.CHANGE_SCROLLRANGE: {
       return reduceChangeScrollrange(state, action);
     }
+    case actions.CHANGE_HORIZONTAL_SCROLLRANGE: {
+      return reduceChangeHorizontalScrollrange(state, action);
+    }
     default:
       return state;
   }
@@ -54,6 +68,6 @@ const reducer = (state, action) => {
 /** */
 export default (state, action) => {
   const next = reducer(state, action);
-  console.debug(action, state, next);
+  // console.debug(action, state, next);
   return next;
 };

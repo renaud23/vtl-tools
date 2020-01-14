@@ -118,14 +118,6 @@ const filterLineTokens = hRange => line => {
     return a;
   }, []);
 
-  // const tokenParts = line.tokens
-  //   .reduce((a, t) => {
-  //     return a;
-  //   }, [])
-  //   .reduce((a, t) => {
-  //     return a;
-  //   }, []);
-
   return { ...line, tokenParts };
 };
 

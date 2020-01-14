@@ -1,3 +1,21 @@
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
+@mixin onDrag {
+  height: 16px;
+  background-color: rgba(250, 250, 250, 0.3);
+  .track {
+    background-color: rgba(250, 100, 250, 0.5);
+  }
+}
+
 .vtl-editor {
   margin: 0;
   padding: 0;
@@ -26,15 +44,7 @@
     width: 100%;
     height: 100%;
 
-    .vtl-editor-overlay {
-      background-color: transparent;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
+    /* */
     .vtl-editor-tokens {
       background-color: black;
       color: snow;
@@ -45,6 +55,41 @@
         overflow-y: hidden;
         overflow-x: hidden;
         height: 22px;
+      }
+    }
+
+    /* */
+    .vtl-editor-overlay {
+      background-color: transparent;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: text;
+
+      overflow-x: hidden;
+    }
+    .vtl-editor-horizontal-scrollrange {
+      position: absolute;
+      height: 10px;
+      width: calc(100% - 16px);
+      background-color: transparent;
+      cursor: default;
+      bottom: 0;
+
+      &:hover {
+        @include onDrag();
+        transition: height 0.1s ease-out;
+      }
+
+      &.on-track {
+        @include onDrag();
+      }
+
+      .track {
+        position: absolute;
+        height: inherit;
       }
     }
   }
