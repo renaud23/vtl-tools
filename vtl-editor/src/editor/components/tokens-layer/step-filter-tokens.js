@@ -39,7 +39,7 @@ const filteringUtilsTokens = lines => tokens => {
   const lStart = lines[0].start;
   const lStop = lines[lines.length - 1].stop;
   return tokens.filter(t => {
-    if (t.stop > lStart && t.start < lStop) {
+    if (t.stop >= lStart && t.start <= lStop) {
       return true;
     }
     return false;
@@ -54,6 +54,7 @@ const filteringUtilsTokens = lines => tokens => {
 const fillLinesWithTokens = lines => tokens => {
   if (tokens.length && lines.length) {
     const tokensFiltered = filteringUtilsTokens(lines)(tokens);
+
     const nl = lines.reduce(
       ({ stack, toks }, l) => {
         const [lineWithToken, tokensLeft] = consumeTokens(l, toks);
