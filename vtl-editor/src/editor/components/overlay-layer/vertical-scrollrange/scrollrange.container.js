@@ -17,7 +17,9 @@ function VerticalScrollrangeContainer() {
   useEffect(() => {
     if (parentEl.current && lines.length > offset) {
       const { height } = parentEl.current.getBoundingClientRect();
-      setTrackHeight(Math.round((offset / (lines.length + margin)) * height));
+      setTrackHeight(
+        Math.max(Math.round((offset / (lines.length + margin)) * height), 15)
+      );
       setParentHeight(height);
     }
   }, [parentEl, offset, lines]);

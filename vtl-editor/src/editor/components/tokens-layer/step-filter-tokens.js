@@ -35,13 +35,25 @@ const consumeTokens = (l, tokens) => {
   return [l, rest];
 };
 
+const filteringUtilsTokens = lines => tokens => {
+  const lStart = lines[0].start;
+  const lStop = lines[lines.length - 1].stop;
+  return tokens.filter(t => {
+    if (t.start + t.value.length > lStart && t.stop < lStop) {
+      return true;
+    }
+    return false;
+  });
+};
+
 /**
  *
  * @param {*} lines
  * @param {*} tokens
  */
 const fillLinesWithTokens = lines => tokens => {
-  if (tokens.length) {
+  if (tokens.length && lines.length) {
+    const tokensFiltered = filteringUtilsTokens(lines)(tokens);
     return lines.reduce(
       ({ stack, toks }, l) => {
         const [lineWithToken, tokensLeft] = consumeTokens(l, toks);
@@ -51,7 +63,7 @@ const fillLinesWithTokens = lines => tokens => {
           toks: tokensLeft
         };
       },
-      { stack: [], toks: [...tokens] }
+      { stack: [], toks: [...tokensFiltered] }
     ).stack;
   }
   return lines;
