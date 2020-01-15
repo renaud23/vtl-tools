@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import HorizontalScrollrange from "./horizontal-scrollrange";
 import { EditorContext, actions } from "../../../events";
 
+const LEFT_BORDER_MARGIN = 2; // in char
+
 function HorizontallScrollrangeContainer() {
   const { state, dispatch } = useContext(EditorContext);
   const { horizontalScrollrange: range = {}, maxLengthRow } = state;
@@ -16,7 +18,9 @@ function HorizontallScrollrangeContainer() {
     if (parentEl.current) {
       const { width } = parentEl.current.getBoundingClientRect();
       if (maxLengthRow) {
-        setTrackWidth(Math.round((offset / maxLengthRow) * width));
+        setTrackWidth(
+          Math.round((offset / (maxLengthRow + LEFT_BORDER_MARGIN)) * width)
+        );
         setParentWidth(width);
       }
     }
@@ -26,7 +30,9 @@ function HorizontallScrollrangeContainer() {
     if (parentEl.current) {
       const { width } = parentEl.current.getBoundingClientRect();
       if (maxLengthRow) {
-        setTrackLeft(Math.round((start / maxLengthRow) * width));
+        setTrackLeft(
+          Math.round((start / (maxLengthRow + LEFT_BORDER_MARGIN)) * width)
+        );
       }
     }
   }, [parentEl, start, maxLengthRow]);
@@ -41,7 +47,9 @@ function HorizontallScrollrangeContainer() {
           Math.max(trackLeft + how, 0),
           parentWidth - trackWidth
         );
-        const nextStart = Math.round((next / parentWidth) * maxLengthRow);
+        const nextStart = Math.round(
+          (next / parentWidth) * (maxLengthRow + LEFT_BORDER_MARGIN)
+        );
         dispatch(
           actions.changeHorizontalScrollrange({
             start: nextStart,

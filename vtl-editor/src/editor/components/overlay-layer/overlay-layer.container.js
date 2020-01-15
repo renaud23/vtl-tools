@@ -1,13 +1,13 @@
-import React, { useRef } from "react";
+import React from "react";
 import Overlay from "./overlay-layer";
 import { HorizontalScrollrange } from "./horizontal-scrollrange";
+import VerticalScrollrange from "./vertical-scrollrange";
 
 function OverlayLayerContainer() {
-  const containerRef = useRef();
-
   return (
-    <Overlay ref={containerRef}>
-      <HorizontalScrollrange parentEl={containerRef.current} />
+    <Overlay>
+      <HorizontalScrollrange />
+      <VerticalScrollrange />
     </Overlay>
   );
 }

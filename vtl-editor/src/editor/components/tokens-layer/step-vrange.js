@@ -16,8 +16,8 @@ const isInRange = (i, { start, offset }) =>
  * @param {*} lines
  * @param {*} hRange
  */
-const getVisiblesLines = vRange => lines =>
-  lines.reduce(
+const getVisiblesLines = vRange => lines => {
+  return lines.reduce(
     ({ stack, next }, l, i) => ({
       stack: isInRange(i, vRange)
         ? [
@@ -34,6 +34,7 @@ const getVisiblesLines = vRange => lines =>
     }),
     { stack: [], next: 0 }
   ).stack;
+};
 
 function StepVRange({ lines }) {
   const { state } = useContext(EditorContext);
