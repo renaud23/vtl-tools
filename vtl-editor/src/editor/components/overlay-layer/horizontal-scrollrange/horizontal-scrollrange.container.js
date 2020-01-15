@@ -9,9 +9,9 @@ function HorizontallScrollrangeContainer() {
   const { state, dispatch } = useContext(EditorContext);
   const { horizontalScrollrange: range = {}, maxLengthRow } = state;
   const { start, offset } = range;
-
-  const [trackWidth, setTrackWidth] = useState(undefined);
-  const [trackLeft, setTrackLeft] = useState(undefined);
+  const [limite, setLimite] = useState(0);
+  const [trackWidth, setTrackWidth] = useState(0);
+  const [trackLeft, setTrackLeft] = useState(0);
   const [parentWidth, setParentWidth] = useState(0);
   const parentEl = useRef();
   useEffect(() => {
@@ -31,11 +31,18 @@ function HorizontallScrollrangeContainer() {
       const { width } = parentEl.current.getBoundingClientRect();
       if (maxLengthRow) {
         setTrackLeft(
-          Math.round((start / (maxLengthRow + LEFT_BORDER_MARGIN)) * width)
+          Math.round(
+            (start / (maxLengthRow + LEFT_BORDER_MARGIN - offset)) *
+              (width - trackWidth)
+          )
         );
       }
     }
-  }, [parentEl, start, maxLengthRow]);
+  }, [parentEl, start, maxLengthRow, offset, trackWidth]);
+
+  useEffect(() => {
+    setLimite(parentWidth - trackWidth);
+  }, [parentWidth, trackWidth]);
 
   return (
     <HorizontalScrollrange
@@ -43,12 +50,9 @@ function HorizontallScrollrangeContainer() {
       trackLeft={trackLeft}
       ref={parentEl}
       onDrag={how => {
-        const next = Math.min(
-          Math.max(trackLeft + how, 0),
-          parentWidth - trackWidth
-        );
+        const next = Math.min(Math.max(trackLeft + how, 0), limite);
         const nextStart = Math.round(
-          (next / parentWidth) * (maxLengthRow + LEFT_BORDER_MARGIN)
+          (next / limite) * (maxLengthRow + LEFT_BORDER_MARGIN - offset)
         );
         dispatch(
           actions.changeHorizontalScrollrange({
@@ -57,7 +61,7 @@ function HorizontallScrollrangeContainer() {
             offset
           })
         );
-        // setTrackLeft(next);
+        setTrackLeft(next);
       }}
     />
   );
