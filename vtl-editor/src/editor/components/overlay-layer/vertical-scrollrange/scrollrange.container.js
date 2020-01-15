@@ -12,7 +12,7 @@ function VerticalScrollrangeContainer() {
   const [trackTop, setTrackTop] = useState(undefined);
   const [parentHeight, setParentHeight] = useState(0);
   const parentEl = useRef();
-  const margin = 10;
+  const margin = 0;
 
   useEffect(() => {
     if (parentEl.current && lines.length > offset) {
