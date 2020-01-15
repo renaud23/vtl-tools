@@ -8,11 +8,11 @@ function VerticalScrollrangeContainer() {
   const { verticalScrollrange: range = {}, lines } = state;
   const { start, offset } = range;
 
-  const [trackHeight, setTrackHeight] = useState(undefined);
-  const [trackTop, setTrackTop] = useState(undefined);
+  const [trackHeight, setTrackHeight] = useState(0);
+  const [trackTop, setTrackTop] = useState(0);
   const [parentHeight, setParentHeight] = useState(0);
   const parentEl = useRef();
-  const margin = 0;
+  const margin = 10;
 
   useEffect(() => {
     if (parentEl.current && lines.length > offset) {
@@ -27,9 +27,11 @@ function VerticalScrollrangeContainer() {
   useEffect(() => {
     if (parentEl.current && lines.length) {
       const { height } = parentEl.current.getBoundingClientRect();
-      setTrackTop(Math.round((start / (lines.length + margin)) * height));
+      setTrackTop(
+        Math.round((start / (lines.length + margin)) * (height - trackHeight))
+      );
     }
-  }, [parentEl, start, lines]);
+  }, [parentEl, start, lines, trackHeight]);
 
   return (
     <VerticalScrollrange
@@ -42,9 +44,14 @@ function VerticalScrollrangeContainer() {
             Math.max(trackTop + how, 0),
             parentHeight - trackHeight
           );
-          const nextStart = Math.round(
-            (next / parentHeight) * (lines.length + margin)
+
+          const nextStart = Math.min(
+            Math.round(
+              (next / (parentHeight - trackHeight)) * (lines.length + margin)
+            ),
+            lines.length - offset + margin
           );
+
           setTrackTop(next);
           dispatch(
             actions.changeVerticalScrollrange({
