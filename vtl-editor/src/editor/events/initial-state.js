@@ -8,6 +8,7 @@ export default {
   fontMetric: undefined,
   maxLengthRow: 0,
   /** selection */
+  overlaySize: { width: undefined, height: undefined },
   cursor: undefined,
   anchor: undefined,
   extent: undefined

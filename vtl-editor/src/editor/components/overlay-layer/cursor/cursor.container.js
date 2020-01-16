@@ -4,6 +4,7 @@ import Cursor from "./cursor";
 
 function CursorContainer() {
   const { state } = useContext(EditorContext);
+
   const {
     cursor,
     horizontalScrollrange: hr,
@@ -12,9 +13,15 @@ function CursorContainer() {
   } = state;
   if (cursor) {
     const { row, index } = cursor;
+
     const top = (row - vr.start) * fm.height;
     const left = (index - hr.start) * fm.width;
-    return top >= 0 && left >= 0 ? <Cursor top={top} left={left} /> : null;
+    return index >= hr.start &&
+      index <= hr.stop &&
+      row >= vr.start &&
+      row <= vr.stop ? (
+      <Cursor top={top} left={left} />
+    ) : null;
   }
   return null;
 }
