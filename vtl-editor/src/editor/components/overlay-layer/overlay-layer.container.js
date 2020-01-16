@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect, useState } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import Overlay from "./overlay-layer";
 import { EditorContext, actions } from "../../events";
 import HorizontalScrollrange from "./horizontal-scrollrange";

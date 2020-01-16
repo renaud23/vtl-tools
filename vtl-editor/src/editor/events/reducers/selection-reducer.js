@@ -8,7 +8,7 @@ const reduceMouseDown = (state, { payload: { row, index } }) => ({
 });
 
 const reduceMouseUp = (state, { payload: { row, index } }) => {
-  const { anchor, cursor } = state;
+  const { anchor } = state;
   if (!anchor) {
     return state;
   }
