@@ -1,4 +1,5 @@
 import React, { useReducer, useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 import Editor from "./editor";
 import { tokenizerWorker } from "../tokenizer";
 import { reducers, initialState, EditorContext, actions } from "../events";
@@ -6,10 +7,20 @@ import FontMetric from "./font-metric";
 
 const TEMPLATE_FONT_METRIC = "font_FONTyuyiyoproorot***@Mm";
 
+const prepareDefaultToken = content => [
+  {
+    value: content,
+    start: 0,
+    stop: content.length,
+    className: "unmapped"
+  }
+];
+
 /** */
-function EditorContainer({ content, fontMetric }) {
+function EditorContainer({ content, fontMetric, zIndex }) {
   const [state, dispatch] = useReducer(reducers, {
     ...initialState,
+    zIndex,
     fontMetric
   });
 
@@ -17,30 +28,17 @@ function EditorContainer({ content, fontMetric }) {
     tokenizerWorker.parse(content).then(({ errors, tokens }) => {
       dispatch(actions.parsingEnd(content, tokens, errors));
     });
-    dispatch(
-      actions.parsingEnd(
-        content,
-        [
-          {
-            value: content,
-            start: 0,
-            stop: content.length,
-            className: "unmapped"
-          }
-        ],
-        []
-      )
-    );
+    dispatch(actions.parsingEnd(content, prepareDefaultToken(content), []));
   }, [content]);
 
   return (
     <EditorContext.Provider value={{ state, dispatch }}>
-      <Editor content={content} />
+      <Editor />
     </EditorContext.Provider>
   );
 }
 
-function EditorRoot({ content }) {
+function EditorRoot({ content, zIndex }) {
   const [fontMetric, setFontMetric] = useState(undefined);
   const containerEl = useRef(null);
   useEffect(() => {
@@ -51,10 +49,20 @@ function EditorRoot({ content }) {
   }, [fontMetric, containerEl]);
 
   return fontMetric ? (
-    <EditorContainer content={content} fontMetric={fontMetric} />
+    <EditorContainer
+      content={content}
+      fontMetric={fontMetric}
+      zIndex={zIndex}
+    />
   ) : (
     <FontMetric value={TEMPLATE_FONT_METRIC} ref={containerEl} />
   );
 }
+
+EditorRoot.propTypes = {
+  content: PropTypes.string,
+  zIndex: PropTypes.number
+};
+EditorRoot.defaultProps = { content: "", zIndex: 0 };
 
 export default EditorRoot;

@@ -1,11 +1,16 @@
 import React from "react";
-import EditorContent from "./editor-content";
+import TokensLayer from "./tokens-layer";
+import OverlayLayer from "./overlay-layer";
 import "./editor.scss";
 
-function Editor({ content }) {
+function Editor() {
   return (
     <pre className="vtl-editor">
-      <EditorContent content={content} />
+      <div className="vtl-editor-rownum" />
+      <div className="vtl-editor-container">
+        <OverlayLayer />
+        <TokensLayer />
+      </div>
     </pre>
   );
 }
