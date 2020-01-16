@@ -1,7 +1,7 @@
 import React from "react";
 
 const layer = React.forwardRef(function OverlayLayer(
-  { children, onMouseDown, onMouseUp },
+  { children, onMouseDown, onMouseUp, onMouseMove },
   ref
 ) {
   return (
@@ -10,6 +10,8 @@ const layer = React.forwardRef(function OverlayLayer(
       className="vtl-editor-overlay"
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
+      onMouseMove={onMouseMove}
+      onDragStart={e => e.preventDefault()}
     >
       {children}
     </div>

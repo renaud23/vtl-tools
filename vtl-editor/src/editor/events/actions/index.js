@@ -36,6 +36,13 @@ export const mouseDown = (row, index) => ({
 });
 
 /** */
+export const MOUSE_DRAG = "vtl-editor/mouse-drag";
+export const mouseDrag = (row, index) => ({
+  type: MOUSE_DRAG,
+  payload: { row, index }
+});
+
+/** */
 export const MOUSE_UP = "vtl-editor/mouse-up";
 export const mouseUp = (row, index) => ({
   type: MOUSE_UP,

@@ -1,9 +1,10 @@
-import React, { useRef, useContext, useEffect } from "react";
+import React, { useRef, useContext, useEffect, useState } from "react";
 import Overlay from "./overlay-layer";
 import { EditorContext, actions } from "../../events";
 import HorizontalScrollrange from "./horizontal-scrollrange";
 import VerticalScrollrange from "./vertical-scrollrange";
 import Cursor from "./cursor";
+import Selection from "./selection";
 
 const computeVerticalScrollrange = (height, fontMetric) => {
   const offset = Math.round(height / fontMetric.height);
@@ -55,6 +56,7 @@ const getCursorPosition = ({
 function OverlayLayerContainer() {
   const { state, dispatch } = useContext(EditorContext);
   const { fontMetric } = state;
+  const [drag, setDrag] = useState(false);
   const containerEl = useRef();
 
   useEffect(() => {
@@ -77,17 +79,28 @@ function OverlayLayerContainer() {
           getRelativePos(containerEl.current)(e)
         );
         dispatch(actions.mouseDown(row, index));
+        setDrag(true);
       }}
       onMouseUp={e => {
         const { row, index } = getCursorPosition(state)(
           getRelativePos(containerEl.current)(e)
         );
         dispatch(actions.mouseUp(row, index));
+        setDrag(false);
+      }}
+      onMouseMove={e => {
+        if (drag) {
+          const { row, index } = getCursorPosition(state)(
+            getRelativePos(containerEl.current)(e)
+          );
+          dispatch(actions.mouseDrag(row, index));
+        }
       }}
     >
       <HorizontalScrollrange />
       <VerticalScrollrange />
       <Cursor />
+      <Selection />
     </Overlay>
   );
 }

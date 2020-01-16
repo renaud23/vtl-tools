@@ -73,6 +73,8 @@ const fillLinesWithTokens = lines => tokens => {
   return lines;
 };
 
+const consumeTemporyChanges = lines => lines;
+
 /**
  *
  * @param {*} lines
@@ -84,7 +86,9 @@ function StepFilterTokens({ lines }) {
   const { tokens } = state;
   const [linesWithTokens, setLinesWithTokens] = useState([]);
   useEffect(() => {
-    setLinesWithTokens(fillLinesWithTokens(lines)(tokens));
+    setLinesWithTokens(
+      consumeTemporyChanges(fillLinesWithTokens(lines)(tokens))
+    );
   }, [lines, tokens]);
 
   return <StepHRange lines={linesWithTokens} />;
