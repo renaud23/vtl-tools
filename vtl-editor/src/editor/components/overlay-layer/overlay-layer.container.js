@@ -55,8 +55,6 @@ const getCursorPosition = ({
 function OverlayLayerContainer() {
   const { state, dispatch } = useContext(EditorContext);
   const { fontMetric } = state;
-  const [overlayWidth, setOverlayWidth] = useState(undefined);
-  const [overlayHeight, setOverlayHeight] = useState(undefined);
   const containerEl = useRef();
 
   useEffect(() => {
@@ -70,14 +68,6 @@ function OverlayLayerContainer() {
       );
     }
   }, [containerEl, fontMetric, dispatch]);
-
-  useEffect(() => {
-    if (containerEl.current) {
-      const { width, height } = containerEl.current.getBoundingClientRect();
-      setOverlayWidth(width);
-      setOverlayHeight(height);
-    }
-  }, [containerEl, dispatch]);
 
   return (
     <Overlay
@@ -97,7 +87,7 @@ function OverlayLayerContainer() {
     >
       <HorizontalScrollrange />
       <VerticalScrollrange />
-      <Cursor overlayWidth={overlayWidth} overlayHeight={overlayHeight} />
+      <Cursor />
     </Overlay>
   );
 }
