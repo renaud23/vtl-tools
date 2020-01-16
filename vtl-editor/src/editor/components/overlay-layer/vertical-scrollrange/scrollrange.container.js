@@ -5,7 +5,7 @@ import { EditorContext, actions } from "../../../events";
 
 function VerticalScrollrangeContainer() {
   const { state, dispatch } = useContext(EditorContext);
-  const { verticalScrollrange: range = {}, lines } = state;
+  const { verticalScrollrange: range = {}, lines, zIndex } = state;
   const { start, offset } = range;
 
   const [trackHeight, setTrackHeight] = useState(0);
@@ -35,6 +35,7 @@ function VerticalScrollrangeContainer() {
 
   return (
     <VerticalScrollrange
+      zIndex={zIndex}
       trackHeight={trackHeight}
       trackTop={trackTop}
       ref={parentEl}

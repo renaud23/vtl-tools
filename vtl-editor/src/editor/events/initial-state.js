@@ -1,5 +1,6 @@
 export default {
   /** general */
+  zIndex: 0,
   source: "",
   lines: [""],
   tokens: [],

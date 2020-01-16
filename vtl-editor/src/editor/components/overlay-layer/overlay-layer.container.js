@@ -55,7 +55,7 @@ const getCursorPosition = ({
 /* **/
 function OverlayLayerContainer() {
   const { state, dispatch } = useContext(EditorContext);
-  const { fontMetric } = state;
+  const { fontMetric, zIndex } = state;
   const [drag, setDrag] = useState(false);
   const containerEl = useRef();
 
@@ -74,6 +74,7 @@ function OverlayLayerContainer() {
   return (
     <Overlay
       ref={containerEl}
+      zIndex={zIndex}
       onMouseDown={e => {
         const { row, index } = getCursorPosition(state)(
           getRelativePos(containerEl.current)(e)

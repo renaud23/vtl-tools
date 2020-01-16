@@ -12,7 +12,7 @@ const LEFT_BORDER_MARGIN = 2; // in char
 
 function HorizontallScrollrangeContainer() {
   const { state, dispatch } = useContext(EditorContext);
-  const { horizontalScrollrange: range = {}, maxLengthRow } = state;
+  const { horizontalScrollrange: range = {}, maxLengthRow, zIndex } = state;
   const { start, offset } = range;
   const [limite, setLimite] = useState(0);
   const [trackWidth, setTrackWidth] = useState(0);
@@ -73,6 +73,7 @@ function HorizontallScrollrangeContainer() {
       trackLeft={trackLeft}
       ref={parentEl}
       onDrag={cally}
+      zIndex={zIndex}
     />
   );
 }

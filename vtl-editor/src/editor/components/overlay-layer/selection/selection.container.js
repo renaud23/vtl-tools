@@ -96,7 +96,8 @@ function SelectionContainer() {
     extent,
     horizontalScrollrange: hr,
     verticalScrollrange: vr,
-    fontMetric
+    fontMetric,
+    zIndex
   } = state;
   const [blocs, setBlocs] = useState([]);
   const [visibles, setVisibles] = useState([]);
@@ -117,7 +118,9 @@ function SelectionContainer() {
   }, [blocs, hr, vr]);
 
   if (extent && anchor) {
-    return <Selection blocs={computeBlocs(visibles, fontMetric)} />;
+    return (
+      <Selection blocs={computeBlocs(visibles, fontMetric)} zIndex={zIndex} />
+    );
   }
   return null;
 }

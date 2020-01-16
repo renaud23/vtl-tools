@@ -3,7 +3,7 @@ import React, { useState, useCallback } from "react";
 import classnames from "classnames";
 import Track from "./track";
 
-function VerticalScrollrange({ trackHeight, trackTop, onDrag }, ref) {
+function VerticalScrollrange({ trackHeight, trackTop, onDrag, zIndex }, ref) {
   const [drag, setDrag] = useState(false);
   const cally = useCallback(
     (state, how) => {
@@ -17,6 +17,7 @@ function VerticalScrollrange({ trackHeight, trackTop, onDrag }, ref) {
   return (
     <div
       ref={ref}
+      style={{ zIndex: zIndex + 1 }}
       className={classnames("vtl-editor-vertical-scrollrange", {
         "on-track": drag
       })}
