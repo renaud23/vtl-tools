@@ -82,11 +82,13 @@ function OverlayLayerContainer() {
         setDrag(true);
       }}
       onMouseUp={e => {
-        const { row, index } = getCursorPosition(state)(
-          getRelativePos(containerEl.current)(e)
-        );
-        dispatch(actions.mouseUp(row, index));
-        setDrag(false);
+        if (drag) {
+          const { row, index } = getCursorPosition(state)(
+            getRelativePos(containerEl.current)(e)
+          );
+          dispatch(actions.mouseUp(row, index));
+          setDrag(false);
+        }
       }}
       onMouseMove={e => {
         if (drag) {
