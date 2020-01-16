@@ -1,1 +1,1 @@
-export { default as HorizontalScrollrange } from "./horizontal-scrollrange.container";
+export { default } from "./horizontal-scrollrange.container";

@@ -13,18 +13,24 @@ function Track({ left, width, onDrag }) {
     },
     [drag, onDrag]
   );
-  useEffect(() => {
-    const mouseup = e => {
+
+  const mouseup = useCallback(
+    e => {
+      e.stopPropagation();
       setDrag(false);
       onDrag(false);
-    };
+    },
+    [onDrag]
+  );
+
+  useEffect(() => {
     window.addEventListener("mouseup", mouseup);
     window.addEventListener("mousemove", mousemove);
     return () => {
       window.removeEventListener("mouseup", mouseup);
       window.removeEventListener("mousemove", mousemove);
     };
-  }, [mousemove, onDrag]);
+  }, [mousemove, mouseup, onDrag]);
 
   return (
     <div
@@ -35,6 +41,9 @@ function Track({ left, width, onDrag }) {
         START_DRAG_X = e.clientX;
         setDrag(true);
         onDrag(true, 0);
+      }}
+      onMouseUp={e => {
+        mouseup(e);
       }}
     ></div>
   );

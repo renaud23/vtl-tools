@@ -1,11 +1,19 @@
 import React from "react";
 
-const OverlayLayer = React.forwardRef(function OverlayLayer({ children }, ref) {
+const layer = React.forwardRef(function OverlayLayer(
+  { children, onMouseDown, onMouseUp },
+  ref
+) {
   return (
-    <div className="vtl-editor-overlay" ref={ref}>
+    <div
+      ref={ref}
+      className="vtl-editor-overlay"
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
+    >
       {children}
     </div>
   );
 });
 
-export default React.memo(OverlayLayer);
+export default React.memo(layer);

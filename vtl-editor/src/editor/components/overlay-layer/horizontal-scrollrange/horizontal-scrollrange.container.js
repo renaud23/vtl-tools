@@ -1,5 +1,10 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
-
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback
+} from "react";
 import HorizontalScrollrange from "./horizontal-scrollrange";
 import { EditorContext, actions } from "../../../events";
 
@@ -44,25 +49,30 @@ function HorizontallScrollrangeContainer() {
     setLimite(parentWidth - trackWidth);
   }, [parentWidth, trackWidth]);
 
+  const cally = useCallback(
+    how => {
+      const next = Math.min(Math.max(trackLeft + how, 0), limite);
+      const nextStart = Math.round(
+        (next / limite) * (maxLengthRow + LEFT_BORDER_MARGIN - offset)
+      );
+      dispatch(
+        actions.changeHorizontalScrollrange({
+          start: nextStart,
+          stop: nextStart + offset - 1,
+          offset
+        })
+      );
+      setTrackLeft(next);
+    },
+    [dispatch, limite, maxLengthRow, offset, trackLeft]
+  );
+
   return (
     <HorizontalScrollrange
       trackWidth={trackWidth}
       trackLeft={trackLeft}
       ref={parentEl}
-      onDrag={how => {
-        const next = Math.min(Math.max(trackLeft + how, 0), limite);
-        const nextStart = Math.round(
-          (next / limite) * (maxLengthRow + LEFT_BORDER_MARGIN - offset)
-        );
-        dispatch(
-          actions.changeHorizontalScrollrange({
-            start: nextStart,
-            stop: nextStart + offset - 1,
-            offset
-          })
-        );
-        setTrackLeft(next);
-      }}
+      onDrag={cally}
     />
   );
 }

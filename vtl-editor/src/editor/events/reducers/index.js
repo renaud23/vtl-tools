@@ -1,73 +1,20 @@
-import * as actions from "../actions";
-import { splitLines } from "../../tools";
+import general from "./general-reducer";
+import selection from "./selection-reducer";
 
 /* */
-// const compose = (...callbacks) =>
-//   callbacks.reduce(
-//     (a, call) => {
-//       return (state, action) => a(call(state, action), action);
-//     },
-//     state => state
-//   );
-
-const reduceParsingEnd = (state, { payload: { source, errors, tokens } }) => {
-  const lines = splitLines(source);
-  const maxLengthRow = lines.reduce(
-    (max, line) => (line.length > max ? line.length : max),
-    0
+const combine = (...callbacks) =>
+  callbacks.reverse().reduce(
+    (a, call) => {
+      return (state, action) => a(call(state, action), action);
+    },
+    state => state
   );
-  return {
-    ...state,
-    source,
-    lines,
-    errors,
-    tokens,
-    maxLengthRow
-  };
-};
 
-const reduceChangeVerticalScrollrange = (state, { payload: { range } }) => ({
-  ...state,
-  verticalScrollrange: range
-});
-
-const reduceChangeHorizontalScrollrange = (state, { payload: { range } }) => ({
-  ...state,
-  horizontalScrollrange: range
-});
-
-const reduceChangeScrollrange = (
-  state,
-  { payload: { vertical, horizontal } }
-) => ({
-  ...state,
-  verticalScrollrange: vertical,
-  horizontalScrollrange: horizontal
-});
-
-/** */
-const reducer = (state, action) => {
-  switch (action.type) {
-    case actions.PARSING_END: {
-      return reduceParsingEnd(state, action);
-    }
-    case actions.CHANGE_VERTICAL_SCROLLRANGE: {
-      return reduceChangeVerticalScrollrange(state, action);
-    }
-    case actions.CHANGE_SCROLLRANGE: {
-      return reduceChangeScrollrange(state, action);
-    }
-    case actions.CHANGE_HORIZONTAL_SCROLLRANGE: {
-      return reduceChangeHorizontalScrollrange(state, action);
-    }
-    default:
-      return state;
-  }
-};
+const reducers = combine(general, selection);
 
 /** */
 export default (state, action) => {
-  const next = reducer(state, action);
+  const next = reducers(state, action);
   // console.debug(action, state, next);
   return next;
 };

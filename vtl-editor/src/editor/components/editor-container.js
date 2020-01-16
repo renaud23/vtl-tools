@@ -36,6 +36,20 @@ function EditorContainer({ content, fontMetric }) {
     tokenizerWorker.parse(content).then(({ errors, tokens }) => {
       dispatch(actions.parsingEnd(content, tokens, errors));
     });
+    dispatch(
+      actions.parsingEnd(
+        content,
+        [
+          {
+            value: content,
+            start: 0,
+            stop: content.length,
+            className: "unmapped"
+          }
+        ],
+        []
+      )
+    );
   }, [content]);
 
   useEffect(() => {

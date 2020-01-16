@@ -27,3 +27,17 @@ export const changeScrollrange = (vertical, horizontal) => ({
   type: CHANGE_SCROLLRANGE,
   payload: { vertical, horizontal }
 });
+
+/** */
+export const MOUSE_DOWN = "vtl-editor/mouse-down";
+export const mouseDown = (row, index) => ({
+  type: MOUSE_DOWN,
+  payload: { row, index }
+});
+
+/** */
+export const MOUSE_UP = "vtl-editor/mouse-up";
+export const mouseUp = (row, index) => ({
+  type: MOUSE_UP,
+  payload: { row, index }
+});
