@@ -13,7 +13,6 @@ function CursorContainer() {
   } = state;
   if (cursor) {
     const { row, index } = cursor;
-
     const top = (row - vr.start) * fm.height;
     const left = (index - hr.start) * fm.width;
     return index >= hr.start &&
