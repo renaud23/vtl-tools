@@ -1,9 +1,27 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import Overlay from "./overlay-layer";
 import { EditorContext, actions } from "../../events";
 import HorizontalScrollrange from "./horizontal-scrollrange";
 import VerticalScrollrange from "./vertical-scrollrange";
 import Cursor from "./cursor";
+
+const computeVerticalScrollrange = (height, fontMetric) => {
+  const offset = Math.round(height / fontMetric.height);
+  return { start: 0, stop: offset - 1, offset };
+};
+
+const computeHorizontalScrollrange = (width, fontMetric) => {
+  const offset = Math.round(width / fontMetric.width);
+  return { start: 0, stop: offset - 1, offset };
+};
+
+const computeScrollrange = (parentEl, fontMetric) => {
+  const { height, width } = parentEl.getBoundingClientRect();
+  return {
+    verticalScrollrange: computeVerticalScrollrange(height, fontMetric),
+    horizontalScrollrange: computeHorizontalScrollrange(width, fontMetric)
+  };
+};
 
 /**
  *
@@ -36,7 +54,20 @@ const getCursorPosition = ({
 /* **/
 function OverlayLayerContainer() {
   const { state, dispatch } = useContext(EditorContext);
+  const { fontMetric } = state;
   const containerEl = useRef();
+
+  useEffect(() => {
+    if (containerEl.current) {
+      const { verticalScrollrange, horizontalScrollrange } = computeScrollrange(
+        containerEl.current,
+        fontMetric
+      );
+      dispatch(
+        actions.changeScrollrange(verticalScrollrange, horizontalScrollrange)
+      );
+    }
+  }, [containerEl, fontMetric, dispatch]);
 
   return (
     <Overlay
