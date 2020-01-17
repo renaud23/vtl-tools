@@ -28,6 +28,7 @@ function EditorContainer({ content, fontMetric, zIndex }) {
 
   useEffect(() => {
     postVtlTask(content, ({ tokens, errors }) => {
+      console.log("one");
       dispatch(actions.parsingEnd(content, tokens, errors));
     });
 
