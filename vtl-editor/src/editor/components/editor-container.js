@@ -1,11 +1,13 @@
 import React, { useReducer, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import Editor from "./editor";
-import { tokenizerWorker } from "../tokenizer";
+import { createVtlTaksManager } from "../tokenizer";
 import { reducers, initialState, EditorContext, actions } from "../events";
 import FontMetric from "./font-metric";
 
 const TEMPLATE_FONT_METRIC = "font_FONTyuyiyoproorot***@Mm";
+
+const postVtlTask = createVtlTaksManager();
 
 const prepareDefaultToken = content => [
   {
@@ -25,9 +27,10 @@ function EditorContainer({ content, fontMetric, zIndex }) {
   });
 
   useEffect(() => {
-    tokenizerWorker.parse(content).then(({ errors, tokens }) => {
+    postVtlTask(content, ({ tokens, errors }) => {
       dispatch(actions.parsingEnd(content, tokens, errors));
     });
+
     dispatch(actions.parsingEnd(content, prepareDefaultToken(content), []));
   }, [content]);
 
