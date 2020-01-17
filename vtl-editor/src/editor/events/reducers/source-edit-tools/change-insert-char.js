@@ -1,6 +1,22 @@
 import { getLineSeparator } from "../../../tools";
 
-export function changeInsertChar(state, char) {
+function computeSourceChange(state, char) {
+  const { cursor, lines, maxLengthRow } = state;
+  const { row, index } = cursor;
+  const newLines = lines.map((l, i) =>
+    i === row ? `${l.substr(0, index)}${char}${l.substr(index)}` : l
+  );
+  const source = newLines.join(getLineSeparator());
+  return {
+    ...state,
+    lines: newLines,
+    source,
+    cursor: { row, index: index + 1 },
+    maxLengthRow: Math.max(lines[row].length, maxLengthRow)
+  };
+}
+
+function computeTokens(state, char) {
   const { tokens, cursor, lines } = state;
   const { row, index } = cursor;
 
@@ -33,3 +49,9 @@ export function changeInsertChar(state, char) {
 
   return { ...state, tokens: nl };
 }
+
+function changeInsertChar(state, char) {
+  return computeTokens(computeSourceChange(state, char), char);
+}
+
+export default changeInsertChar;

@@ -1,28 +1,10 @@
 import * as actions from "../actions";
 import { getLineSeparator } from "../../tools";
 import stringHash from "string-hash";
+import { changeInsertChar, changeDeleteSelection } from "./source-edit-tools";
 
-import { changeInsertChar } from "./source-edit-tools";
-
-const reduceCharDown = (state, { payload: { char } }) => {
-  const { cursor, lines, maxLengthRow } = state;
-  const { row, index } = cursor;
-  const newLines = lines.map((l, i) =>
-    i === row ? `${l.substr(0, index)}${char}${l.substr(index)}` : l
-  );
-  const source = newLines.join(getLineSeparator());
-
-  return changeInsertChar(
-    {
-      ...state,
-      lines: newLines,
-      source,
-      cursor: { row, index: index + 1 },
-      maxLengthRow: Math.max(lines[row].length, maxLengthRow)
-    },
-    char
-  );
-};
+const reduceCharDown = (state, { payload: { char } }) =>
+  changeInsertChar(changeDeleteSelection(state), char);
 
 const reduceUpdateSource = (state, { payload: { source } }) => {
   const lines = source.split(getLineSeparator());

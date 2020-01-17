@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { EditorContext } from "../../../events";
+import { orderingSelection } from "../../../tools";
 import Selection from "./selection";
 
 const MAX_LENGTH = 9999999;
@@ -60,21 +61,6 @@ const rangifyBlocs = (hr, vr) => blocs => {
   }, []);
   return visibles;
 };
-
-/**
- *
- * @param {*} anchor
- * @param {*} extent
- */
-function orderingSelection(anchor, extent) {
-  if (
-    anchor.row > extent.row ||
-    (anchor.row === extent.row && extent.index < anchor.index)
-  ) {
-    return { first: extent, last: anchor };
-  }
-  return { first: anchor, last: extent };
-}
 
 /**
  *

@@ -1,5 +1,4 @@
 export default {
-  dispatch: undefined,
   /** general */
   zIndex: 0,
   source: "",

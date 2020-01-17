@@ -8,3 +8,5 @@ export const getLineSeparator = () => CRLF;
 
 export const splitLines = content =>
   typeof content === "string" ? content.split(CRLF) : content;
+
+export const mergeLine = lines => lines.join(getLineSeparator());
