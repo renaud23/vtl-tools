@@ -1,4 +1,5 @@
 import KEY from "./key-binding";
+import * as actions from "../actions";
 
 /* */
 const stopAndPrevent = e => {
@@ -9,6 +10,9 @@ const stopAndPrevent = e => {
 /* */
 const keyDownOverlayCallback = dispatch => e => {
   if (KEY.isUnbindedKey(e.key)) return false;
+  if (KEY.isCharCode(e.key)) {
+    dispatch(actions.charDown(e.key));
+  }
 };
 
 /* */

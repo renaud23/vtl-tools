@@ -6,8 +6,7 @@ import { reducers, initialState, EditorContext, actions } from "../events";
 import FontMetric from "./font-metric";
 
 const TEMPLATE_FONT_METRIC = "font_FONTyuyiyoproorot***@Mm";
-
-const postVtlTask = createVtlTaksManager();
+const parseVtl = createVtlTaksManager();
 
 const prepareDefaultToken = content => [
   {
@@ -23,15 +22,14 @@ function EditorContainer({ content, fontMetric, zIndex }) {
   const [state, dispatch] = useReducer(reducers, {
     ...initialState,
     zIndex,
-    fontMetric
+    fontMetric,
+    parseVtl
   });
 
   useEffect(() => {
-    postVtlTask(content, ({ tokens, errors }) => {
-      console.log("one");
+    parseVtl(content, ({ tokens = [], errors = [] } = {}) => {
       dispatch(actions.parsingEnd(content, tokens, errors));
     });
-
     dispatch(actions.parsingEnd(content, prepareDefaultToken(content), []));
   }, [content]);
 

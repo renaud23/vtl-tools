@@ -24,6 +24,7 @@ const getVisiblesLines = vRange => lines => {
             ...stack,
             {
               value: l,
+              row: i,
               start: next,
               stop: next + l.length - 1,
               tokens: []

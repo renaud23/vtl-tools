@@ -1,5 +1,6 @@
 import general from "./general-reducer";
 import selection from "./selection-reducer";
+import contentChange from "./content-change";
 
 /* */
 const combine = (...callbacks) =>
@@ -10,7 +11,7 @@ const combine = (...callbacks) =>
     state => state
   );
 
-const reducers = combine(general, selection);
+const reducers = combine(general, selection, contentChange);
 
 /** */
 export default (state, action) => {

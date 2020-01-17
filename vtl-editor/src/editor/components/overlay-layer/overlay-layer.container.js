@@ -1,6 +1,6 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
 import Overlay from "./overlay-layer";
-import { EditorContext, actions } from "../../events";
+import { EditorContext, actions, createKeydownCallback } from "../../events";
 import HorizontalScrollrange from "./horizontal-scrollrange";
 import VerticalScrollrange from "./vertical-scrollrange";
 import Cursor from "./cursor";
@@ -99,6 +99,7 @@ function OverlayLayerContainer() {
           dispatch(actions.mouseDrag(row, index));
         }
       }}
+      onKeydown={createKeydownCallback(dispatch)}
     >
       <HorizontalScrollrange />
       <VerticalScrollrange />

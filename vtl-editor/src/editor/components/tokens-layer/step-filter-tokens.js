@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { EditorContext } from "../../events";
+import { EditorContext, actions, contentChanges } from "../../events";
 import StepHRange from "./step-hrange";
 
 /**
@@ -73,7 +73,19 @@ const fillLinesWithTokens = lines => tokens => {
   return lines;
 };
 
-const consumeTemporyChanges = lines => lines;
+const consumeChange = lines => change => {
+  switch (change.type) {
+    case contentChanges.INSERT_TEXT: {
+      return contentChanges.reduceInsertText(lines, change.payload);
+    }
+    default:
+      return lines;
+  }
+};
+
+const consumeTemporyChanges = lines => changes => {
+  return changes.reduce((a, change) => consumeChange(a)(change), lines);
+};
 
 /**
  *
@@ -82,14 +94,22 @@ const consumeTemporyChanges = lines => lines;
  */
 
 function StepFilterTokens({ lines }) {
-  const { state } = useContext(EditorContext);
-  const { tokens } = state;
+  const { state, dispatch } = useContext(EditorContext);
+  const { tokens, temporyContentChanges } = state;
   const [linesWithTokens, setLinesWithTokens] = useState([]);
+
   useEffect(() => {
-    setLinesWithTokens(
-      consumeTemporyChanges(fillLinesWithTokens(lines)(tokens))
-    );
-  }, [lines, tokens]);
+    if (temporyContentChanges.length) {
+      const linesBefore = fillLinesWithTokens(lines)(tokens);
+      const lineAfter = consumeTemporyChanges(linesBefore)(
+        temporyContentChanges
+      );
+      setLinesWithTokens(lineAfter);
+      dispatch(actions.consumeContentTemporyChange());
+    } else {
+      setLinesWithTokens(fillLinesWithTokens(lines)(tokens));
+    }
+  }, [lines, tokens, temporyContentChanges, dispatch]);
 
   return <StepHRange lines={linesWithTokens} />;
 }

@@ -1,3 +1,1 @@
-import * as tokenizerWorker from "./tokenizer-worker";
-
-export { tokenizerWorker };
+export * from "./tokenizer-worker-simple";

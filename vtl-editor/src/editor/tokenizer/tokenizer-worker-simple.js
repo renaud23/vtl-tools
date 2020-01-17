@@ -1,4 +1,4 @@
-const PUSHER_INTERVAL = 200;
+const PUSHER_INTERVAL = 70;
 let ID = 0;
 
 const createWorkerCallback = (content, cally) => {
@@ -29,7 +29,6 @@ export const createVtlTaksManager = () => {
     if (!content.length) return;
 
     if (pusherTask) {
-      console.log("clear", pusherTask);
       window.clearTimeout(pusherTask);
     }
 
