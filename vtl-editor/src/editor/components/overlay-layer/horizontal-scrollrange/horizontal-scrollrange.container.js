@@ -19,6 +19,7 @@ function HorizontallScrollrangeContainer() {
   const [trackLeft, setTrackLeft] = useState(0);
   const [parentWidth, setParentWidth] = useState(0);
   const parentEl = useRef();
+
   useEffect(() => {
     if (parentEl.current) {
       const { width } = parentEl.current.getBoundingClientRect();

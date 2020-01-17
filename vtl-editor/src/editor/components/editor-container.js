@@ -9,15 +9,6 @@ import FontMetric from "./font-metric";
 const TEMPLATE_FONT_METRIC = "font_FONTyuyiyoproorot***@Mm";
 const parseVtl = createVtlTaksManager();
 
-const prepareDefaultToken = content => [
-  {
-    value: content,
-    start: 0,
-    stop: content.length,
-    className: "unmapped"
-  }
-];
-
 /** */
 function EditorContainer({ content, fontMetric, zIndex }) {
   const [state, dispatch] = useReducer(reducers, {
@@ -30,7 +21,6 @@ function EditorContainer({ content, fontMetric, zIndex }) {
 
   useEffect(() => {
     dispatch(actions.updateSource(content));
-    dispatch(actions.parsingEnd(prepareDefaultToken(content), []));
   }, [content]);
 
   useEffect(() => {

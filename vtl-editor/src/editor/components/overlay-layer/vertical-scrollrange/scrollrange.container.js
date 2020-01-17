@@ -11,6 +11,7 @@ function VerticalScrollrangeContainer() {
   const [trackHeight, setTrackHeight] = useState(0);
   const [trackTop, setTrackTop] = useState(0);
   const [parentHeight, setParentHeight] = useState(0);
+
   const parentEl = useRef();
   const margin = 10;
 
@@ -40,7 +41,7 @@ function VerticalScrollrangeContainer() {
       trackTop={trackTop}
       ref={parentEl}
       onDrag={how => {
-        if (lines.length > offset) {
+        if (lines.length > offset && how) {
           const next = Math.min(
             Math.max(trackTop + how, 0),
             parentHeight - trackHeight

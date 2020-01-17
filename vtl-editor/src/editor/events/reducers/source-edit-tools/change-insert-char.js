@@ -1,4 +1,3 @@
-import { createDefaultToken } from "./create-default-token";
 import { getLineSeparator } from "../../../tools";
 
 export function changeInsertChar(state, char) {
