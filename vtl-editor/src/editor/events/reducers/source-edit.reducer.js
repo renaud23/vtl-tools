@@ -2,14 +2,7 @@ import * as actions from "../actions";
 import { getLineSeparator } from "../../tools";
 import stringHash from "string-hash";
 
-const prepareDefaultToken = content => [
-  {
-    value: content,
-    start: 0,
-    stop: content.length,
-    className: "token unmapped"
-  }
-];
+import { changeInsertChar } from "./source-edit-tools";
 
 const reduceCharDown = (state, { payload: { char } }) => {
   const { cursor, lines, maxLengthRow } = state;
@@ -18,16 +11,17 @@ const reduceCharDown = (state, { payload: { char } }) => {
     i === row ? `${l.substr(0, index)}${char}${l.substr(index)}` : l
   );
   const source = newLines.join(getLineSeparator());
-  const tokens = prepareDefaultToken(source);
 
-  return {
-    ...state,
-    lines: newLines,
-    tokens,
-    source,
-    cursor: { row, index: index + 1 },
-    maxLengthRow: Math.max(lines[row].length, maxLengthRow)
-  };
+  return changeInsertChar(
+    {
+      ...state,
+      lines: newLines,
+      source,
+      cursor: { row, index: index + 1 },
+      maxLengthRow: Math.max(lines[row].length, maxLengthRow)
+    },
+    char
+  );
 };
 
 const reduceUpdateSource = (state, { payload: { source } }) => {
