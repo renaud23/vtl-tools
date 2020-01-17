@@ -1,6 +1,7 @@
 import general from "./general-reducer";
 import selection from "./selection-reducer";
-import contentChange from "./content-change";
+import temporyChanges from "./tempory-changes";
+import sourceEdit from "./source-edit";
 
 /* */
 const combine = (...callbacks) =>
@@ -11,7 +12,7 @@ const combine = (...callbacks) =>
     state => state
   );
 
-const reducers = combine(general, selection, contentChange);
+const reducers = combine(general, selection, temporyChanges, sourceEdit);
 
 /** */
 export default (state, action) => {

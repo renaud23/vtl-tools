@@ -9,6 +9,7 @@ const stopAndPrevent = e => {
 
 /* */
 const keyDownOverlayCallback = dispatch => e => {
+  stopAndPrevent(e);
   if (KEY.isUnbindedKey(e.key)) return false;
   if (KEY.isCharCode(e.key)) {
     dispatch(actions.charDown(e.key));

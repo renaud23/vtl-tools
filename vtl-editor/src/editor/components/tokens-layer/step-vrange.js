@@ -46,6 +46,7 @@ function StepVRange({ lines }) {
   useEffect(() => {
     setVisibles(getVisiblesLines(verticalScrollrange)(lines));
   }, [lines, verticalScrollrange]);
+
   return <StepFilterTokens lines={visibles} />;
 }
 

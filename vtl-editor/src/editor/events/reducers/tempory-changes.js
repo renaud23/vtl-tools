@@ -2,7 +2,7 @@ import * as actions from "../actions";
 import * as contentChanges from "../content-changes";
 
 const reduceCharDown = (state, { payload: { char } }) => {
-  const { extent, anchor, cursor } = state;
+  const { cursor } = state;
   const temporyContentChanges = [];
   if (cursor) {
     temporyContentChanges.push(contentChanges.insertText(cursor, `${char}`));

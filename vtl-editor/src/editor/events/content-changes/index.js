@@ -6,7 +6,7 @@ export const insertText = (cursor, text) => ({
 });
 
 export const reduceInsertText = (lines, { cursor, text }) => {
-  const { row, index } = cursor;
+  const { row } = cursor;
   // const line = lines[cursor.row];
   // const tokens = line.tokens.map(t => {
   //   const start = t.start - line.start;
@@ -20,11 +20,13 @@ export const reduceInsertText = (lines, { cursor, text }) => {
 
   lines.map(line => {
     if (row === line.row) {
-      const token = line.tokens.reduce(
-        (a, t) => (t.start - line.start >= index ? a : t),
-        undefined
-      );
-      console.log(token, index);
+      const tokens = line.tokens.map(t => {
+        return t;
+      });
+      return { ...line, tokens };
+    }
+    if (row > line.row) {
+      return { line };
     }
 
     return line;

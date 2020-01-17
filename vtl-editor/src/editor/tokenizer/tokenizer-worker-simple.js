@@ -1,4 +1,4 @@
-const PUSHER_INTERVAL = 70;
+const PUSHER_INTERVAL = 300;
 let ID = 0;
 
 const createWorkerCallback = (content, cally) => {
@@ -15,11 +15,6 @@ const createWorkerCallback = (content, cally) => {
   };
 };
 
-const createTask = content => ({
-  id: `${ID++}#${new Date().getTime()}`,
-  content
-});
-
 export const createVtlTaksManager = () => {
   const worker = new Worker("/worker-vtl-2.0-insee.js");
   let currentIdTask = undefined;
@@ -33,7 +28,7 @@ export const createVtlTaksManager = () => {
     }
 
     pusherTask = window.setTimeout(() => {
-      pusherTask = undefined;
+      // pusherTask = undefined;
       const at = new Date().getTime();
       const id = `${ID++}#${at}`;
       worker.postMessage({ action: "parse", content, id });
@@ -41,6 +36,7 @@ export const createVtlTaksManager = () => {
         if (data.id === currentIdTask) {
           callback(data);
         }
+        window.clearTimeout(pusherTask);
         pusherTask = undefined;
       });
 

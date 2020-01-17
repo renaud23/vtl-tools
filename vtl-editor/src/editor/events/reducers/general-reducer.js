@@ -1,21 +1,4 @@
 import * as actions from "../actions";
-import { splitLines } from "../../tools";
-
-const reduceParsingEnd = (state, { payload: { source, errors, tokens } }) => {
-  const lines = splitLines(source);
-  const maxLengthRow = lines.reduce(
-    (max, line) => (line.length > max ? line.length : max),
-    0
-  );
-  return {
-    ...state,
-    source,
-    lines,
-    errors,
-    tokens,
-    maxLengthRow
-  };
-};
 
 const reduceChangeVerticalScrollrange = (state, { payload: { range } }) => ({
   ...state,
@@ -39,9 +22,6 @@ const reduceChangeScrollrange = (
 /** */
 const reducer = (state, action) => {
   switch (action.type) {
-    case actions.PARSING_END: {
-      return reduceParsingEnd(state, action);
-    }
     case actions.CHANGE_VERTICAL_SCROLLRANGE: {
       return reduceChangeVerticalScrollrange(state, action);
     }

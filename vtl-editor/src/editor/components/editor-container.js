@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
+import stringHash from "string-hash";
 import Editor from "./editor";
 import { createVtlTaksManager } from "../tokenizer";
 import { reducers, initialState, EditorContext, actions } from "../events";
@@ -22,16 +23,22 @@ function EditorContainer({ content, fontMetric, zIndex }) {
   const [state, dispatch] = useReducer(reducers, {
     ...initialState,
     zIndex,
-    fontMetric,
-    parseVtl
+    fontMetric
   });
 
+  const { source } = state;
+
   useEffect(() => {
-    parseVtl(content, ({ tokens = [], errors = [] } = {}) => {
-      dispatch(actions.parsingEnd(content, tokens, errors));
-    });
-    dispatch(actions.parsingEnd(content, prepareDefaultToken(content), []));
+    dispatch(actions.updateSource(content));
+    dispatch(actions.parsingEnd(prepareDefaultToken(content), []));
   }, [content]);
+
+  useEffect(() => {
+    parseVtl(source, ({ tokens = [], errors = [] } = {}) => {
+      const hash = stringHash(source);
+      dispatch(actions.parsingEnd(tokens, errors, hash));
+    });
+  }, [source]);
 
   return (
     <EditorContext.Provider value={{ state, dispatch }}>

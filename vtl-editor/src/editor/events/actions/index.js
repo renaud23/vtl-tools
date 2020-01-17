@@ -1,8 +1,8 @@
 /** */
 export const PARSING_END = "vtl-editor/parsing-end";
-export const parsingEnd = (source, tokens, errors) => ({
+export const parsingEnd = (tokens, errors, hash) => ({
   type: PARSING_END,
-  payload: { source, tokens, errors }
+  payload: { tokens, errors, hash }
 });
 
 /** */
@@ -58,4 +58,11 @@ export const CONSUME_CONTENT_TEMPORY_CHANGE =
   "vtl-editor/consume-content-tempory-change";
 export const consumeContentTemporyChange = () => ({
   type: CONSUME_CONTENT_TEMPORY_CHANGE
+});
+
+/** */
+export const UPDATE_SOURCE = "vtl-editor/update-source";
+export const updateSource = source => ({
+  type: UPDATE_SOURCE,
+  payload: { source }
 });
