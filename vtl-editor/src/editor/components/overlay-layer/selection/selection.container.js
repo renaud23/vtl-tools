@@ -114,6 +114,8 @@ function SelectionContainer() {
   useEffect(() => {
     if (blocs.length) {
       setVisibles(rangifyBlocs(hr, vr)(blocs));
+    } else {
+      setVisibles([]);
     }
   }, [blocs, hr, vr]);
 
