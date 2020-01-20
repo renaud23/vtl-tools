@@ -1,10 +1,10 @@
 import React from "react";
 
-function Cursor({ top, left }) {
+function Cursor({ top, left, zIndex }) {
   return (
     <div
       className="vtl-editor-cursor"
-      style={{ top, left }}
+      style={{ top, left, zIndex: zIndex + 1 }}
       onDragStart={e => e.preventDefault()}
     />
   );

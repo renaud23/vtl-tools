@@ -9,7 +9,8 @@ function CursorContainer() {
     cursor,
     horizontalScrollrange: hr,
     verticalScrollrange: vr,
-    fontMetric: fm
+    fontMetric: fm,
+    zIndex
   } = state;
   if (cursor) {
     const { row, index } = cursor;
@@ -19,7 +20,7 @@ function CursorContainer() {
       index <= hr.stop &&
       row >= vr.start &&
       row <= vr.stop ? (
-      <Cursor top={top} left={left} />
+      <Cursor top={top} left={left} zIndex={zIndex} />
     ) : null;
   }
   return null;
