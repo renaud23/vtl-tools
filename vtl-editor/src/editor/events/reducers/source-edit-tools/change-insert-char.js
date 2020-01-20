@@ -46,7 +46,6 @@ function computeTokens(state, char) {
     }
     return t;
   });
-
   return { ...state, tokens: nl };
 }
 

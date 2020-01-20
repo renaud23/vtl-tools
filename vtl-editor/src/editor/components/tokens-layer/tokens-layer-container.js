@@ -1,11 +1,18 @@
 import React, { useContext } from "react";
 import { EditorContext } from "../../events";
-import StepVRange from "./step-vrange";
+import StepFilterTokens from "./step-filter-tokens";
 
 function TokensContainer() {
   const { state } = useContext(EditorContext);
-  const { lines } = state;
-  return <StepVRange lines={lines} />;
+  const { visibles, horizontalScrollrange, tokens } = state;
+
+  return (
+    <StepFilterTokens
+      visibles={visibles}
+      tokens={tokens}
+      horizontalScrollrange={horizontalScrollrange}
+    />
+  );
 }
 
 export default TokensContainer;

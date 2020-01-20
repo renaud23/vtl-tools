@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
-import { EditorContext } from "../../events";
+import React, { useState, useEffect } from "react";
 import StepHRange from "./step-hrange";
 
 /**
@@ -55,7 +54,7 @@ const fillLinesWithTokens = lines => tokens => {
   if (tokens.length && lines.length) {
     const tokensFiltered = filteringUtilsTokens(lines)(tokens);
 
-    const nl = lines.reduce(
+    const { stack } = lines.reduce(
       ({ stack, toks }, l) => {
         const [lineWithToken, tokensLeft] = consumeTokens(l, toks);
 
@@ -65,8 +64,9 @@ const fillLinesWithTokens = lines => tokens => {
         };
       },
       { stack: [], toks: [...tokensFiltered] }
-    ).stack;
-    return nl;
+    );
+
+    return stack;
   }
 
   return lines;
@@ -78,16 +78,19 @@ const fillLinesWithTokens = lines => tokens => {
  * @param {*} hRange
  */
 
-function StepFilterTokens({ lines }) {
-  const { state, dispatch } = useContext(EditorContext);
-  const { tokens, temporyContentChanges } = state;
+function StepFilterTokens({ visibles, tokens, horizontalScrollrange }) {
   const [linesWithTokens, setLinesWithTokens] = useState([]);
 
   useEffect(() => {
-    setLinesWithTokens(fillLinesWithTokens(lines)(tokens));
-  }, [lines, tokens, temporyContentChanges, dispatch]);
+    setLinesWithTokens(fillLinesWithTokens(visibles)(tokens));
+  }, [visibles, tokens]);
 
-  return <StepHRange lines={linesWithTokens} />;
+  return (
+    <StepHRange
+      visibles={linesWithTokens}
+      horizontalScrollrange={horizontalScrollrange}
+    />
+  );
 }
 
 export default StepFilterTokens;

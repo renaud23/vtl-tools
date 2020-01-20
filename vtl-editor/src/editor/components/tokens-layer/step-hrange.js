@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
-import { EditorContext } from "../../events";
+import React, { useState, useEffect } from "react";
 import TokensLayer from "./tokens-layer";
 
 /**
@@ -44,13 +43,11 @@ const filterTokensWithVRange = lines => hRange => {
   return lines.map(filter);
 };
 
-function StepHRange({ lines }) {
-  const { state } = useContext(EditorContext);
-  const { horizontalScrollrange } = state;
+function StepHRange({ visibles, horizontalScrollrange }) {
   const [linesFiltered, setLinesFiltered] = useState([]);
   useEffect(() => {
-    setLinesFiltered(filterTokensWithVRange(lines)(horizontalScrollrange));
-  }, [lines, horizontalScrollrange]);
+    setLinesFiltered(filterTokensWithVRange(visibles)(horizontalScrollrange));
+  }, [visibles, horizontalScrollrange]);
   return <TokensLayer lines={linesFiltered} />;
 }
 

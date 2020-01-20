@@ -16,6 +16,6 @@ const reducers = combine(general, selection, sourceEdit);
 /** */
 export default (state, action) => {
   const next = reducers(state, action);
-  // console.debug(action, state, next);
+  // console.info(action, state, next);
   return next;
 };

@@ -1,4 +1,5 @@
 import * as actions from "../actions";
+import { computeVisibleLines } from "./source-edit-tools";
 
 const reduceChangeVerticalScrollrange = (state, { payload: { range } }) => ({
   ...state,
@@ -23,7 +24,9 @@ const reduceChangeScrollrange = (
 const reducer = (state, action) => {
   switch (action.type) {
     case actions.CHANGE_VERTICAL_SCROLLRANGE: {
-      return reduceChangeVerticalScrollrange(state, action);
+      return computeVisibleLines(
+        reduceChangeVerticalScrollrange(state, action)
+      );
     }
     case actions.CHANGE_SCROLLRANGE: {
       return reduceChangeScrollrange(state, action);

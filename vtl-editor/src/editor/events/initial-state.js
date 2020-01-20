@@ -3,6 +3,7 @@ export default {
   zIndex: 0,
   source: "",
   lines: [""],
+  visibles: [{ value: "", start: 0, stopb: 0, row: 0, tokens: [] }],
   tokens: [],
   verticalScrollrange: { start: 0, stop: 0, offset: 1 },
   horizontalScrollrange: { start: 0, stop: 0, offset: 0 },
