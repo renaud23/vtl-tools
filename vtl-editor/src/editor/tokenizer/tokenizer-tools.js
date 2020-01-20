@@ -5,6 +5,13 @@ export const mergeLines = lines =>
   lines.reduce((a, { value }) => `${a}${value}${LF}`, "");
 
 /* */
+export const createDefaultToken = value => ({
+  value,
+  start: 0,
+  stop: value.length - 1
+});
+
+/* */
 export const fillUnmappedToken = (tokensOriginal, ligne) => {
   const result = tokensOriginal.reduce(
     ({ index, tokens }, token) =>

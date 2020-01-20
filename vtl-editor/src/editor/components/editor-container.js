@@ -2,8 +2,9 @@ import React, { useReducer, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import stringHash from "string-hash";
 import Editor from "./editor";
-import { createVtlTaksManager } from "../tokenizer";
+import { createVtlTaksManager, createDefaultToken } from "../tokenizer";
 import { reducers, initialState, EditorContext, actions } from "../events";
+
 import FontMetric from "./font-metric";
 
 const TEMPLATE_FONT_METRIC = "font_FONTyuyiyoproorot***@Mm";
@@ -21,12 +22,14 @@ function EditorContainer({ content, fontMetric, zIndex }) {
 
   useEffect(() => {
     dispatch(actions.updateSource(content));
+    dispatch(
+      actions.parsingEnd([createDefaultToken(content)], [], stringHash(content))
+    );
   }, [content]);
 
   useEffect(() => {
     parseVtl(source, ({ tokens = [], errors = [] } = {}) => {
-      const hash = stringHash(source);
-      dispatch(actions.parsingEnd(tokens, errors, hash));
+      dispatch(actions.parsingEnd(tokens, errors, stringHash(source)));
     });
   }, [source]);
 

@@ -19,7 +19,6 @@ function computeSourceChange(state, char) {
 function computeTokens(state, char) {
   const { tokens, cursor, lines } = state;
   const { row, index } = cursor;
-
   const pos = lines.reduce((a, l, i) => {
     if (i < row) {
       return a + l.length + getLineSeparator().length;

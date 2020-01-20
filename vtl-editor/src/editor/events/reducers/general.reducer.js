@@ -1,5 +1,5 @@
 import * as actions from "../actions";
-import { computeVisibleLines } from "./source-edit-tools";
+import { validateVisibleLines } from "./state-validator";
 
 const reduceChangeVerticalScrollrange = (state, { payload: { range } }) => ({
   ...state,
@@ -24,7 +24,7 @@ const reduceChangeScrollrange = (
 const reducer = (state, action) => {
   switch (action.type) {
     case actions.CHANGE_VERTICAL_SCROLLRANGE: {
-      return computeVisibleLines(
+      return validateVisibleLines(
         reduceChangeVerticalScrollrange(state, action)
       );
     }

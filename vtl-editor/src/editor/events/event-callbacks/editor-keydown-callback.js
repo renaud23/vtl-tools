@@ -1,6 +1,7 @@
 import KEY from "./key-binding";
 import * as actions from "../actions";
 
+let could = true;
 /* */
 const stopAndPrevent = e => {
   e.stopPropagation();
@@ -10,9 +11,13 @@ const stopAndPrevent = e => {
 /* */
 const keyDownOverlayCallback = dispatch => e => {
   stopAndPrevent(e);
-  if (KEY.isUnbindedKey(e.key)) return false;
-  if (KEY.isCharCode(e.key)) {
-    dispatch(actions.charDown(e.key));
+  if (could) {
+    could = false;
+    window.setTimeout(() => (could = true), 30);
+    if (KEY.isUnbindedKey(e.key)) return false;
+    if (KEY.isCharCode(e.key)) {
+      dispatch(actions.charDown(e.key));
+    }
   }
 };
 
