@@ -17,7 +17,10 @@ const keyDownOverlayCallback = dispatch => e => {
     if (KEY.isUnbindedKey(e.key)) return false;
     if (KEY.isCharCode(e.key)) {
       dispatch(actions.charDown(e.key));
+      return false;
     }
+    dispatch(actions.keyDown(e.key));
+    return false;
   }
 };
 

@@ -8,7 +8,10 @@
                                   supported by Chrome, Opera and Firefox */
 }
 
+$lineHeight: 22px;
+$fontSize: 18px;
 $scrollbarMargin: 12px;
+
 @mixin onDrag {
   background-color: transparent;
   .track {
@@ -26,11 +29,17 @@ $scrollbarMargin: 12px;
   position: absolute;
   font-weight: bolder;
   &:before {
-    font-size: 22px;
+    font-size: 18px;
     content: "\007c";
     font-weight: 800;
     color: ivory;
   }
+}
+
+@mixin monospaceFont() {
+  font-size: $fontSize;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Inconsolata", "Source Code Pro", "Courier New", monospace;
 }
 
 .vtl-editor {
@@ -38,15 +47,12 @@ $scrollbarMargin: 12px;
   padding: 0;
   width: 100%;
   height: 100%;
-
-  line-height: 22px;
-  font-size: 14px;
-  font-family: dm, Menlo, Monaco, "Courier New", monospace;
+  line-height: $lineHeight;
+  @include monospaceFont();
 
   .font-metric {
-    line-height: 22px;
-    font-size: 14px;
-    font-family: dm, Menlo, Monaco, "Courier New", monospace;
+    line-height: $lineHeight;
+    @include monospaceFont();
     padding: 0;
     overflow-y: hidden;
     display: inline-block;
@@ -62,7 +68,7 @@ $scrollbarMargin: 12px;
 
     /* */
     .vtl-editor-tokens {
-      background-color: black;
+      background-color: rgb(44, 44, 36);
       color: snow;
 
       width: 100%;
@@ -73,7 +79,7 @@ $scrollbarMargin: 12px;
       .row {
         overflow-y: hidden;
         overflow-x: hidden;
-        height: 22px;
+        height: $lineHeight;
       }
     }
 
@@ -93,14 +99,14 @@ $scrollbarMargin: 12px;
 
     .vtl-editor-selection-bloc {
       position: absolute;
-      background-color: rgba(119, 119, 238, 0.438);
-      height: 22px;
+      background-color: rgba(221, 160, 245, 0.3);
+      height: $lineHeight;
     }
 
     .vtl-editor-cursor {
       @include cursor();
-      margin-top: -0px;
-      margin-left: -6px;
+      margin-top: -1px;
+      margin-left: -4px;
     }
 
     /* */
