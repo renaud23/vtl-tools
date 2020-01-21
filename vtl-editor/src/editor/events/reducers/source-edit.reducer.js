@@ -2,7 +2,10 @@ import * as actions from "../actions";
 import { getLineSeparator } from "../../tools";
 import stringHash from "string-hash";
 import { changeInsertChar, changeDeleteSelection } from "./source-edit-tools";
-import { validateVisibleLines, validateCursorPos } from "./state-validator";
+import {
+  validateVisibleLines,
+  validateCursorHorizontalScrollrange
+} from "./state-validator";
 
 const reduceCharDown = (state, { payload: { char } }) =>
   changeInsertChar(changeDeleteSelection(state), char);
@@ -36,7 +39,7 @@ const reducer = (state, action) => {
     }
     case actions.CHAR_DOWN: {
       return validateVisibleLines(
-        validateCursorPos(reduceCharDown(state, action))
+        validateCursorHorizontalScrollrange(reduceCharDown(state, action))
       );
     }
     case actions.UPDATE_SOURCE: {
