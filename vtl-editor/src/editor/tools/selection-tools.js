@@ -1,3 +1,5 @@
+import { getLineSeparator } from "./split-lines";
+
 /**
  *
  * @param {*} anchor
@@ -11,4 +13,25 @@ export function orderingSelection(anchor, extent) {
     return { first: extent, last: anchor };
   }
   return { first: anchor, last: extent };
+}
+
+export function computeSourcePosition(lines, ...cursors) {
+  return lines.reduce(
+    (a, line, i) => {
+      return a.map(c => {
+        if (i < c.row) {
+          return {
+            ...c,
+            pos: (c.pos || 0) + line.length + getLineSeparator().length
+          };
+        }
+        if (c.row === i) {
+          return { ...c, pos: (c.pos || 0) + c.index };
+        }
+
+        return c;
+      });
+    },
+    [...cursors]
+  );
 }
