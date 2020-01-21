@@ -51,7 +51,8 @@ const rangifyBlocs = (hr, vr) => blocs => {
           {
             row: row - vr.start,
             index: Math.max(index - hr.start, 0),
-            length: Math.min(index + length, hr.offset) - index
+            length:
+              Math.min(hr.stop, index + length) - Math.max(hr.start, index)
           }
         ];
       }
