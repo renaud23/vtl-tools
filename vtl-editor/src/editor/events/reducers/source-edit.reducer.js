@@ -2,7 +2,11 @@ import * as actions from "../actions";
 import { getLineSeparator } from "../../tools";
 import stringHash from "string-hash";
 import { KEY } from "../event-callbacks";
-import { changeInsertChar, changeDeleteSelection } from "./source-edit-tools";
+import {
+  changeInsertChar,
+  changeDeleteSelection,
+  changeKeyEnter
+} from "./source-edit-tools";
 import {
   validateVisibleLines,
   validateCursorHorizontalScrollrange
@@ -11,7 +15,7 @@ import {
 const reduceKeyDown = (state, { payload: { key } }) => {
   switch (key) {
     case KEY.ENTER: {
-      return changeDeleteSelection(state);
+      return validateVisibleLines(changeKeyEnter(changeDeleteSelection(state)));
     }
     default:
       return state;

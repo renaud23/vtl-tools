@@ -9,7 +9,7 @@
 }
 
 $lineHeight: 22px;
-$fontSize: 18px;
+$fontSize: 16px;
 $scrollbarMargin: 12px;
 
 @mixin onDrag {
@@ -29,7 +29,7 @@ $scrollbarMargin: 12px;
   position: absolute;
   font-weight: bolder;
   &:before {
-    font-size: 18px;
+    font-size: 20px;
     content: "\007c";
     font-weight: 800;
     color: ivory;
@@ -39,6 +39,7 @@ $scrollbarMargin: 12px;
 @mixin monospaceFont() {
   font-size: $fontSize;
   -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.1em;
   font-family: "Inconsolata", "Source Code Pro", "Courier New", monospace;
 }
 
