@@ -11,6 +11,7 @@
 $lineHeight: 22px;
 $fontSize: 16px;
 $scrollbarMargin: 12px;
+$editorBackgroundColor: rgb(44, 44, 36);
 
 @mixin onDrag {
   background-color: transparent;
@@ -46,10 +47,27 @@ $scrollbarMargin: 12px;
 .vtl-editor {
   margin: 0;
   padding: 0;
-  width: 100%;
+  width: calc(100% + 1px);
   height: 100%;
   line-height: $lineHeight;
   @include monospaceFont();
+
+  display: flex;
+  flex-direction: row;
+
+  .vtl-editor-rownums {
+    width: 55px;
+    height: 100%;
+    background-color: $editorBackgroundColor;
+    border-right: solid rgba(250, 250, 250, 0.4) 1px;
+    .vtl-editor-rownum {
+      color: rgba(250, 250, 250, 0.4);
+      line-height: $lineHeight;
+      padding-left: 2px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 14px;
+    }
+  }
 
   .font-metric {
     line-height: $lineHeight;
@@ -69,7 +87,7 @@ $scrollbarMargin: 12px;
 
     /* */
     .vtl-editor-tokens {
-      background-color: rgb(44, 44, 36);
+      background-color: $editorBackgroundColor;
       color: snow;
 
       width: 100%;
@@ -96,6 +114,10 @@ $scrollbarMargin: 12px;
 
       overflow-y: hidden;
       overflow-x: hidden;
+
+      &:focus {
+        outline: none;
+      }
     }
 
     .vtl-editor-selection-bloc {

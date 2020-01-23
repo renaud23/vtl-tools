@@ -23,6 +23,7 @@ function HorizontallScrollrangeContainer() {
   useEffect(() => {
     if (parentEl.current) {
       const { width } = parentEl.current.getBoundingClientRect();
+
       if (maxLengthRow) {
         setTrackWidth(
           Math.round((offset / (maxLengthRow + LEFT_BORDER_MARGIN)) * width)
