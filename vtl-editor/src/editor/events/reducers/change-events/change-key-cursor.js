@@ -1,35 +1,28 @@
-function getAnchor(shiftKey, anchor, cursor) {
+function getSelection(shiftKey, anchor, extent) {
   if (shiftKey) {
-    return anchor ? anchor : cursor;
+    return { anchor, extent };
   }
-  return undefined;
+  return { anchor: undefined, extent: undefined };
 }
 
-function getExtent(shiftKey, next) {
-  if (shiftKey) {
-    return next;
-  }
-  return undefined;
-}
-
-export function changeKeyUp(state) {
-  const { cursor, lines } = state;
+export function changeKeyUp(state, { shiftKey }) {
+  const { cursor, lines, anchor } = state;
   if (!cursor) {
     return state;
   }
   const { row, index } = cursor;
   const nextRow = Math.max(0, row - 1);
   const nextIndex = Math.min(index, lines[nextRow].length);
+  const nextCursor = { row: nextRow, index: nextIndex };
   return {
     ...state,
-    cursor: { row: nextRow, index: nextIndex },
-    extent: undefined,
-    anchor: undefined
+    ...getSelection(shiftKey, anchor || cursor, nextCursor),
+    cursor: nextCursor
   };
 }
 
 export function changeKeyDown(state, { shiftKey }) {
-  const { cursor, lines, extent, anchor } = state;
+  const { cursor, lines, anchor } = state;
   if (!cursor) {
     return state;
   }
@@ -39,14 +32,13 @@ export function changeKeyDown(state, { shiftKey }) {
   const nextCursor = { row: nextRow, index: nextIndex };
   return {
     ...state,
-    cursor: nextCursor,
-    extent: getExtent(shiftKey, nextCursor),
-    anchor: getAnchor(shiftKey, anchor, cursor)
+    ...getSelection(shiftKey, anchor || cursor, nextCursor),
+    cursor: nextCursor
   };
 }
 
-export function changeKeyLeft(state) {
-  const { cursor, lines } = state;
+export function changeKeyLeft(state, { shiftKey }) {
+  const { cursor, lines, anchor } = state;
   if (!cursor) {
     return state;
   }
@@ -56,16 +48,16 @@ export function changeKeyLeft(state) {
   }
   const nextRow = index === 0 ? Math.max(0, row - 1) : row;
   const nextIndex = index === 0 ? lines[nextRow].length : index - 1;
+  const nextCursor = { row: nextRow, index: nextIndex };
   return {
     ...state,
-    extent: undefined,
-    cursor: { row: nextRow, index: nextIndex },
-    anchor: undefined
+    ...getSelection(shiftKey, anchor || cursor, nextCursor),
+    cursor: nextCursor
   };
 }
 
-export function changeKeyRight(state) {
-  const { cursor, lines } = state;
+export function changeKeyRight(state, { shiftKey }) {
+  const { cursor, lines, anchor } = state;
   if (!cursor) {
     return state;
   }
@@ -81,10 +73,10 @@ export function changeKeyRight(state) {
       ? Math.min(lines.length ? lines.length - 1 : 0, row + 1)
       : row;
   const nextIndex = index === lines[row].length ? 0 : index + 1;
+  const nextCursor = { row: nextRow, index: nextIndex };
   return {
     ...state,
-    extent: undefined,
-    cursor: { row: nextRow, index: nextIndex },
-    anchor: undefined
+    ...getSelection(shiftKey, anchor || cursor, nextCursor),
+    cursor: nextCursor
   };
 }
