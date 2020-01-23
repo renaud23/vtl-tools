@@ -68,7 +68,7 @@ function HorizontallScrollrangeContainer() {
     [dispatch, limite, maxLengthRow, offset, trackLeft]
   );
 
-  return (
+  return maxLengthRow > offset ? (
     <HorizontalScrollrange
       trackWidth={trackWidth}
       trackLeft={trackLeft}
@@ -76,7 +76,7 @@ function HorizontallScrollrangeContainer() {
       onDrag={cally}
       zIndex={zIndex}
     />
-  );
+  ) : null;
 }
 
 export default HorizontallScrollrangeContainer;

@@ -21,6 +21,8 @@ function VerticalScrollrangeContainer() {
         Math.max(Math.round((offset / (lines.length + margin)) * height), 15)
       );
       setParentHeight(height);
+    } else {
+      setTrackHeight(0);
     }
   }, [parentEl, offset, lines]);
 
