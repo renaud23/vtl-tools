@@ -5,7 +5,8 @@ import { KEY } from "../event-callbacks";
 import {
   changeInsertChar,
   changeDeleteSelection,
-  changeKeyEnter
+  changeKeyEnter,
+  changeBackSpaceKey
 } from "./source-edit-tools";
 import { updateState } from "../../tools";
 import {
@@ -17,6 +18,9 @@ const reduceKeyDown = (state, { payload: { key } }) => {
   switch (key) {
     case KEY.ENTER: {
       return changeKeyEnter(changeDeleteSelection(state));
+    }
+    case KEY.BACK_SPACE: {
+      return changeBackSpaceKey(state);
     }
     default:
       return state;
