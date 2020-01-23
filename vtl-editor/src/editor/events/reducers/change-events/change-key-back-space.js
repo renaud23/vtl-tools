@@ -14,6 +14,7 @@ function changeBackSpaceKey(state) {
     return {
       ...state,
       source: nextSource,
+      waiting: true,
       post: {
         cursor: {
           row: Math.max(0, index === 0 ? row - 1 : row),

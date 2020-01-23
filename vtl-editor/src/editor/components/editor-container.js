@@ -22,9 +22,6 @@ function EditorContainer({ content, fontMetric, zIndex }) {
 
   useEffect(() => {
     dispatch(actions.updateSource(content));
-    // dispatch(
-    //   actions.parsingEnd([createDefaultToken(content)], [], stringHash(content))
-    // );
   }, [content]);
 
   useEffect(() => {
