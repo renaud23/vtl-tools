@@ -3,7 +3,10 @@ import React, { useState, useCallback } from "react";
 import classnames from "classnames";
 import Track from "./track";
 
-function VerticalScrollrange({ trackHeight, trackTop, onDrag, zIndex }, ref) {
+function VerticalScrollrange(
+  { trackHeight, trackTop, onDrag, zIndex, children },
+  ref
+) {
   const [drag, setDrag] = useState(false);
   const cally = useCallback(
     (state, how) => {
@@ -23,6 +26,7 @@ function VerticalScrollrange({ trackHeight, trackTop, onDrag, zIndex }, ref) {
       })}
     >
       <Track height={trackHeight} top={trackTop} onDrag={cally} />
+      {children}
     </div>
   );
 }

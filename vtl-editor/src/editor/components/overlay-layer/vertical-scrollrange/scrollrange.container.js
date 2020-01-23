@@ -2,13 +2,21 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 
 import VerticalScrollrange from "./scrollrange";
 import { EditorContext, actions } from "../../../events";
+import SelectionView from "./selection-view";
 
 function VerticalScrollrangeContainer() {
   const { state, dispatch } = useContext(EditorContext);
-  const { verticalScrollrange: range = {}, lines, zIndex } = state;
+  const {
+    verticalScrollrange: range = {},
+    lines,
+    zIndex,
+    anchor,
+    extent
+  } = state;
   const { start, offset } = range;
 
   const [trackHeight, setTrackHeight] = useState(0);
+  const [selection, setSelection] = useState(undefined);
   const [trackTop, setTrackTop] = useState(0);
   const [parentHeight, setParentHeight] = useState(0);
 
@@ -34,6 +42,20 @@ function VerticalScrollrangeContainer() {
       );
     }
   }, [parentEl, start, lines, trackHeight]);
+
+  useEffect(() => {
+    if (anchor && extent) {
+      const selHeigh = Math.round(
+        (Math.abs(extent.row - anchor.row) / lines.length) * parentHeight
+      );
+      const selTop = Math.round(
+        (Math.min(extent.row, anchor.row) / lines.length) * parentHeight
+      );
+      setSelection({ top: selTop, height: selHeigh });
+    } else {
+      setSelection(undefined);
+    }
+  }, [extent, anchor, parentHeight, lines]);
 
   return (
     <VerticalScrollrange
@@ -65,7 +87,9 @@ function VerticalScrollrangeContainer() {
           );
         }
       }}
-    />
+    >
+      {selection ? <SelectionView {...selection} /> : null}
+    </VerticalScrollrange>
   );
 }
 
