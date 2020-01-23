@@ -55,7 +55,10 @@ export const charDown = char => ({ type: CHAR_DOWN, payload: { char } });
 
 /** */
 export const KEY_DOWN = "vtl-editor/key-down";
-export const keyDown = key => ({ type: KEY_DOWN, payload: { key } });
+export const keyDown = (key, data) => ({
+  type: KEY_DOWN,
+  payload: { key, data }
+});
 
 /** */
 export const UPDATE_SOURCE = "vtl-editor/update-source";

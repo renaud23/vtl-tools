@@ -30,19 +30,19 @@ function reduceChangeScrollrange(state, { payload: { vertical, horizontal } }) {
   };
 }
 
-function reduceKeyDown(state, { payload: { key } }) {
+function reduceKeyDown(state, { payload: { key, data } }) {
   switch (key) {
     case KEY.ARROW_RIGHT: {
-      return changeKeyRight(state);
+      return changeKeyRight(state, data);
     }
     case KEY.ARROW_LEFT: {
-      return changeKeyLeft(state);
+      return changeKeyLeft(state, data);
     }
     case KEY.ARROW_UP: {
-      return changeKeyUp(state);
+      return changeKeyUp(state, data);
     }
     case KEY.ARROW_DOWN: {
-      return changeKeyDown(state);
+      return changeKeyDown(state, data);
     }
     default:
       return state;

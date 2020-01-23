@@ -21,7 +21,7 @@ const keyDownOverlayCallback = (state, dispatch) => e => {
       dispatch(actions.charDown(e.key));
       return false;
     }
-    dispatch(actions.keyDown(e.key));
+    dispatch(actions.keyDown(e.key, { shiftKey: e.shiftKey }));
     return false;
   }
 };

@@ -1,3 +1,17 @@
+function getAnchor(shiftKey, anchor, cursor) {
+  if (shiftKey) {
+    return anchor ? anchor : cursor;
+  }
+  return undefined;
+}
+
+function getExtent(shiftKey, next) {
+  if (shiftKey) {
+    return next;
+  }
+  return undefined;
+}
+
 export function changeKeyUp(state) {
   const { cursor, lines } = state;
   if (!cursor) {
@@ -14,19 +28,20 @@ export function changeKeyUp(state) {
   };
 }
 
-export function changeKeyDown(state) {
-  const { cursor, lines } = state;
+export function changeKeyDown(state, { shiftKey }) {
+  const { cursor, lines, extent, anchor } = state;
   if (!cursor) {
     return state;
   }
   const { row, index } = cursor;
   const nextRow = Math.min(lines.length ? lines.length - 1 : 0, row + 1);
   const nextIndex = Math.min(index, lines[nextRow].length);
+  const nextCursor = { row: nextRow, index: nextIndex };
   return {
     ...state,
-    cursor: { row: nextRow, index: nextIndex },
-    extent: undefined,
-    anchor: undefined
+    cursor: nextCursor,
+    extent: getExtent(shiftKey, nextCursor),
+    anchor: getAnchor(shiftKey, anchor, cursor)
   };
 }
 
