@@ -9,10 +9,7 @@ import {
   changeBackSpaceKey
 } from "./change-events";
 import { updateState } from "../../tools";
-import {
-  validateVisibleLines,
-  validateCursorHorizontalScrollrange
-} from "./state-validator";
+import { validateVisibleLines, validateScrollrange } from "./state-validator";
 
 const reduceKeyDown = (state, { payload: { key } }) => {
   switch (key) {
@@ -48,8 +45,8 @@ const reduceParsingEnd = (state, { payload: { errors, tokens, hash } }) => {
   if (currentHash !== hash) return state;
   const lines = source.split(getLineSeparator());
   const maxLengthRow = lines.reduce((a, l) => (l.length > a ? l.length : a), 0);
-  return validateCursorHorizontalScrollrange(
-    validateVisibleLines({
+  return validateVisibleLines(
+    validateScrollrange({
       ...update,
       errors,
       lines,
