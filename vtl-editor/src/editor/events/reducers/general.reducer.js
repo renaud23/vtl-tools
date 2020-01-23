@@ -1,5 +1,5 @@
 import * as actions from "../actions";
-import { validateVisibleLines } from "./state-validator";
+import { validateScrollrange, validateVisibleLines } from "./state-validator";
 import {
   changeKeyRight,
   changeKeyLeft,
@@ -64,7 +64,9 @@ const reducer = (state, action) => {
       return reduceChangeHorizontalScrollrange(state, action);
     }
     case actions.KEY_DOWN: {
-      return reduceKeyDown(state, action);
+      return validateVisibleLines(
+        validateScrollrange(reduceKeyDown(state, action))
+      );
     }
     default:
       return state;
