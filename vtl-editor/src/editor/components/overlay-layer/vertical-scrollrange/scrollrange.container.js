@@ -14,7 +14,6 @@ function VerticalScrollrangeContainer() {
 
   const parentEl = useRef();
   const margin = 10;
-
   useEffect(() => {
     if (parentEl.current && lines.length > offset) {
       const { height } = parentEl.current.getBoundingClientRect();

@@ -18,19 +18,21 @@ function EditorContainer({ content, fontMetric, zIndex }) {
     fontMetric
   });
 
-  const { source } = state;
+  const { source, sourceMap } = state;
 
   useEffect(() => {
     dispatch(actions.updateSource(content));
-    dispatch(
-      actions.parsingEnd([createDefaultToken(content)], [], stringHash(content))
-    );
+    // dispatch(
+    //   actions.parsingEnd([createDefaultToken(content)], [], stringHash(content))
+    // );
   }, [content]);
 
   useEffect(() => {
-    parseVtl(source, ({ tokens = [], errors = [] } = {}) => {
-      dispatch(actions.parsingEnd(tokens, errors, stringHash(source)));
-    });
+    if (source) {
+      parseVtl(source, ({ tokens = [], errors = [] } = {}) => {
+        dispatch(actions.parsingEnd(tokens, errors, stringHash(source)));
+      });
+    }
   }, [source]);
 
   return (

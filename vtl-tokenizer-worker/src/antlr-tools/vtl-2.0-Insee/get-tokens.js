@@ -99,9 +99,6 @@ const getTokens = lines => {
     .getAllTokens()
     .map(tokenize(lexer.symbolicNames, lexer)(lines));
 
-  // console.log(tokens, ligne);
-  // console.log(fillUnmappedToken(tokens, ligne));
-
   return tokens;
 };
 

@@ -9,8 +9,10 @@ const stopAndPrevent = e => {
 };
 
 /* */
-const keyDownOverlayCallback = dispatch => e => {
+const keyDownOverlayCallback = (state, dispatch) => e => {
   stopAndPrevent(e);
+  const { waiting } = state;
+  if (waiting) return;
   if (could) {
     could = false;
     window.setTimeout(() => (could = true), 30);
@@ -25,4 +27,4 @@ const keyDownOverlayCallback = dispatch => e => {
 };
 
 /* */
-export default dispatch => keyDownOverlayCallback(dispatch);
+export default (state, dispatch) => keyDownOverlayCallback(state, dispatch);

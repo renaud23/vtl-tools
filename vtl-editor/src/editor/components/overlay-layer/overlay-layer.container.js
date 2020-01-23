@@ -30,8 +30,12 @@ const computeScrollrange = (parentEl, fontMetric) => {
  */
 const getRelativePos = el => e => {
   const { pageX, pageY } = e;
-  const { x, y } = el.getBoundingClientRect();
-  return { x: pageX - x - window.scrollX, y: pageY - y - window.scrollY };
+  const { x, y, top, left } = el.getBoundingClientRect();
+
+  return {
+    x: pageX - (x || left) - window.scrollX,
+    y: pageY - (y || top) - window.scrollY
+  };
 };
 
 /**
@@ -99,7 +103,7 @@ function OverlayLayerContainer() {
           dispatch(actions.mouseDrag(row, index));
         }
       }}
-      onKeydown={createKeydownCallback(dispatch)}
+      onKeydown={createKeydownCallback(state, dispatch)}
     >
       <HorizontalScrollrange />
       <VerticalScrollrange />

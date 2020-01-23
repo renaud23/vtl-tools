@@ -9,7 +9,6 @@ import Token from "./token";
  */
 
 function Row({ line }) {
-  // const compute = computeTokenValue(line);
   return (
     <div className="row">
       {line.tokenParts.map((t, i) => (

@@ -7,7 +7,7 @@ const antlr4 = require("antlr4/index");
     if (action && content) {
       switch (action) {
         case "tokenize":
-          vtl.getTokens(content).then((...args) => postMessage(...args));
+          postMessage({ tokens: vtl.getTokens(content), id });
           break;
         case "parse":
           postMessage({ ...vtl.parse(content, root), id });

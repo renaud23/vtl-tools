@@ -32,6 +32,7 @@ const getVisibleLines = vRange => lines => {
     }),
     { stack: [], next: 0 }
   );
+
   return stack;
 };
 

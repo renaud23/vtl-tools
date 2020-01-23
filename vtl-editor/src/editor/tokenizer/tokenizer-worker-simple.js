@@ -31,10 +31,10 @@ export const createVtlTaksManager = () => {
       // pusherTask = undefined;
       const at = new Date().getTime();
       const id = `${ID++}#${at}`;
-      worker.postMessage({ action: "parse", content, id });
+      worker.postMessage({ action: "tokenize", content, id });
       worker.onmessage = createWorkerCallback(content, data => {
         if (data.id === currentIdTask) {
-          callback(data);
+          callback({ ...data, errors: [] });
         }
         window.clearTimeout(pusherTask);
         pusherTask = undefined;

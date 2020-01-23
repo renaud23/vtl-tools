@@ -23,7 +23,7 @@ const reduceKeyDown = (state, { payload: { key } }) => {
 };
 
 const reduceCharDown = (state, { payload: { char } }) =>
-  changeInsertChar(changeDeleteSelection(state), char);
+  changeInsertChar(state, char);
 
 const reduceUpdateSource = (state, { payload: { source } }) => {
   const lines = source.split(getLineSeparator());
@@ -37,25 +37,28 @@ const reduceUpdateSource = (state, { payload: { source } }) => {
 };
 
 const reduceParsingEnd = (state, { payload: { errors, tokens, hash } }) => {
-  const { source } = state;
+  const { source, post = {} } = state;
   const currentHash = stringHash(source);
   if (currentHash !== hash) return state;
+  const lines = source.split(getLineSeparator());
   return {
     ...state,
+    ...post,
     errors,
-    tokens
+    lines,
+    post: undefined,
+    tokens,
+    waiting: false
   };
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case actions.PARSING_END: {
-      return reduceParsingEnd(state, action);
+      return validateVisibleLines(reduceParsingEnd(state, action));
     }
     case actions.CHAR_DOWN: {
-      return validateVisibleLines(
-        validateCursorHorizontalScrollrange(reduceCharDown(state, action))
-      );
+      return validateCursorHorizontalScrollrange(reduceCharDown(state, action));
     }
     case actions.KEY_DOWN: {
       return validateVisibleLines(
