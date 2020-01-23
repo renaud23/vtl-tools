@@ -2,7 +2,7 @@ import React, { useReducer, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import stringHash from "string-hash";
 import Editor from "./editor";
-import { createVtlTaksManager, createDefaultToken } from "../tokenizer";
+import { createVtlTaksManager } from "../tokenizer";
 import { reducers, initialState, EditorContext, actions } from "../events";
 
 import FontMetric from "./font-metric";
@@ -18,7 +18,7 @@ function EditorContainer({ content, fontMetric, zIndex }) {
     fontMetric
   });
 
-  const { source, sourceMap } = state;
+  const { source } = state;
 
   useEffect(() => {
     dispatch(actions.updateSource(content));

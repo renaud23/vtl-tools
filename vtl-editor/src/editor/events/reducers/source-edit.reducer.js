@@ -7,6 +7,7 @@ import {
   changeDeleteSelection,
   changeKeyEnter
 } from "./source-edit-tools";
+import { updateState } from "../../tools";
 import {
   validateVisibleLines,
   validateCursorHorizontalScrollrange
@@ -15,7 +16,7 @@ import {
 const reduceKeyDown = (state, { payload: { key } }) => {
   switch (key) {
     case KEY.ENTER: {
-      return validateVisibleLines(changeKeyEnter(changeDeleteSelection(state)));
+      return changeKeyEnter(changeDeleteSelection(state));
     }
     default:
       return state;
@@ -23,7 +24,7 @@ const reduceKeyDown = (state, { payload: { key } }) => {
 };
 
 const reduceCharDown = (state, { payload: { char } }) =>
-  changeInsertChar(state, char);
+  changeInsertChar(changeDeleteSelection(state), char);
 
 const reduceUpdateSource = (state, { payload: { source } }) => {
   const lines = source.split(getLineSeparator());
@@ -37,36 +38,38 @@ const reduceUpdateSource = (state, { payload: { source } }) => {
 };
 
 const reduceParsingEnd = (state, { payload: { errors, tokens, hash } }) => {
-  const { source, post = {} } = state;
+  const update = updateState(state);
+  const { source } = update;
   const currentHash = stringHash(source);
   if (currentHash !== hash) return state;
   const lines = source.split(getLineSeparator());
-  return {
-    ...state,
-    ...post,
-    errors,
-    lines,
-    post: undefined,
-    tokens,
-    waiting: false
-  };
+  const maxLengthRow = lines.reduce((a, l) => (l.length > a ? l.length : a), 0);
+  return validateCursorHorizontalScrollrange(
+    validateVisibleLines({
+      ...update,
+      errors,
+      lines,
+      maxLengthRow,
+      post: undefined,
+      tokens,
+      waiting: false
+    })
+  );
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case actions.PARSING_END: {
-      return validateVisibleLines(reduceParsingEnd(state, action));
+      return reduceParsingEnd(state, action);
     }
     case actions.CHAR_DOWN: {
-      return validateCursorHorizontalScrollrange(reduceCharDown(state, action));
+      return reduceCharDown(state, action);
     }
     case actions.KEY_DOWN: {
-      return validateVisibleLines(
-        validateCursorHorizontalScrollrange(reduceKeyDown(state, action))
-      );
+      return reduceKeyDown(state, action);
     }
     case actions.UPDATE_SOURCE: {
-      return validateVisibleLines(reduceUpdateSource(state, action));
+      return reduceUpdateSource(state, action);
     }
     default:
       return state;

@@ -1,7 +1,8 @@
-import { getLineSeparator, computeSourcePosition } from "../../../tools";
+import { computeSourcePosition, updateState } from "../../../tools";
 
 function changeInsertChar(state, char) {
-  const { source, lines, cursor } = state;
+  const update = updateState(state);
+  const { source, lines, cursor } = update;
   const { row, index } = cursor;
   const [{ pos }] = computeSourcePosition(lines, cursor);
 
