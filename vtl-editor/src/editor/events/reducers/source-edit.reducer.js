@@ -7,7 +7,7 @@ import {
   changeDeleteSelection,
   changeKeyEnter,
   changeBackSpaceKey
-} from "./source-edit-tools";
+} from "./change-events";
 import { updateState } from "../../tools";
 import {
   validateVisibleLines,
