@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useRef, useState } from "react";
+import React, { useReducer, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import stringHash from "string-hash";
 import Editor from "./editor";
@@ -7,7 +7,6 @@ import { reducers, initialState, EditorContext, actions } from "../events";
 
 import FontMetric from "./font-metric";
 
-const TEMPLATE_FONT_METRIC = "font_FONTyuyiyoproorot***@Mm";
 const parseVtl = createVtlTaksManager();
 
 /** */
@@ -41,13 +40,6 @@ function EditorContainer({ content, fontMetric, zIndex }) {
 
 function EditorRoot({ content, zIndex }) {
   const [fontMetric, setFontMetric] = useState(undefined);
-  const containerEl = useRef(null);
-  useEffect(() => {
-    if (containerEl.current && !fontMetric) {
-      const { width, height } = containerEl.current.getBoundingClientRect();
-      setFontMetric({ width: width / TEMPLATE_FONT_METRIC.length, height });
-    }
-  }, [fontMetric, containerEl]);
 
   return fontMetric ? (
     <EditorContainer
@@ -56,7 +48,7 @@ function EditorRoot({ content, zIndex }) {
       zIndex={zIndex}
     />
   ) : (
-    <FontMetric value={TEMPLATE_FONT_METRIC} ref={containerEl} />
+    <FontMetric onLoad={fm => setFontMetric(fm)} />
   );
 }
 

@@ -31,7 +31,6 @@ const computeScrollrange = (parentEl, fontMetric) => {
 const getRelativePos = el => e => {
   const { pageX, pageY } = e;
   const { x, y, top, left } = el.getBoundingClientRect();
-
   return {
     x: pageX - (x || left) - window.scrollX,
     y: pageY - (y || top) - window.scrollY
