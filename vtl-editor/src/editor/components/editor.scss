@@ -174,8 +174,18 @@ $editorBackgroundColor: rgb(44, 44, 36);
         background-color: rgb(255, 144, 16);
         position: absolute;
         width: 4px;
-        height: 50px;
+
         margin-left: 4px;
+        z-index: -1;
+      }
+
+      .vtl-editor-vertical-scrollrange-cursor {
+        display: block;
+        background-color: rgb(50, 233, 4);
+        position: absolute;
+        width: 100%;
+        height: 2px;
+
         z-index: -1;
       }
 

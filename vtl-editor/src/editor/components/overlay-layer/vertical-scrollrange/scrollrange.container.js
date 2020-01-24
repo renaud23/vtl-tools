@@ -1,27 +1,45 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback
+} from "react";
 
 import VerticalScrollrange from "./scrollrange";
 import { EditorContext, actions } from "../../../events";
 import SelectionView from "./selection-view";
+import SelectionCursor from "./selection-cursor";
 
 function VerticalScrollrangeContainer() {
   const { state, dispatch } = useContext(EditorContext);
   const {
     verticalScrollrange: range = {},
     lines,
+    cursor,
     zIndex,
     anchor,
     extent
   } = state;
   const { start, offset } = range;
-
+  const margin = 10;
   const [trackHeight, setTrackHeight] = useState(0);
   const [selection, setSelection] = useState(undefined);
+  const [cursorPosition, setCursorPosition] = useState(undefined);
   const [trackTop, setTrackTop] = useState(0);
   const [parentHeight, setParentHeight] = useState(0);
 
+  const calc = useCallback(
+    function(pos) {
+      return Math.round(
+        (pos / (lines.length + margin)) * (parentHeight - trackHeight)
+      );
+    },
+    [parentHeight, trackHeight, lines.length, margin]
+  );
+
   const parentEl = useRef();
-  const margin = 10;
+
   useEffect(() => {
     if (parentEl.current && lines.length > offset) {
       const { height } = parentEl.current.getBoundingClientRect();
@@ -35,27 +53,32 @@ function VerticalScrollrangeContainer() {
   }, [parentEl, offset, lines]);
 
   useEffect(() => {
-    if (parentEl.current && lines.length) {
-      const { height } = parentEl.current.getBoundingClientRect();
+    if (parentHeight) {
       setTrackTop(
-        Math.round((start / (lines.length + margin)) * (height - trackHeight))
+        Math.round(
+          (start / (lines.length + margin)) * (parentHeight - trackHeight)
+        )
       );
     }
-  }, [parentEl, start, lines, trackHeight]);
+  }, [parentHeight, start, lines, trackHeight]);
 
   useEffect(() => {
     if (anchor && extent) {
-      const selHeigh = Math.round(
-        (Math.abs(extent.row - anchor.row) / lines.length) * parentHeight
-      );
-      const selTop = Math.round(
-        (Math.min(extent.row, anchor.row) / lines.length) * parentHeight
-      );
+      const selHeigh = calc(Math.abs(extent.row - anchor.row) + 1);
+      const selTop = calc(Math.min(extent.row, anchor.row));
       setSelection({ top: selTop, height: selHeigh });
     } else {
       setSelection(undefined);
     }
-  }, [extent, anchor, parentHeight, lines]);
+  }, [extent, anchor, calc]);
+
+  useEffect(() => {
+    if (cursor) {
+      setCursorPosition(calc(cursor.row));
+    } else {
+      setCursorPosition(undefined);
+    }
+  }, [calc, cursor]);
 
   return (
     <VerticalScrollrange
@@ -88,7 +111,11 @@ function VerticalScrollrangeContainer() {
         }
       }}
     >
-      {selection ? <SelectionView {...selection} /> : null}
+      <SelectionView display={selection !== undefined} {...selection} />
+      <SelectionCursor
+        display={cursorPosition !== undefined}
+        top={cursorPosition}
+      />
     </VerticalScrollrange>
   );
 }
