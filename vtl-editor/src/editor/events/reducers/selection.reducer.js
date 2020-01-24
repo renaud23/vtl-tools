@@ -29,17 +29,17 @@ function reduceMouseDrag(state, { payload: { row, index } }) {
   return state;
 }
 
-function reduceMouseDragOut(state) {
-  const { extent, anchor, lines } = state;
-  if (anchor && extent) {
-    // const { index, row } = extent;
-    // const nextRow = Math.min(lines.length ? lines.length - 1 : 0, row + 1);
-    // const nextIndex = Math.min(index, lines[nextRow].length);
-    // const nextExtent = { row: nextRow, index: nextIndex };
-    // return { ...state, extent: nextExtent };
-  }
-  return state;
-}
+// function reduceMouseDragOut(state) {
+//   const { extent, anchor, lines } = state;
+//   if (anchor && extent) {
+//     // const { index, row } = extent;
+//     // const nextRow = Math.min(lines.length ? lines.length - 1 : 0, row + 1);
+//     // const nextIndex = Math.min(index, lines[nextRow].length);
+//     // const nextExtent = { row: nextRow, index: nextIndex };
+//     // return { ...state, extent: nextExtent };
+//   }
+//   return state;
+// }
 
 const reducer = (state, action) => {
   switch (action.type) {

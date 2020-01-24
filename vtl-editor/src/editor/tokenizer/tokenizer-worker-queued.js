@@ -13,7 +13,7 @@ const createWorkerCallback = (content, cally) => {
   return e => {
     const end = new Date();
     console.log(
-      "%cparse (in millisec)",
+      "%ctokenize (in millisec)",
       "color: green;",
       e.data.id,
       end - start
@@ -25,7 +25,7 @@ const createWorkerCallback = (content, cally) => {
 const doIt = worker => {
   const { content, id, callback } = QUEUE.pop();
   worker.onmessage = createWorkerCallback(content, data => {
-    callback({ ...data, errors: [] });
+    callback({ ...data });
     // ON_WORK = false;
     if (QUEUE.length) {
       doIt(worker);
@@ -38,10 +38,12 @@ const doIt = worker => {
 
 export const createVtlTaksManager = () => {
   const worker = new Worker("/worker-vtl-2.0-insee.js");
-  // worker.postMessage({ action: "tokenize", content, id });
 
   return (content, callback) => {
-    if (!content.length) return;
+    if (!content.length) {
+      callback({ tokens: [], id: getId() });
+      return;
+    }
     QUEUE.push({ content, callback, id: getId() });
 
     if (!ON_WORK) {

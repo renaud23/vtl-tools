@@ -1,6 +1,6 @@
 import * as actions from "../actions";
 import { getLineSeparator } from "../../tools";
-import stringHash from "string-hash";
+// import stringHash from "string-hash";
 import { KEY } from "../event-callbacks";
 import {
   changeInsertChar,
@@ -42,17 +42,17 @@ const reduceUpdateSource = (state, { payload: { source } }) => {
   };
 };
 
-const reduceParsingEnd = (state, { payload: { errors, tokens, hash } }) => {
+const reduceParsingEnd = (state, { payload: { tokens, hash } }) => {
   const update = updateState(state);
   const { source } = update;
-  const currentHash = stringHash(source);
-  if (currentHash !== hash) return state;
+
+  // const currentHash = stringHash(source);
+  // if (currentHash !== hash) return { ...state, waiting: false };
   const lines = source.split(getLineSeparator());
   const maxLengthRow = lines.reduce((a, l) => (l.length > a ? l.length : a), 0);
   return validateVisibleLines(
     validateScrollrange({
       ...update,
-      errors,
       lines,
       maxLengthRow,
       post: undefined,

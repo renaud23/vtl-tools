@@ -1,5 +1,5 @@
 import changeDeleteSelection from "./change-delete-selection";
-import { computeSourcePosition } from "../../../tools";
+import { computeSourcePosition, getLineSeparator } from "../../../tools";
 
 function changeBackSpaceKey(state) {
   const { anchor, extent, cursor, lines, source } = state;
@@ -7,10 +7,10 @@ function changeBackSpaceKey(state) {
     return changeDeleteSelection(state);
   }
   const [{ pos }] = computeSourcePosition(lines, cursor);
-  const { row, index } = cursor;
   if (pos > 0) {
-    const nextSource = `${source.substr(0, pos - 1)}${source.substr(pos)}`;
-
+    const { row, index } = cursor;
+    const length = index ? 1 : getLineSeparator().length;
+    const nextSource = `${source.substr(0, pos - length)}${source.substr(pos)}`;
     return {
       ...state,
       source: nextSource,

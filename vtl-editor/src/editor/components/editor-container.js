@@ -24,11 +24,9 @@ function EditorContainer({ content, fontMetric, zIndex }) {
   }, [content]);
 
   useEffect(() => {
-    if (source) {
-      parseVtl(source, ({ tokens = [], errors = [] } = {}) => {
-        dispatch(actions.parsingEnd(tokens, errors, stringHash(source)));
-      });
-    }
+    parseVtl(source, ({ tokens = [] } = {}) => {
+      dispatch(actions.parsingEnd(tokens, stringHash(source)));
+    });
   }, [source]);
 
   return (
