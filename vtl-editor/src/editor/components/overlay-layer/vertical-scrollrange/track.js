@@ -6,6 +6,7 @@ function Track({ top, height, onDrag }) {
   const [drag, setDrag] = useState(false);
   const mousemove = useCallback(
     e => {
+      e.stopPropagation();
       if (drag) {
         onDrag(true, e.clientY - START_DRAG_Y);
         START_DRAG_Y = e.clientY;
@@ -30,6 +31,7 @@ function Track({ top, height, onDrag }) {
     <div
       className="track noselect"
       style={{ top, height }}
+      onMouseMove={mousemove}
       onMouseDown={e => {
         e.stopPropagation();
         START_DRAG_Y = e.clientY;

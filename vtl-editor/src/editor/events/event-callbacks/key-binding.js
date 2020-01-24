@@ -55,6 +55,8 @@ KEY.isUnbindedKey = key => UNBINDED_KEY.indexOf(key) !== -1;
 
 /* */
 KEY.isCharCode = c =>
-  /^[\w-+*=/?,!;.:{}/\\$*%()"#@µ<>'~|& [\]éôêûîèäëïüöùààç]{1}$/gim.test(c); // il en manquera !
+  /^[\w-+*=/?,!;.:{}/\\$*%()"#@µ<>'~|& [\]ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ]{1}$/gim.test(
+    c
+  ); // il en manquera !
 
 export default KEY;

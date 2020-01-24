@@ -30,10 +30,10 @@ const computeScrollrange = (parentEl, fontMetric) => {
  */
 const getRelativePos = el => e => {
   const { pageX, pageY } = e;
-  const { x, y, top, left } = el.getBoundingClientRect();
+  const { top, left } = el.getBoundingClientRect();
   return {
-    x: pageX - (x || left) - window.scrollX,
-    y: pageY - (y || top) - window.scrollY
+    x: pageX - left - window.scrollX,
+    y: pageY - top - window.scrollY
   };
 };
 
@@ -48,6 +48,9 @@ const getCursorPosition = ({
   lines
 }) => ({ x, y }) => {
   const row = Math.min(vr.start + Math.trunc(y / fm.height), lines.length - 1);
+  if (row < 0 || row >= lines.length) {
+    return { row: -1, index: -1 };
+  }
   const index = Math.min(
     hr.start + Math.trunc(x / fm.width),
     lines[row].length
@@ -74,6 +77,24 @@ function OverlayLayerContainer() {
     }
   }, [containerEl, fontMetric, dispatch]);
 
+  useEffect(() => {
+    const mousemove = e => {
+      e.stopPropagation();
+      if (drag) {
+        const how = getCursorPosition(state)(
+          getRelativePos(containerEl.current)(e)
+        );
+
+        // console.log(how);
+      }
+    };
+    window.addEventListener("mousemove", mousemove);
+
+    return () => {
+      window.removeEventListener("mousemove", mousemove);
+    };
+  }, [drag, state]);
+
   return (
     <Overlay
       ref={containerEl}
@@ -95,6 +116,7 @@ function OverlayLayerContainer() {
         }
       }}
       onMouseMove={e => {
+        // e.stopPropagation();
         if (drag) {
           const { row, index } = getCursorPosition(state)(
             getRelativePos(containerEl.current)(e)

@@ -1,4 +1,5 @@
 import React from "react";
+import classnames from "classnames";
 
 function RowNum({ start, offset }) {
   const rows = new Array(offset).fill(start).map((s, i) => (
@@ -7,7 +8,9 @@ function RowNum({ start, offset }) {
     </div>
   ));
 
-  return <div className="vtl-editor-rownums">{rows}</div>;
+  return (
+    <div className={classnames("vtl-editor-rownums", "noselect")}>{rows}</div>
+  );
 }
 
 export default React.memo(RowNum);
