@@ -32,7 +32,7 @@ function VerticalScrollrangeContainer() {
   const calc = useCallback(
     function(pos) {
       return Math.round(
-        (pos / (lines.length + margin)) * (parentHeight - trackHeight)
+        ((parentHeight - trackHeight) / (lines.length + margin)) * pos
       );
     },
     [parentHeight, trackHeight, lines.length, margin]
@@ -44,7 +44,10 @@ function VerticalScrollrangeContainer() {
     if (parentEl.current && lines.length > offset) {
       const { height } = parentEl.current.getBoundingClientRect();
       setTrackHeight(
-        Math.max(Math.round((offset / (lines.length + margin)) * height), 15)
+        Math.max(
+          Math.round(((height - 15) / (lines.length + margin)) * offset),
+          15
+        )
       );
       setParentHeight(height);
     } else {
@@ -55,16 +58,14 @@ function VerticalScrollrangeContainer() {
   useEffect(() => {
     if (parentHeight) {
       setTrackTop(
-        Math.round(
-          (start / (lines.length + margin)) * (parentHeight - trackHeight)
-        )
+        Math.round(((parentHeight - 15) / (lines.length + 10)) * start)
       );
     }
   }, [parentHeight, start, lines, trackHeight]);
 
   useEffect(() => {
     if (anchor && extent) {
-      const selHeigh = calc(Math.abs(extent.row - anchor.row) + 1);
+      const selHeigh = calc(Math.abs(extent.row - anchor.row));
       const selTop = calc(Math.min(extent.row, anchor.row));
       setSelection({ top: selTop, height: selHeigh });
     } else {
@@ -92,11 +93,8 @@ function VerticalScrollrangeContainer() {
             Math.max(trackTop + how, 0),
             parentHeight - trackHeight
           );
-
           const nextStart = Math.min(
-            Math.round(
-              (next / (parentHeight - trackHeight)) * (lines.length + margin)
-            ),
+            Math.round(next / ((parentHeight - 15) / (lines.length + margin))),
             lines.length - offset + margin
           );
 

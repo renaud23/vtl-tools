@@ -61,7 +61,13 @@ const getCursorPosition = ({
 /* **/
 function OverlayLayerContainer() {
   const { state, dispatch } = useContext(EditorContext);
-  const { fontMetric, zIndex } = state;
+  const {
+    fontMetric,
+    zIndex,
+    verticalScrollrange,
+    horizontalScrollrange,
+    lines
+  } = state;
   const [drag, setDrag] = useState(false);
   const containerEl = useRef();
 
@@ -81,10 +87,12 @@ function OverlayLayerContainer() {
     const mousemove = e => {
       e.stopPropagation();
       if (drag) {
-        const how = getCursorPosition(state)(
-          getRelativePos(containerEl.current)(e)
-        );
-
+        // const how = getCursorPosition({
+        //   verticalScrollrange,
+        //   horizontalScrollrange,
+        //   fontMetric,
+        //   lines
+        // })(getRelativePos(containerEl.current)(e));
         // console.log(how);
       }
     };
@@ -93,7 +101,7 @@ function OverlayLayerContainer() {
     return () => {
       window.removeEventListener("mousemove", mousemove);
     };
-  }, [drag, state]);
+  }, [drag, verticalScrollrange, horizontalScrollrange, fontMetric, lines]);
 
   return (
     <Overlay
@@ -116,7 +124,6 @@ function OverlayLayerContainer() {
         }
       }}
       onMouseMove={e => {
-        // e.stopPropagation();
         if (drag) {
           const { row, index } = getCursorPosition(state)(
             getRelativePos(containerEl.current)(e)
