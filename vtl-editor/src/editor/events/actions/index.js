@@ -54,10 +54,10 @@ export const CHAR_DOWN = "vtl-editor/char-down";
 export const charDown = char => ({ type: CHAR_DOWN, payload: { char } });
 
 /** */
-export const CONSUME_CONTENT_TEMPORY_CHANGE =
-  "vtl-editor/consume-content-tempory-change";
-export const consumeContentTemporyChange = () => ({
-  type: CONSUME_CONTENT_TEMPORY_CHANGE
+export const KEY_DOWN = "vtl-editor/key-down";
+export const keyDown = (key, data) => ({
+  type: KEY_DOWN,
+  payload: { key, data }
 });
 
 /** */

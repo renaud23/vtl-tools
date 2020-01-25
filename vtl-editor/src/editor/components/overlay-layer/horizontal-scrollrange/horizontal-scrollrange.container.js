@@ -23,6 +23,7 @@ function HorizontallScrollrangeContainer() {
   useEffect(() => {
     if (parentEl.current) {
       const { width } = parentEl.current.getBoundingClientRect();
+
       if (maxLengthRow) {
         setTrackWidth(
           Math.round((offset / (maxLengthRow + LEFT_BORDER_MARGIN)) * width)
@@ -68,7 +69,7 @@ function HorizontallScrollrangeContainer() {
     [dispatch, limite, maxLengthRow, offset, trackLeft]
   );
 
-  return (
+  return maxLengthRow > offset ? (
     <HorizontalScrollrange
       trackWidth={trackWidth}
       trackLeft={trackLeft}
@@ -76,7 +77,7 @@ function HorizontallScrollrangeContainer() {
       onDrag={cally}
       zIndex={zIndex}
     />
-  );
+  ) : null;
 }
 
 export default HorizontallScrollrangeContainer;

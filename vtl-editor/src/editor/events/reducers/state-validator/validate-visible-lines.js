@@ -23,7 +23,7 @@ const getVisibleLines = vRange => lines => {
               value: l,
               row: i,
               start: next,
-              stop: next + l.length - 1,
+              stop: next + Math.max(l.length - 1, 0),
               tokens: []
             }
           ]
@@ -32,6 +32,7 @@ const getVisibleLines = vRange => lines => {
     }),
     { stack: [], next: 0 }
   );
+
   return stack;
 };
 

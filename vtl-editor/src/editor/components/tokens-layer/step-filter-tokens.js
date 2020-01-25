@@ -57,7 +57,6 @@ const fillLinesWithTokens = lines => tokens => {
     const { stack } = lines.reduce(
       ({ stack, toks }, l) => {
         const [lineWithToken, tokensLeft] = consumeTokens(l, toks);
-
         return {
           stack: [...stack, lineWithToken],
           toks: tokensLeft
@@ -84,7 +83,6 @@ function StepFilterTokens({ visibles, tokens, horizontalScrollrange }) {
   useEffect(() => {
     setLinesWithTokens(fillLinesWithTokens(visibles)(tokens));
   }, [visibles, tokens]);
-
   return (
     <StepHRange
       visibles={linesWithTokens}

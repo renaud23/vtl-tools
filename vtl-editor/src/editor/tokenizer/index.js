@@ -1,2 +1,2 @@
-export * from "./tokenizer-worker-simple";
+export * from "./tokenizer-worker-queued";
 export * from "./tokenizer-tools";

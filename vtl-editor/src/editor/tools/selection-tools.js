@@ -35,3 +35,8 @@ export function computeSourcePosition(lines, ...cursors) {
     [...cursors]
   );
 }
+
+export function updateState(state) {
+  const { post = {} } = state;
+  return { ...state, ...post };
+}

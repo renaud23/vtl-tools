@@ -1,12 +1,13 @@
 import React from "react";
 import TokensLayer from "./tokens-layer";
 import OverlayLayer from "./overlay-layer";
+import RowNum from "./row-num";
 import "./editor.scss";
 
 function Editor() {
   return (
     <pre className="vtl-editor">
-      <div className="vtl-editor-rownum" />
+      <RowNum />
       <div className="vtl-editor-container">
         <OverlayLayer />
         <TokensLayer />

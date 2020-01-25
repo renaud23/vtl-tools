@@ -1,24 +1,53 @@
 import * as actions from "../actions";
-import { validateVisibleLines } from "./state-validator";
+import { validateScrollrange, validateVisibleLines } from "./state-validator";
+import {
+  changeKeyRight,
+  changeKeyLeft,
+  changeKeyUp,
+  changeKeyDown
+} from "./change-events";
+import { KEY } from "../event-callbacks";
 
-const reduceChangeVerticalScrollrange = (state, { payload: { range } }) => ({
-  ...state,
-  verticalScrollrange: range
-});
+function reduceChangeVerticalScrollrange(state, { payload: { range } }) {
+  return {
+    ...state,
+    verticalScrollrange: range
+  };
+}
 
-const reduceChangeHorizontalScrollrange = (state, { payload: { range } }) => ({
-  ...state,
-  horizontalScrollrange: range
-});
+function reduceChangeHorizontalScrollrange(state, { payload: { range } }) {
+  return {
+    ...state,
+    horizontalScrollrange: range
+  };
+}
 
-const reduceChangeScrollrange = (
-  state,
-  { payload: { vertical, horizontal } }
-) => ({
-  ...state,
-  verticalScrollrange: vertical,
-  horizontalScrollrange: horizontal
-});
+function reduceChangeScrollrange(state, { payload: { vertical, horizontal } }) {
+  return {
+    ...state,
+    verticalScrollrange: vertical,
+    horizontalScrollrange: horizontal
+  };
+}
+
+function reduceKeyDown(state, { payload: { key, data } }) {
+  switch (key) {
+    case KEY.ARROW_RIGHT: {
+      return changeKeyRight(state, data);
+    }
+    case KEY.ARROW_LEFT: {
+      return changeKeyLeft(state, data);
+    }
+    case KEY.ARROW_UP: {
+      return changeKeyUp(state, data);
+    }
+    case KEY.ARROW_DOWN: {
+      return changeKeyDown(state, data);
+    }
+    default:
+      return state;
+  }
+}
 
 /** */
 const reducer = (state, action) => {
@@ -33,6 +62,11 @@ const reducer = (state, action) => {
     }
     case actions.CHANGE_HORIZONTAL_SCROLLRANGE: {
       return reduceChangeHorizontalScrollrange(state, action);
+    }
+    case actions.KEY_DOWN: {
+      return validateVisibleLines(
+        validateScrollrange(reduceKeyDown(state, action))
+      );
     }
     default:
       return state;

@@ -6,6 +6,7 @@ function Track({ left, width, onDrag }) {
   const [drag, setDrag] = useState(false);
   const mousemove = useCallback(
     e => {
+      e.stopPropagation();
       if (drag) {
         onDrag(true, e.clientX - START_DRAG_X);
         START_DRAG_X = e.clientX;
@@ -42,6 +43,7 @@ function Track({ left, width, onDrag }) {
         setDrag(true);
         onDrag(true, 0);
       }}
+      onMouseMove={mousemove}
       onMouseUp={e => {
         mouseup(e);
       }}

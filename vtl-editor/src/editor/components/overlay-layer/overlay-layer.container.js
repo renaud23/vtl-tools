@@ -30,8 +30,11 @@ const computeScrollrange = (parentEl, fontMetric) => {
  */
 const getRelativePos = el => e => {
   const { pageX, pageY } = e;
-  const { x, y } = el.getBoundingClientRect();
-  return { x: pageX - x - window.scrollX, y: pageY - y - window.scrollY };
+  const { top, left } = el.getBoundingClientRect();
+  return {
+    x: pageX - left - window.scrollX,
+    y: pageY - top - window.scrollY
+  };
 };
 
 /**
@@ -45,6 +48,9 @@ const getCursorPosition = ({
   lines
 }) => ({ x, y }) => {
   const row = Math.min(vr.start + Math.trunc(y / fm.height), lines.length - 1);
+  if (row < 0 || row >= lines.length) {
+    return { row: -1, index: -1 };
+  }
   const index = Math.min(
     hr.start + Math.trunc(x / fm.width),
     lines[row].length
@@ -55,7 +61,13 @@ const getCursorPosition = ({
 /* **/
 function OverlayLayerContainer() {
   const { state, dispatch } = useContext(EditorContext);
-  const { fontMetric, zIndex } = state;
+  const {
+    fontMetric,
+    zIndex,
+    verticalScrollrange,
+    horizontalScrollrange,
+    lines
+  } = state;
   const [drag, setDrag] = useState(false);
   const containerEl = useRef();
 
@@ -70,6 +82,26 @@ function OverlayLayerContainer() {
       );
     }
   }, [containerEl, fontMetric, dispatch]);
+
+  useEffect(() => {
+    const mousemove = e => {
+      e.stopPropagation();
+      if (drag) {
+        // const how = getCursorPosition({
+        //   verticalScrollrange,
+        //   horizontalScrollrange,
+        //   fontMetric,
+        //   lines
+        // })(getRelativePos(containerEl.current)(e));
+        // console.log(how);
+      }
+    };
+    window.addEventListener("mousemove", mousemove);
+
+    return () => {
+      window.removeEventListener("mousemove", mousemove);
+    };
+  }, [drag, verticalScrollrange, horizontalScrollrange, fontMetric, lines]);
 
   return (
     <Overlay
@@ -99,7 +131,7 @@ function OverlayLayerContainer() {
           dispatch(actions.mouseDrag(row, index));
         }
       }}
-      onKeydown={createKeydownCallback(dispatch)}
+      onKeydown={createKeydownCallback(state, dispatch)}
     >
       <HorizontalScrollrange />
       <VerticalScrollrange />
