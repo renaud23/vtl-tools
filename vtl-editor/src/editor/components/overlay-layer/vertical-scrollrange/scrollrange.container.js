@@ -5,11 +5,13 @@ import React, {
   useRef,
   useCallback
 } from "react";
-
 import VerticalScrollrange from "./scrollrange";
 import { EditorContext, actions } from "../../../events";
 import SelectionView from "./selection-view";
 import SelectionCursor from "./selection-cursor";
+
+const MIN_TRACK_HEIGHT = 15;
+const MARGIN = 10;
 
 function VerticalScrollrangeContainer() {
   const { state, dispatch } = useContext(EditorContext);
@@ -22,7 +24,6 @@ function VerticalScrollrangeContainer() {
     extent
   } = state;
   const { start, offset } = range;
-  const margin = 10;
   const [trackHeight, setTrackHeight] = useState(0);
   const [selection, setSelection] = useState(undefined);
   const [cursorPosition, setCursorPosition] = useState(undefined);
@@ -32,10 +33,10 @@ function VerticalScrollrangeContainer() {
   const calc = useCallback(
     function(pos) {
       return Math.round(
-        ((parentHeight - trackHeight) / (lines.length + margin)) * pos
+        ((parentHeight - trackHeight) / (lines.length + MARGIN)) * pos
       );
     },
-    [parentHeight, trackHeight, lines.length, margin]
+    [parentHeight, trackHeight, lines.length]
   );
 
   const parentEl = useRef();
@@ -45,8 +46,8 @@ function VerticalScrollrangeContainer() {
       const { height } = parentEl.current.getBoundingClientRect();
       setTrackHeight(
         Math.max(
-          Math.round(((height - 15) / (lines.length + margin)) * offset),
-          15
+          Math.round((height / (lines.length + MARGIN)) * offset),
+          MIN_TRACK_HEIGHT
         )
       );
       setParentHeight(height);
@@ -58,10 +59,13 @@ function VerticalScrollrangeContainer() {
   useEffect(() => {
     if (parentHeight) {
       setTrackTop(
-        Math.round(((parentHeight - 15) / (lines.length + 10)) * start)
+        Math.round(
+          ((parentHeight - trackHeight) / (lines.length + MARGIN - offset)) *
+            start
+        )
       );
     }
-  }, [parentHeight, start, lines, trackHeight]);
+  }, [parentHeight, start, lines, trackHeight, offset]);
 
   useEffect(() => {
     if (anchor && extent) {
@@ -94,8 +98,12 @@ function VerticalScrollrangeContainer() {
             parentHeight - trackHeight
           );
           const nextStart = Math.min(
-            Math.round(next / ((parentHeight - 15) / (lines.length + margin))),
-            lines.length - offset + margin
+            Math.round(
+              next /
+                ((parentHeight - trackHeight) /
+                  (lines.length + MARGIN - offset))
+            ),
+            lines.length - offset + MARGIN
           );
 
           setTrackTop(next);
