@@ -1,5 +1,12 @@
-import React, { useRef, useContext, useEffect, useState } from "react";
+import React, {
+  useRef,
+  useContext,
+  useEffect,
+  useState,
+  useCallback
+} from "react";
 import Overlay from "./overlay-layer";
+import useInterval from "use-interval";
 import { EditorContext, actions, createKeydownCallback } from "../../events";
 import { getRelativePos } from "../../tools";
 import HorizontalScrollrange from "./horizontal-scrollrange";
@@ -57,7 +64,19 @@ function OverlayLayerContainer() {
     lines
   } = state;
   const [drag, setDrag] = useState(false);
+  const [dragOutDirection, setDragOutDirection] = useState(undefined);
   const containerEl = useRef();
+
+  useInterval(
+    () => {
+      if (dragOutDirection === "up") {
+        dispatch(actions.selectionExpandUp());
+      } else if (dragOutDirection === "down") {
+        dispatch(actions.selectionExpandDown());
+      }
+    },
+    dragOutDirection ? 50 : null
+  );
 
   useEffect(() => {
     if (containerEl.current) {
@@ -74,6 +93,7 @@ function OverlayLayerContainer() {
   useEffect(() => {
     const mousemove = e => {
       e.stopPropagation();
+
       if (drag) {
         const { start, stop } = verticalScrollrange;
         const { row, index } = getCursorPosition({
@@ -82,17 +102,17 @@ function OverlayLayerContainer() {
           fontMetric,
           lines
         })(getRelativePos(containerEl.current)(e));
-        // const nextRow = row - start;
-
         if (row < start) {
+          setDragOutDirection("up");
         } else if (row > stop) {
+          setDragOutDirection("down");
         } else {
+          setDragOutDirection(undefined);
           dispatch(actions.mouseDrag(row, Math.max(index, 0)));
         }
       }
     };
-    window.addEventListener("mousemove", mousemove, dispatch);
-
+    window.addEventListener("mousemove", mousemove);
     return () => {
       window.removeEventListener("mousemove", mousemove);
     };
@@ -108,6 +128,7 @@ function OverlayLayerContainer() {
   useEffect(() => {
     const mouseup = () => {
       if (drag) {
+        setDragOutDirection(undefined);
         setDrag(false);
       }
     };
@@ -127,6 +148,7 @@ function OverlayLayerContainer() {
       }}
       onMouseUp={e => {
         if (drag) {
+          setDragOutDirection(undefined);
           const { row, index } = getCursorPosition(state)(
             getRelativePos(containerEl.current)(e)
           );
@@ -135,12 +157,7 @@ function OverlayLayerContainer() {
         }
       }}
       onMouseMove={e => {
-        // if (drag) {
-        //   const { row, index } = getCursorPosition(state)(
-        //     getRelativePos(containerEl.current)(e)
-        //   );
-        //   dispatch(actions.mouseDrag(row, index));
-        // }
+        setDragOutDirection(undefined);
       }}
       onKeydown={createKeydownCallback(state, dispatch)}
     >

@@ -66,3 +66,17 @@ export const updateSource = source => ({
   type: UPDATE_SOURCE,
   payload: { source }
 });
+
+/** */
+export const SELECTION_EXPAND_UP = "vtl-editor/selection-expand-up";
+export const selectionExpandUp = index => ({
+  type: SELECTION_EXPAND_UP,
+  payload: { index }
+});
+
+/** */
+export const SELECTION_EXPAND_DOWN = "vtl-editor/selection-expand-down";
+export const selectionExpandDown = index => ({
+  type: SELECTION_EXPAND_DOWN,
+  payload: { index }
+});
