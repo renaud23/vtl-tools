@@ -9,8 +9,9 @@ import VerticalScrollrange from "./scrollrange";
 import { EditorContext, actions } from "../../../events";
 import SelectionView from "./selection-view";
 import SelectionCursor from "./selection-cursor";
+import { getRelativePos } from "../../../tools";
 
-const MIN_TRACK_HEIGHT = 15;
+const MIN_TRACK_HEIGHT = 5;
 const MARGIN = 10;
 
 function VerticalScrollrangeContainer() {
@@ -32,8 +33,7 @@ function VerticalScrollrangeContainer() {
 
   const quant = useCallback(
     trackHeight =>
-      (parentHeight - trackHeight) /
-      (lines.length + MARGIN - (trackHeight === 15 ? offset : offset)),
+      (parentHeight - trackHeight) / (lines.length + MARGIN - offset),
     [offset, lines, parentHeight]
   );
 
@@ -41,7 +41,22 @@ function VerticalScrollrangeContainer() {
     function(pos) {
       return Math.round(quant(trackHeight) * pos);
     },
-    [trackHeight, quant]
+    [quant, trackHeight]
+  );
+
+  const scrollTo = useCallback(
+    function(y) {
+      const nextStart = Math.min(
+        Math.round(y / quant(trackHeight)),
+        lines.length - offset + MARGIN
+      );
+      return {
+        start: nextStart,
+        stop: nextStart + offset - 1,
+        offset
+      };
+    },
+    [offset, quant, lines, trackHeight]
   );
 
   const parentEl = useRef();
@@ -88,6 +103,12 @@ function VerticalScrollrangeContainer() {
       zIndex={zIndex}
       trackHeight={trackHeight}
       trackTop={trackTop}
+      onMouseDown={e => {
+        e.stopPropagation();
+        const { y } = getRelativePos(parentEl.current)(e);
+        setTrackTop(y);
+        dispatch(actions.changeVerticalScrollrange(scrollTo(y)));
+      }}
       ref={parentEl}
       onDrag={how => {
         if (lines.length > offset && how) {
@@ -95,19 +116,8 @@ function VerticalScrollrangeContainer() {
             Math.max(trackTop + how, 0),
             parentHeight - trackHeight
           );
-          const nextStart = Math.min(
-            Math.round(next / quant(trackHeight)),
-            lines.length - offset + MARGIN
-          );
-
           setTrackTop(next);
-          dispatch(
-            actions.changeVerticalScrollrange({
-              start: nextStart,
-              stop: nextStart + offset - 1,
-              offset
-            })
-          );
+          dispatch(actions.changeVerticalScrollrange(scrollTo(next)));
         }
       }}
     >
