@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useContext,
-  useEffect,
-  useState,
-  useCallback
-} from "react";
+import React, { useRef, useContext, useEffect, useState } from "react";
 import Overlay from "./overlay-layer";
 import useInterval from "use-interval";
 import { EditorContext, actions, createKeydownCallback } from "../../events";
