@@ -1,6 +1,7 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
 import Overlay from "./overlay-layer";
 import { EditorContext, actions, createKeydownCallback } from "../../events";
+import { getRelativePos } from "../../tools";
 import HorizontalScrollrange from "./horizontal-scrollrange";
 import VerticalScrollrange from "./vertical-scrollrange";
 import Cursor from "./cursor";
@@ -21,19 +22,6 @@ const computeScrollrange = (parentEl, fontMetric) => {
   return {
     verticalScrollrange: computeVerticalScrollrange(height, fontMetric),
     horizontalScrollrange: computeHorizontalScrollrange(width, fontMetric)
-  };
-};
-
-/**
- *
- * @param {*} el
- */
-const getRelativePos = el => e => {
-  const { pageX, pageY } = e;
-  const { top, left } = el.getBoundingClientRect();
-  return {
-    x: pageX - left - window.scrollX,
-    y: pageY - top - window.scrollY
   };
 };
 
@@ -87,22 +75,45 @@ function OverlayLayerContainer() {
     const mousemove = e => {
       e.stopPropagation();
       if (drag) {
-        // const how = getCursorPosition({
-        //   verticalScrollrange,
-        //   horizontalScrollrange,
-        //   fontMetric,
-        //   lines
-        // })(getRelativePos(containerEl.current)(e));
-        // console.log(how);
+        const { start, stop } = verticalScrollrange;
+        const { row, index } = getCursorPosition({
+          verticalScrollrange,
+          horizontalScrollrange,
+          fontMetric,
+          lines
+        })(getRelativePos(containerEl.current)(e));
+        // const nextRow = row - start;
+
+        if (row < start) {
+        } else if (row > stop) {
+        } else {
+          dispatch(actions.mouseDrag(row, Math.max(index, 0)));
+        }
       }
     };
-    window.addEventListener("mousemove", mousemove);
+    window.addEventListener("mousemove", mousemove, dispatch);
 
     return () => {
       window.removeEventListener("mousemove", mousemove);
     };
-  }, [drag, verticalScrollrange, horizontalScrollrange, fontMetric, lines]);
+  }, [
+    drag,
+    verticalScrollrange,
+    horizontalScrollrange,
+    fontMetric,
+    lines,
+    dispatch
+  ]);
 
+  useEffect(() => {
+    const mouseup = () => {
+      if (drag) {
+        setDrag(false);
+      }
+    };
+    window.addEventListener("mouseup", mouseup);
+    return () => window.removeEventListener("mouseup", mouseup);
+  }, [drag]);
   return (
     <Overlay
       ref={containerEl}
@@ -124,12 +135,12 @@ function OverlayLayerContainer() {
         }
       }}
       onMouseMove={e => {
-        if (drag) {
-          const { row, index } = getCursorPosition(state)(
-            getRelativePos(containerEl.current)(e)
-          );
-          dispatch(actions.mouseDrag(row, index));
-        }
+        // if (drag) {
+        //   const { row, index } = getCursorPosition(state)(
+        //     getRelativePos(containerEl.current)(e)
+        //   );
+        //   dispatch(actions.mouseDrag(row, index));
+        // }
       }}
       onKeydown={createKeydownCallback(state, dispatch)}
     >

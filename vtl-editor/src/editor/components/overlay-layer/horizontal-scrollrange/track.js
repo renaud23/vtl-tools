@@ -17,7 +17,7 @@ function Track({ left, width, onDrag }) {
 
   const mouseup = useCallback(
     e => {
-      e.stopPropagation();
+      // e.stopPropagation();
       setDrag(false);
       onDrag(false);
     },
