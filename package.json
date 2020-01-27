@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "clipboard-polyfill": "^2.8.6"
+    "clipboard-polyfill": "^2.8.6",
+    "use-interval": "^1.2.1"
   }
 }
