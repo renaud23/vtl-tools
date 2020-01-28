@@ -63,14 +63,14 @@ class VtlErrorsListener {
   // reportContextSensitivity: ƒ (recognizer, dfa, startIndex, stopIndex, prediction, configs)
   // syntaxError: ƒ (recognizer, offendingSymbol, line, column, msg, e)
   // constructor: ƒ ErrorListener()
-  errors = [];
-  reportAmbiguity() {}
-  reportAttemptingFullContext() {}
-  reportContextSensitivity() {}
-  syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
-    console.debug("%csyntaxError", "color: red;", msg, line, column);
-    this.errors.push({ msg, line, column, stack: e });
-  }
+  //  const errors = [];
+  //   reportAmbiguity() {}
+  //   reportAttemptingFullContext() {}
+  //   reportContextSensitivity() {}
+  //   syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
+  //     console.debug("%csyntaxError", "color: red;", msg, line, column);
+  //     this.errors.push({ msg, line, column, stack: e });
+  //   }
 }
 
 class VtlInspector extends VtlListener {

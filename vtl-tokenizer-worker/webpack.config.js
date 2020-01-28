@@ -13,13 +13,13 @@ module.exports = {
   mode: process.env.NODE_ENV || "development",
 
   watchOptions: {
-    ignored: /node_modules|dist|\.js/g
+    ignored: /node_modules|dist|\.ts/g
   },
 
   devtool: "cheap-module-eval-source-map",
 
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"],
+    extensions: [".js", ".jsx", ".js", ".json"],
     plugins: []
   },
 
@@ -37,6 +37,7 @@ module.exports = {
       }
     ]
   },
+  watch: true,
   node: {
     fs: "empty"
   }

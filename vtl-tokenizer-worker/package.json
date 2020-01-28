@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
+    "test": "jest --watchAll",
     "preview": "workers-preview < dist/bundle.js"
   },
   "author": "",
@@ -15,7 +16,10 @@
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/preset-env": "^7.7.7",
     "antlr4": "^4.7.2",
-    "babel-loader": "^8.0.6"
+    "babel-jest": "^25.1.0",
+    "babel-loader": "^8.0.6",
+    "jest": "^25.1.0",
+    "webpack": "^4.41.5"
   },
   "dependencies": {
     "classnames": "^2.2.6"
