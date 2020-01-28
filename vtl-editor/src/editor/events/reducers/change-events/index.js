@@ -5,4 +5,5 @@ export { default as changeKeyEnter } from "./change-key-enter";
 export { default as changeKeyBackSpace } from "./change-key-back-space";
 export { default as changeKeyDelete } from "./change-key-delete";
 export * from "./change-key-end-home";
+export * from "./change-key-page";
 export * from "./change-key-cursor";

@@ -6,7 +6,9 @@ import {
   changeKeyUp,
   changeKeyDown,
   changeKeyHome,
-  changeKeyEnd
+  changeKeyEnd,
+  changeKeyPageUp,
+  changeKeyPageDown
 } from "./change-events";
 import { KEY } from "../event-callbacks";
 
@@ -51,6 +53,12 @@ function reduceKeyDown(state, { payload: { key, data } }) {
     }
     case KEY.END: {
       return changeKeyEnd(state, data);
+    }
+    case KEY.PAGE_UP: {
+      return changeKeyPageUp(state, data);
+    }
+    case KEY.PAGE_DOWN: {
+      return changeKeyPageDown(state, data);
     }
     default:
       return state;
