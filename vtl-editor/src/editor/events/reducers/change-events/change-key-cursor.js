@@ -1,9 +1,4 @@
-function getSelection(shiftKey, anchor, extent) {
-  if (shiftKey) {
-    return { anchor, extent };
-  }
-  return { anchor: undefined, extent: undefined };
-}
+import { getShiftSelection } from "./tools";
 
 export function changeKeyUp(state, { shiftKey }) {
   const { cursor, lines, anchor } = state;
@@ -16,7 +11,7 @@ export function changeKeyUp(state, { shiftKey }) {
   const nextCursor = { row: nextRow, index: nextIndex };
   return {
     ...state,
-    ...getSelection(shiftKey, anchor || cursor, nextCursor),
+    ...getShiftSelection(shiftKey, anchor || cursor, nextCursor),
     cursor: nextCursor
   };
 }
@@ -32,7 +27,7 @@ export function changeKeyDown(state, { shiftKey }) {
   const nextCursor = { row: nextRow, index: nextIndex };
   return {
     ...state,
-    ...getSelection(shiftKey, anchor || cursor, nextCursor),
+    ...getShiftSelection(shiftKey, anchor || cursor, nextCursor),
     cursor: nextCursor
   };
 }
@@ -51,7 +46,7 @@ export function changeKeyLeft(state, { shiftKey }) {
   const nextCursor = { row: nextRow, index: nextIndex };
   return {
     ...state,
-    ...getSelection(shiftKey, anchor || cursor, nextCursor),
+    ...getShiftSelection(shiftKey, anchor || cursor, nextCursor),
     cursor: nextCursor
   };
 }
@@ -76,7 +71,7 @@ export function changeKeyRight(state, { shiftKey }) {
   const nextCursor = { row: nextRow, index: nextIndex };
   return {
     ...state,
-    ...getSelection(shiftKey, anchor || cursor, nextCursor),
+    ...getShiftSelection(shiftKey, anchor || cursor, nextCursor),
     cursor: nextCursor
   };
 }
