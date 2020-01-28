@@ -1,7 +1,7 @@
 import React from "react";
 
 const layer = React.forwardRef(function OverlayLayer(
-  { children, onMouseDown, onMouseUp, onMouseMove, zIndex, onKeydown },
+  { children, onMouseDown, onMouseUp, onMouseMove, zIndex, onKeydown, onWheel },
   ref
 ) {
   return (
@@ -12,8 +12,13 @@ const layer = React.forwardRef(function OverlayLayer(
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
       onMouseMove={onMouseMove}
-      onDragStart={e => e.preventDefault()}
+      onDragStart={e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
       onKeyDown={onKeydown}
+      onFocus={() => {}}
+      onWheel={onWheel}
       style={{ zIndex }}
     >
       {children}

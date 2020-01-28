@@ -13,10 +13,10 @@ const createWorkerCallback = (content, cally) => {
   return e => {
     const end = new Date();
     console.log(
-      "%ctokenize (in millisec)",
-      "color: green;",
-      e.data.id,
-      end - start
+      `%cTokenize%c\t${e.data.id}%c\t${end - start} ms`,
+      "color: white; background-color: blue;padding: 5px 5px 3px 5px;border-radius: 5px;font-weight: bolder;",
+      "color: red;",
+      "color:blue;"
     );
     cally(e.data);
   };
@@ -26,7 +26,6 @@ const doIt = worker => {
   const { content, id, callback } = QUEUE.pop();
   worker.onmessage = createWorkerCallback(content, data => {
     callback({ ...data });
-    // ON_WORK = false;
     if (QUEUE.length) {
       doIt(worker);
     } else {

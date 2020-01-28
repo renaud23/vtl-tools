@@ -11,6 +11,7 @@ const stopAndPrevent = e => {
 /* */
 const keyDownOverlayCallback = (state, dispatch) => e => {
   stopAndPrevent(e);
+
   const { waiting } = state;
   if (waiting) return;
   if (could) {

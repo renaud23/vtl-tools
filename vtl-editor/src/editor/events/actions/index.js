@@ -80,3 +80,15 @@ export const selectionExpandDown = index => ({
   type: SELECTION_EXPAND_DOWN,
   payload: { index }
 });
+
+/** */
+export const ON_WHEEL_UP = "vtl-editor/on-wheel-up";
+export const onWheelUp = () => ({
+  type: ON_WHEEL_UP
+});
+
+/** */
+export const ON_WHEEL_DOWN = "vtl-editor/on-wheel-down";
+export const onWheelDown = () => ({
+  type: ON_WHEEL_DOWN
+});

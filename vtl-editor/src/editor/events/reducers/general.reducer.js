@@ -8,7 +8,9 @@ import {
   changeKeyHome,
   changeKeyEnd,
   changeKeyPageUp,
-  changeKeyPageDown
+  changeKeyPageDown,
+  changeOnWheelUp,
+  changeOnWheelDown
 } from "./change-events";
 import { KEY } from "../event-callbacks";
 
@@ -83,6 +85,12 @@ const reducer = (state, action) => {
       return validateVisibleLines(
         validateScrollrange(reduceKeyDown(state, action))
       );
+    }
+    case actions.ON_WHEEL_UP: {
+      return validateVisibleLines(changeOnWheelUp(state, action));
+    }
+    case actions.ON_WHEEL_DOWN: {
+      return validateVisibleLines(changeOnWheelDown(state, action));
     }
     default:
       return state;

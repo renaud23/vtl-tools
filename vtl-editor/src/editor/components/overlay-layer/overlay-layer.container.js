@@ -1,7 +1,12 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
 import Overlay from "./overlay-layer";
 import useInterval from "use-interval";
-import { EditorContext, actions, createKeydownCallback } from "../../events";
+import {
+  EditorContext,
+  actions,
+  createKeydownCallback,
+  createOnWheelCallback
+} from "../../events";
 import { getRelativePos } from "../../tools";
 import HorizontalScrollrange from "./horizontal-scrollrange";
 import VerticalScrollrange from "./vertical-scrollrange";
@@ -86,9 +91,9 @@ function OverlayLayerContainer() {
 
   useEffect(() => {
     const mousemove = e => {
-      e.stopPropagation();
-
       if (drag) {
+        e.stopPropagation();
+        e.preventDefault();
         const { start, stop } = verticalScrollrange;
         const { row, index } = getCursorPosition({
           verticalScrollrange,
@@ -129,6 +134,16 @@ function OverlayLayerContainer() {
     window.addEventListener("mouseup", mouseup);
     return () => window.removeEventListener("mouseup", mouseup);
   }, [drag]);
+
+  useEffect(() => {
+    if (containerEl.current) {
+      const onWheel = createOnWheelCallback(undefined, dispatch);
+      containerEl.current.addEventListener("wheel", onWheel, {
+        passive: false
+      });
+    }
+  }, [containerEl, dispatch]);
+
   return (
     <Overlay
       ref={containerEl}
