@@ -1,6 +1,14 @@
 import KEY from "./key-binding";
 import * as actions from "../actions";
 
+const compose = (...opts) => (...callbacks) =>
+  callbacks.reverse().reduce(
+    (a, call) => e => {
+      if (!call(...opts)(e)) a(e);
+    },
+    () => false
+  );
+
 let could = true;
 /* */
 const stopAndPrevent = e => {
@@ -9,7 +17,7 @@ const stopAndPrevent = e => {
 };
 
 /* */
-const keyDownOverlayCallback = (state, dispatch) => e => {
+const keyDownCallback = (state, dispatch) => e => {
   stopAndPrevent(e);
 
   const { waiting } = state;
@@ -28,4 +36,25 @@ const keyDownOverlayCallback = (state, dispatch) => e => {
 };
 
 /* */
-export default (state, dispatch) => keyDownOverlayCallback(state, dispatch);
+const keyDownShorcutCallback = (state, dispatch, shortcutPatterns) => e => {
+  const { altKey, shiftKey, ctrlKey, key } = e;
+  if (ctrlKey || altKey || shiftKey) {
+    if (key !== KEY.ALT && key !== KEY.SHIFT && key !== KEY.CONTROL) {
+      stopAndPrevent(e);
+      return shortcutPatterns
+        .get({ altKey, shiftKey, ctrlKey, key })
+        .execute(dispatch, state);
+    }
+  }
+  return false;
+};
+
+/* */
+// export default (state, dispatch) => keyDownCallback(state, dispatch);
+
+export default (dispatch, state, shortcutPatterns) =>
+  compose(
+    dispatch,
+    state,
+    shortcutPatterns
+  )(keyDownShorcutCallback, keyDownCallback);

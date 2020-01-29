@@ -14,6 +14,10 @@ import Highlights from "./highlights";
 import Cursor from "./cursor";
 import Selection from "./selection";
 
+import { createDefaultShortcuts } from "../../tools";
+
+const shorcuts = createDefaultShortcuts();
+
 const computeVerticalScrollrange = (height, fontMetric) => {
   const offset = Math.round(height / fontMetric.height);
   return { start: 0, stop: offset - 1, offset };
@@ -173,7 +177,7 @@ function OverlayLayerContainer() {
       onDoubleClick={e => {
         dispatch(actions.doubleClick());
       }}
-      onKeydown={createKeydownCallback(state, dispatch)}
+      onKeydown={createKeydownCallback(state, dispatch, shorcuts)}
     >
       <HorizontalScrollrange />
       <VerticalScrollrange />
