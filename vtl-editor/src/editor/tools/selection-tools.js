@@ -58,6 +58,10 @@ function consumeTokens(tokens = [], index) {
   return consumeTokens(rest, index);
 }
 
+/**
+ *
+ * @param {*} state
+ */
 export function getTokenAtCursor(state) {
   const { tokens, lines, cursor } = state;
   if (cursor) {
@@ -68,17 +72,19 @@ export function getTokenAtCursor(state) {
       (a, line, i) => {
         if (i <= row) {
           const { lineStart, toks } = a;
-          const lineEnd = lineStart + line.length + getLineSeparator().length;
+          const lineEnd = lineStart + line.length;
           const { rest, token } = consumeTokens(
             toks,
-            row === i ? lineStart + index : lineEnd
+            row === i
+              ? Math.min(lineStart + index, lineStart + line.length - 1)
+              : lineEnd
           );
           if (token) {
             witch = { ...token, row: i, index: token.start - lineStart };
           }
 
           return {
-            lineStart: lineStart + line.length + getLineSeparator().length,
+            lineStart: lineEnd + getLineSeparator().length,
             toks: rest
           };
         }
@@ -87,7 +93,6 @@ export function getTokenAtCursor(state) {
       },
       { toks: [...tokens], lineStart: 0 }
     );
-
     return witch;
   }
   return undefined;
