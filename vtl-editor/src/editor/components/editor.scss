@@ -32,7 +32,7 @@ $editorBackgroundColor: rgb(44, 44, 36);
   &:before {
     font-size: 20px;
     content: "\007c";
-    font-weight: 800;
+    font-weight: lighter;
     color: ivory;
   }
 }
@@ -40,7 +40,7 @@ $editorBackgroundColor: rgb(44, 44, 36);
 @mixin monospaceFont() {
   font-size: $fontSize;
   -webkit-font-smoothing: antialiased;
-  letter-spacing: 0.1em;
+  letter-spacing: 1px;
   font-family: "Inconsolata", "Source Code Pro", "Courier New", monospace;
 }
 
@@ -76,6 +76,7 @@ $editorBackgroundColor: rgb(44, 44, 36);
     padding: 0;
     overflow-y: hidden;
     display: inline-block;
+    color: transparent;
   }
 
   .vtl-editor-container {
@@ -127,10 +128,16 @@ $editorBackgroundColor: rgb(44, 44, 36);
       height: $lineHeight;
     }
 
+    .vtl-editor-highlight {
+      position: absolute;
+      border: solid 1px palegoldenrod;
+      height: $lineHeight;
+    }
+
     .vtl-editor-cursor {
       @include cursor();
       margin-top: -1px;
-      margin-left: -4px;
+      margin-left: -5px;
     }
 
     /* */

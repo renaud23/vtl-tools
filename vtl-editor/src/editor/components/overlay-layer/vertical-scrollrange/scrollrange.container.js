@@ -14,6 +14,10 @@ import { getRelativePos } from "../../../tools";
 const MIN_TRACK_HEIGHT = 5;
 const MARGIN = 10;
 
+export function getVerticalScrollrangeMargin() {
+  return MARGIN;
+}
+
 function VerticalScrollrangeContainer() {
   const { state, dispatch } = useContext(EditorContext);
   const {

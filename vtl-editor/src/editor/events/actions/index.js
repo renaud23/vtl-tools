@@ -92,3 +92,9 @@ export const ON_WHEEL_DOWN = "vtl-editor/on-wheel-down";
 export const onWheelDown = () => ({
   type: ON_WHEEL_DOWN
 });
+
+/** */
+export const DOUBLE_CLICK = "vtl-editor/double-click";
+export const doubleClick = () => ({
+  type: DOUBLE_CLICK
+});

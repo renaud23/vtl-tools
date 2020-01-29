@@ -45,9 +45,6 @@ const reduceUpdateSource = (state, { payload: { source } }) => {
 const reduceParsingEnd = (state, { payload: { tokens, hash } }) => {
   const update = updateState(state);
   const { source } = update;
-
-  // const currentHash = stringHash(source);
-  // if (currentHash !== hash) return { ...state, waiting: false };
   const lines = source.split(getLineSeparator());
   const maxLengthRow = lines.reduce((a, l) => (l.length > a ? l.length : a), 0);
   return validateVisibleLines(

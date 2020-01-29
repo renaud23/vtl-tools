@@ -40,3 +40,55 @@ export function updateState(state) {
   const { post = {} } = state;
   return { ...state, ...post };
 }
+
+function consumeTokens(tokens = [], index) {
+  const [token, ...rest] = tokens;
+  if (!token) {
+    return { token: undefined, rest };
+  }
+
+  const { start, stop } = token;
+  if (index >= start && index <= stop) {
+    return { token, rest };
+  }
+  if (start > index) {
+    return { token: undefined, rest: [token, ...rest] };
+  }
+
+  return consumeTokens(rest, index);
+}
+
+export function getTokenAtCursor(state) {
+  const { tokens, lines, cursor } = state;
+  if (cursor) {
+    const { row, index } = cursor;
+
+    let witch = undefined;
+    lines.reduce(
+      (a, line, i) => {
+        if (i <= row) {
+          const { lineStart, toks } = a;
+          const lineEnd = lineStart + line.length + getLineSeparator().length;
+          const { rest, token } = consumeTokens(
+            toks,
+            row === i ? lineStart + index : lineEnd
+          );
+          if (token) {
+            witch = { ...token, row: i, index: token.start - lineStart };
+          }
+
+          return {
+            lineStart: lineStart + line.length + getLineSeparator().length,
+            toks: rest
+          };
+        }
+
+        return a;
+      },
+      { toks: [...tokens], lineStart: 0 }
+    );
+
+    return witch;
+  }
+  return undefined;
+}

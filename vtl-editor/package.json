@@ -1,7 +1,8 @@
 {
-  "name": "test",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@renaud/vtl-ditor",
+  "version": "0.0.1",
+  "description": "vtl editor",
+  "licens": "MIT",
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
@@ -9,7 +10,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "author": "",
+  "author": "Renaud Genevois",
   "license": "ISC",
   "dependencies": {
     "classnames": "^2.2.6",
@@ -17,7 +18,8 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scripts": "^3.3.0",
-    "string-hash": "^1.1.3"
+    "string-hash": "^1.1.3",
+    "use-interval": "^1.2.1"
   },
   "browserslist": {
     "production": [

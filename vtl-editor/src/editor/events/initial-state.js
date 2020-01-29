@@ -15,5 +15,7 @@ export default {
   overlaySize: { width: undefined, height: undefined },
   cursor: undefined,
   anchor: undefined,
-  extent: undefined
+  extent: undefined,
+  /** */
+  highlights: []
 };

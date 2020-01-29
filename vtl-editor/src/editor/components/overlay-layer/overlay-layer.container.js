@@ -10,6 +10,7 @@ import {
 import { getRelativePos } from "../../tools";
 import HorizontalScrollrange from "./horizontal-scrollrange";
 import VerticalScrollrange from "./vertical-scrollrange";
+import Highlights from "./highlights";
 import Cursor from "./cursor";
 import Selection from "./selection";
 
@@ -139,7 +140,8 @@ function OverlayLayerContainer() {
     if (containerEl.current) {
       const onWheel = createOnWheelCallback(undefined, dispatch);
       containerEl.current.addEventListener("wheel", onWheel, {
-        passive: false
+        passive: false,
+        capture: true
       });
     }
   }, [containerEl, dispatch]);
@@ -168,12 +170,16 @@ function OverlayLayerContainer() {
       onMouseMove={e => {
         setDragOutDirection(undefined);
       }}
+      onDoubleClick={e => {
+        dispatch(actions.doubleClick());
+      }}
       onKeydown={createKeydownCallback(state, dispatch)}
     >
       <HorizontalScrollrange />
       <VerticalScrollrange />
       <Cursor />
       <Selection />
+      <Highlights />
     </Overlay>
   );
 }
