@@ -37,7 +37,7 @@ module.exports = {
       }
     ]
   },
-  watch: true,
+  // watch: true,
   node: {
     fs: "empty"
   }
