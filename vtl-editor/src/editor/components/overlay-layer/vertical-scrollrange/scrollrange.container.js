@@ -34,10 +34,13 @@ function VerticalScrollrangeContainer() {
   const [cursorPosition, setCursorPosition] = useState(undefined);
   const [trackTop, setTrackTop] = useState(0);
   const [parentHeight, setParentHeight] = useState(0);
+  const isDisplayTrack = lines.length + MARGIN > offset;
 
   const quant = useCallback(
-    trackHeight =>
-      (parentHeight - trackHeight) / (lines.length + MARGIN - offset),
+    th => {
+      const w = (parentHeight - th) / (lines.length + MARGIN - offset);
+      return w;
+    },
     [offset, lines, parentHeight]
   );
 
@@ -66,7 +69,7 @@ function VerticalScrollrangeContainer() {
   const parentEl = useRef();
 
   useEffect(() => {
-    if (parentEl.current && lines.length > offset) {
+    if (parentEl.current && isDisplayTrack) {
       const { height } = parentEl.current.getBoundingClientRect();
       setTrackHeight(
         Math.max(
@@ -78,29 +81,30 @@ function VerticalScrollrangeContainer() {
     } else {
       setTrackHeight(0);
     }
-  }, [parentEl, offset, lines]);
+  }, [parentEl, offset, lines, isDisplayTrack]);
 
   useEffect(() => {
     setTrackTop(calc(start));
   }, [parentHeight, start, calc]);
 
   useEffect(() => {
-    if (anchor && extent) {
+    if (anchor && extent && isDisplayTrack) {
       const selHeigh = calc(Math.abs(extent.row - anchor.row));
       const selTop = calc(Math.min(extent.row, anchor.row));
       setSelection({ top: selTop, height: selHeigh });
     } else {
       setSelection(undefined);
     }
-  }, [extent, anchor, calc]);
+  }, [extent, anchor, calc, isDisplayTrack]);
 
   useEffect(() => {
-    if (cursor) {
-      setCursorPosition(calc(cursor.row));
+    if (cursor && isDisplayTrack) {
+      const how = calc(cursor.row);
+      setCursorPosition(how);
     } else {
       setCursorPosition(undefined);
     }
-  }, [calc, cursor]);
+  }, [calc, cursor, isDisplayTrack]);
 
   return (
     <VerticalScrollrange
@@ -127,7 +131,7 @@ function VerticalScrollrangeContainer() {
     >
       <SelectionView display={selection !== undefined} {...selection} />
       <SelectionCursor
-        display={cursorPosition !== undefined}
+        display={cursorPosition !== undefined && isDisplayTrack}
         top={cursorPosition}
       />
     </VerticalScrollrange>
