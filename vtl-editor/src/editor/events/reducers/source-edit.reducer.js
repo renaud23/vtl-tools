@@ -56,6 +56,7 @@ const reduceParsingEnd = (state, { payload: { tokens, hash } }) => {
       waiting: false
     })
   );
+  // console.log(next);
   return next;
 };
 
