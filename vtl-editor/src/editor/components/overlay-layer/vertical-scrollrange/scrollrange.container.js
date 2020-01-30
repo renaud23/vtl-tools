@@ -119,7 +119,7 @@ function VerticalScrollrangeContainer() {
       }}
       ref={parentEl}
       onDrag={how => {
-        if (lines.length > offset && how) {
+        if (lines.length + MARGIN > offset && how) {
           const next = Math.min(
             Math.max(trackTop + how, 0),
             parentHeight - trackHeight
