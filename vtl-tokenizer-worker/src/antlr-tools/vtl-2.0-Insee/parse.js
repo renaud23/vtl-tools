@@ -1,6 +1,5 @@
 import antlr4 from "antlr4";
 import { VtlParser, VtlLexer, VtlListener } from "./parser-vtl";
-import getTokens from "./get-tokens";
 
 const parse = (code, level = "start") => {
   try {
@@ -18,7 +17,6 @@ const parse = (code, level = "start") => {
     antlr4.tree.ParseTreeWalker.DEFAULT.walk(inspector, tree);
 
     return {
-      tokens: getTokens(code),
       errors: errorsListener.errors.map(({ column, line, msg }) => ({
         column,
         line,
@@ -30,32 +28,6 @@ const parse = (code, level = "start") => {
     return undefined;
   }
 };
-
-// const fillUnmapped = (tokens, source) => {
-//   return tokens.reduce(
-//     ({ stack, next }, t) => {
-//       if (t.start !== next) {
-//         return {
-//           stack: [
-//             ...stack,
-//             {
-//               name: "UNMAPPED",
-//               className: "vtl-unmapped",
-//               value: source.substr(next, t.start - next),
-//               start: next,
-//               stop: t.start - 1
-//             },
-//             t
-//           ],
-//           next: t.stop + 1
-//         };
-//       }
-
-//       return { stack: [...stack, t], next: t.stop + 1 };
-//     },
-//     { stack: [], next: 0 }
-//   ).stack;
-// };
 
 class VtlErrorsListener {
   // reportAmbiguity: ƒ (recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs)
