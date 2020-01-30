@@ -22,7 +22,7 @@ function reducePaste(state, { payload: { text } }) {
     const next = changeDeleteSelection(state);
     const { source, cursor, lines } = next;
     const [{ pos }] = computeSourcePosition(lines, cursor);
-    const nextSource = `${source.substr(0, pos)}${text}$${source.substr(pos)}`;
+    const nextSource = `${source.substr(0, pos)}${text}${source.substr(pos)}`;
 
     return { ...next, post: undefined, source: nextSource, highlights: [] };
   }

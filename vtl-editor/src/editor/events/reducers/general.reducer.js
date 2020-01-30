@@ -10,7 +10,8 @@ import {
   changeKeyPageUp,
   changeKeyPageDown,
   changeOnWheelUp,
-  changeOnWheelDown
+  changeOnWheelDown,
+  changeKeyTab
 } from "./change-events";
 import { KEY } from "../event-callbacks";
 
@@ -61,6 +62,9 @@ function reduceKeyDown(state, { payload: { key, data } }) {
     }
     case KEY.PAGE_DOWN: {
       return changeKeyPageDown(state, data);
+    }
+    case KEY.TAB: {
+      return changeKeyTab(state, data);
     }
     default:
       return state;

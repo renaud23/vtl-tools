@@ -12,6 +12,7 @@ import HorizontalScrollrange from "./horizontal-scrollrange";
 import VerticalScrollrange from "./vertical-scrollrange";
 import Highlights from "./highlights";
 import Cursor from "./cursor";
+import Indentation from "./indentation";
 import Selection from "./selection";
 
 import { createDefaultShortcuts } from "../../tools";
@@ -184,6 +185,7 @@ function OverlayLayerContainer() {
       <Cursor />
       <Selection />
       <Highlights />
+      <Indentation />
     </Overlay>
   );
 }

@@ -24,7 +24,7 @@ const keyDownCallback = (state, dispatch) => e => {
   if (waiting) return;
   if (could) {
     could = false;
-    window.setTimeout(() => (could = true), 30);
+    window.setTimeout(() => (could = true), 20);
     if (KEY.isUnbindedKey(e.key)) return false;
     if (KEY.isCharCode(e.key)) {
       dispatch(actions.charDown(e.key));
