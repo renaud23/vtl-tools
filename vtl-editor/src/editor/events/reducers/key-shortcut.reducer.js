@@ -3,7 +3,9 @@ import { updateState, computeSourcePosition } from "../../tools";
 import { changeDeleteSelection } from "./change-events";
 
 function reduceCut(state, action) {
-  return updateState(changeDeleteSelection(state));
+  const next = updateState(changeDeleteSelection(state));
+
+  return { ...next, waiting: true };
 }
 
 function reduceSelectAll(state, action) {
@@ -22,7 +24,7 @@ function reducePaste(state, { payload: { text } }) {
     const [{ pos }] = computeSourcePosition(lines, cursor);
     const nextSource = `${source.substr(0, pos)}${text}$${source.substr(pos)}`;
 
-    return { ...next, post: undefined, source: nextSource };
+    return { ...next, post: undefined, source: nextSource, highlights: [] };
   }
   return state;
 }
