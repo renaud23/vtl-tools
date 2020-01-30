@@ -15,6 +15,11 @@ export function orderingSelection(anchor, extent) {
   return { first: anchor, last: extent };
 }
 
+/**
+ *
+ * @param {*} lines
+ * @param  {...any} cursors
+ */
 export function computeSourcePosition(lines, ...cursors) {
   return lines.reduce(
     (a, line, i) => {
@@ -36,11 +41,21 @@ export function computeSourcePosition(lines, ...cursors) {
   );
 }
 
+/**
+ * post contains terminal state transformations to realise after
+ * ending parse. This function merge post & stat.
+ * @param {object} state
+ */
 export function updateState(state) {
   const { post = {} } = state;
-  return { ...state, ...post };
+  return { ...state, ...post, post: undefined };
 }
 
+/**
+ *
+ * @param {*} tokens
+ * @param {*} index
+ */
 function consumeTokens(tokens = [], index) {
   const [token, ...rest] = tokens;
   if (!token) {
@@ -95,5 +110,20 @@ export function getTokenAtCursor(state) {
     );
     return witch;
   }
+  return undefined;
+}
+
+/**
+ *
+ * @param {*} state
+ */
+export function getSelection(state) {
+  const { anchor, extent, source, lines } = state;
+  if (anchor && extent) {
+    const { first, last } = orderingSelection(anchor, extent);
+    const [firstEx, lastEx] = computeSourcePosition(lines, first, last);
+    return source.substr(firstEx.pos, lastEx.pos - firstEx.pos);
+  }
+
   return undefined;
 }

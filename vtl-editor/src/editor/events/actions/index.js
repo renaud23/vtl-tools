@@ -98,3 +98,13 @@ export const DOUBLE_CLICK = "vtl-editor/double-click";
 export const doubleClick = () => ({
   type: DOUBLE_CLICK
 });
+
+/** */
+export const ON_KEY_SHORTCUT = "vtl-editor/on-key-shortcut";
+export const onKeyShortcut = (pattern, data = {}) => ({
+  type: ON_KEY_SHORTCUT,
+  payload: {
+    pattern,
+    ...data
+  }
+});

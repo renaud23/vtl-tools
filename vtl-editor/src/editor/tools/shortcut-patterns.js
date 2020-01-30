@@ -1,3 +1,6 @@
+import * as clipboard from "clipboard-polyfill";
+import { actions } from "../events";
+import { getSelection } from "./selection-tools";
 const SHORT_CUTS = new Map();
 
 /* */
@@ -7,23 +10,35 @@ const unmappedPattern = pattern => () => {
 };
 
 /* copy to clipboard */
-const copy = () => {
+const copy = state => {
+  const selection = getSelection(state);
+  if (selection) {
+    clipboard.writeText(selection);
+  }
   return true;
 };
 
 /* cut to clipboard */
-const cut = () => {
+const cut = (state, dispatch) => {
+  const selection = getSelection(state);
+  if (selection) {
+    clipboard.writeText(selection);
+    dispatch(actions.onKeyShortcut("ctrl|x"));
+  }
   return true;
 };
 
 /* paste clipboard */
-const paste = () => {
+const paste = (state, dispatch) => {
+  clipboard.readText().then(function(text) {
+    dispatch(actions.onKeyShortcut("ctrl|v", { text }));
+  });
   return true;
 };
 
 /* select all */
-const selectAll = () => {
-  console.log("crtl|a");
+const selectAll = (state, dispatch) => {
+  dispatch(actions.onKeyShortcut("ctrl|a"));
   return true;
 };
 

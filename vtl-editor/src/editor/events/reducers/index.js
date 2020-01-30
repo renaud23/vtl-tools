@@ -2,6 +2,7 @@ import general from "./general.reducer";
 import selection from "./selection.reducer";
 import sourceEdit from "./source-edit.reducer";
 import highlight from "./highlights-reducer";
+import keyShortchut from "./key-shortcut.reducer";
 
 /* */
 const combine = (...callbacks) =>
@@ -12,7 +13,13 @@ const combine = (...callbacks) =>
     state => state
   );
 
-const reducers = combine(general, selection, sourceEdit, highlight);
+const reducers = combine(
+  general,
+  selection,
+  sourceEdit,
+  highlight,
+  keyShortchut
+);
 
 /** */
 export default (state, action) => {
