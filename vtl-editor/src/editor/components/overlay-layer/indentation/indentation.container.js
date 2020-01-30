@@ -3,7 +3,6 @@ import { EditorContext } from "../../../events";
 import Indentation from "./indentation";
 
 function getTabs(visibles, vr, hr, { width, height }) {
-  console.log(visibles);
   const tabs = visibles.reduce((a, l, i) => {
     if (l.row >= vr.start && l.row <= vr.stop) {
       const how = l.value.split(/[^\t]/)[0].length;
@@ -37,7 +36,7 @@ function IndentationContainer() {
     setTabs(
       getTabs(visibles, verticalScrollrange, horizontalScrollrange, fontMetric)
     );
-  }, [visibles, fontMetric]);
+  }, [visibles, verticalScrollrange, horizontalScrollrange, fontMetric]);
 
   return <Indentation tabs={tabs} />;
 }
