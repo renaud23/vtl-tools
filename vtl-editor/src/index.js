@@ -23,6 +23,10 @@ const Paragraphe = () => (
 
 const fetchContent = () => fetch("/rule.vtl").then(response => response.text());
 
+function onChange(source, action) {
+  console.log(action);
+}
+
 const App = () => {
   const [source, setSource] = useState("");
   useEffect(() => {
@@ -33,7 +37,7 @@ const App = () => {
       <div className="container">
         <Paragraphe />
         <div className="editor">
-          <VtlEditor source={source} />
+          <VtlEditor source={source} onChange={onChange} />
         </div>
         <Paragraphe />
       </div>

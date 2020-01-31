@@ -10,6 +10,7 @@ import {
 } from "./change-events";
 import { updateState } from "../../tools";
 import { validateVisibleLines, validateScrollrange } from "./state-validator";
+import { consumeSourceEvents } from "./source-events";
 
 const reduceKeyDown = (state, { payload: { key } }) => {
   switch (key) {
@@ -21,6 +22,9 @@ const reduceKeyDown = (state, { payload: { key } }) => {
     }
     case KEY.DELETE: {
       return changeKeyDelete(state);
+    }
+    case KEY.TAB: {
+      return changeInsertChar(changeDeleteSelection(state), "\t");
     }
     default:
       return state;
@@ -66,10 +70,10 @@ const reducer = (state, action) => {
       return reduceParsingEnd(state, action);
     }
     case actions.CHAR_DOWN: {
-      return reduceCharDown(state, action);
+      return consumeSourceEvents(reduceCharDown(state, action));
     }
     case actions.KEY_DOWN: {
-      return reduceKeyDown(state, action);
+      return consumeSourceEvents(reduceKeyDown(state, action));
     }
     case actions.UPDATE_SOURCE: {
       return reduceUpdateSource(state, action);
