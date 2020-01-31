@@ -10,7 +10,7 @@ import FontMetric from "./font-metric";
 const parseVtl = createVtlTaksManager();
 
 /** */
-function EditorContainer({ content, fontMetric, zIndex }) {
+function EditorContainer({ source: sourceFromProps, fontMetric, zIndex }) {
   const [state, dispatch] = useReducer(reducers, {
     ...initialState,
     zIndex,
@@ -20,8 +20,10 @@ function EditorContainer({ content, fontMetric, zIndex }) {
   const { source } = state;
 
   useEffect(() => {
-    dispatch(actions.updateSource(content));
-  }, [content]);
+    if (sourceFromProps) {
+      dispatch(actions.updateSource(sourceFromProps));
+    }
+  }, [sourceFromProps]);
 
   useEffect(() => {
     parseVtl(source, ({ tokens = [] } = {}) => {
@@ -36,15 +38,11 @@ function EditorContainer({ content, fontMetric, zIndex }) {
   );
 }
 
-function EditorRoot({ content, zIndex }) {
+function EditorRoot({ source, zIndex }) {
   const [fontMetric, setFontMetric] = useState(undefined);
 
   return fontMetric ? (
-    <EditorContainer
-      content={content}
-      fontMetric={fontMetric}
-      zIndex={zIndex}
-    />
+    <EditorContainer source={source} fontMetric={fontMetric} zIndex={zIndex} />
   ) : (
     <FontMetric onLoad={fm => setFontMetric(fm)} />
   );
@@ -54,6 +52,6 @@ EditorRoot.propTypes = {
   content: PropTypes.string,
   zIndex: PropTypes.number
 };
-EditorRoot.defaultProps = { content: "", zIndex: 0 };
+EditorRoot.defaultProps = { source: "", zIndex: 0 };
 
 export default EditorRoot;

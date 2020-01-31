@@ -24,16 +24,16 @@ const Paragraphe = () => (
 const fetchContent = () => fetch("/rule.vtl").then(response => response.text());
 
 const App = () => {
-  const [content, setContent] = useState("");
+  const [source, setSource] = useState("");
   useEffect(() => {
-    fetchContent().then(rule => setContent(rule));
+    fetchContent().then(rule => setSource(rule));
   }, []);
   return (
     <div className="application">
       <div className="container">
         <Paragraphe />
         <div className="editor">
-          <VtlEditor content={content} />
+          <VtlEditor source={source} />
         </div>
         <Paragraphe />
       </div>
