@@ -49,7 +49,7 @@ const App = () => {
     if (history) {
       setShortcuts({
         "ctrl|z": () => {
-          setSource(history.replayExceptLast());
+          setSource(history.undo());
           return true;
         }
       });
