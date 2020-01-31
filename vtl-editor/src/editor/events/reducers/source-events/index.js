@@ -7,9 +7,9 @@ export const deleteFragment = (start, stop) => ({
 
 /** */
 export const INSERT_FRAGMENT = "source-edit/insert-fragment";
-export const insertFragment = (pos, fragment) => ({
+export const insertFragment = (start, fragment) => ({
   type: INSERT_FRAGMENT,
-  payload: { pos, fragment }
+  payload: { start, fragment }
 });
 
 /**
@@ -30,9 +30,9 @@ export function produceSourceEvent(state, event) {
  *
  */
 export function consumeSourceEvents(state) {
-  const { onChange } = state;
+  const { onChange, cursor, anchor, extent } = state;
   if (typeof onChange === "function") {
-    onChange(state.source, state.sourceEvents);
+    onChange(state.source, state.sourceEvents, { cursor, anchor, extent });
   }
   state.sourceEvents = undefined;
   return state;

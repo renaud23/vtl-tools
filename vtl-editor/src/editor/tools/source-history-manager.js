@@ -2,10 +2,11 @@ import {
   DELETE_FRAGMENT,
   INSERT_FRAGMENT
 } from "../events/reducers/source-events";
+import { getLineSeparator } from "./split-lines";
 
 function computeInsertFragment(source, diff) {
-  const { pos, fragment } = diff;
-  return `${source.substr(0, pos)}${fragment}${source.substr(pos)}`;
+  const { start, fragment } = diff;
+  return `${source.substr(0, start)}${fragment}${source.substr(start)}`;
 }
 
 function computeDeleteFragment(source, diff) {
@@ -13,18 +14,20 @@ function computeDeleteFragment(source, diff) {
   return `${source.substr(0, start)}${source.substr(stop)}`;
 }
 
-function computeDiff(source, diff) {
-  return diff.reduce((src, one, i) => {
+function computeDiff(origin, diff) {
+  const next = diff.reduce((source, one, i) => {
     const { type, payload } = one;
     switch (type) {
       case DELETE_FRAGMENT:
-        return computeDeleteFragment(src, payload);
+        return computeDeleteFragment(source, payload);
       case INSERT_FRAGMENT:
-        return computeInsertFragment(src, payload);
+        return computeInsertFragment(source, payload);
       default:
-        return src;
+        return source;
     }
-  }, source);
+  }, origin);
+
+  return next;
 }
 
 const pushHistory = stack => events => {
@@ -33,16 +36,40 @@ const pushHistory = stack => events => {
 
 const logHistory = stack => () => console.log(stack);
 
-const undo = (source, stack) => () => {
-  const newSource = stack.reduce((src, diff, i) => {
-    if (i < stack.length - 1) {
-      return computeDiff(src, diff);
-    }
-    return src;
-  }, source);
+const isChanges = stack => () => stack.length > 0;
 
-  stack.pop();
-  return newSource;
+function getCursor(source, pos) {
+  return source.split(getLineSeparator()).reduce(
+    ({ row, index, acc }, l, i) => {
+      const nextAcc = acc + l.length + getLineSeparator().length;
+      if (acc && pos >= acc && pos <= nextAcc) {
+        return { row: i, index: pos - acc };
+      }
+      return { row, index, acc: nextAcc };
+    },
+    { row: 0, index: 0, acc: 0 }
+  );
+}
+
+const undo = (origin, stack) => () => {
+  if (stack.length) {
+    const source = stack.reduce((next, diff, i) => {
+      if (i < stack.length - 1) {
+        return computeDiff(next, diff);
+      }
+      return next;
+    }, origin);
+
+    const last = stack.pop();
+
+    const { row, index } = getCursor(
+      origin,
+      last.reduce((a, { payload: { start } }) => start, 0)
+    );
+
+    return { source, cursor: { row, index } };
+  }
+  return { source: origin };
 };
 
 function createHistoryManager(source) {
@@ -51,6 +78,7 @@ function createHistoryManager(source) {
   return {
     pushHistory: pushHistory(stack),
     logHistory: logHistory(stack),
+    isChanges: isChanges(stack),
     undo: undo(source, stack)
   };
 }

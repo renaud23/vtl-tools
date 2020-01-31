@@ -26,14 +26,16 @@ const fetchContent = () => fetch("/rule.vtl").then(response => response.text());
 const App = () => {
   const [source, setSource] = useState("");
   const [history, setHistory] = useState(undefined);
+  const [cursor, setCursor] = useState({ row: 0, index: 0 });
   const [shortcuts, setShortcuts] = useState({});
 
   const onChange = useCallback(
-    (newSource, events) => {
+    (newSource, events, { cursor, anchor, extent }) => {
       if (history) {
         history.pushHistory(events);
       }
       setSource(newSource);
+      setCursor(cursor);
     },
     [history]
   );
@@ -49,7 +51,11 @@ const App = () => {
     if (history) {
       setShortcuts({
         "ctrl|z": () => {
-          setSource(history.undo());
+          if (history.isChanges()) {
+            const { source: ns, cursor: nc } = history.undo();
+            setSource(ns);
+            setCursor(nc);
+          }
           return true;
         }
       });
@@ -65,6 +71,7 @@ const App = () => {
             source={source}
             onChange={onChange}
             shortcuts={shortcuts}
+            cursor={cursor}
           />
         </div>
         <Paragraphe />

@@ -73,6 +73,14 @@ const reduceSetOnChange = (state, { payload: { onChange } }) => ({
   onChange
 });
 
+const reduceSetCursor = (state, { payload: { row, index } }) => {
+  return {
+    ...state,
+    cursor:
+      row !== undefined && index !== undefined ? { row, index } : undefined
+  };
+};
+
 /** */
 const reducer = (state, action) => {
   switch (action.type) {
@@ -100,6 +108,9 @@ const reducer = (state, action) => {
     }
     case actions.SET_ON_CHANGE: {
       return reduceSetOnChange(state, action);
+    }
+    case actions.SET_CURSOR: {
+      return reduceSetCursor(state, action);
     }
     default:
       return state;

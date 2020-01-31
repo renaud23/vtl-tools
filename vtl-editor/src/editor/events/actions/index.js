@@ -109,11 +109,26 @@ export const onKeyShortcut = (pattern, data = {}) => ({
   }
 });
 
+/*
+ *
+ *
+ */
+
 /** */
 export const SET_ON_CHANGE = "vtl-editor/set-on-change";
 export const setOnChange = onChange => ({
   type: SET_ON_CHANGE,
   payload: {
     onChange
+  }
+});
+
+/** */
+export const SET_CURSOR = "vtl-editor/set-cursor";
+export const setCursor = (row, index) => ({
+  type: SET_CURSOR,
+  payload: {
+    row,
+    index
   }
 });
