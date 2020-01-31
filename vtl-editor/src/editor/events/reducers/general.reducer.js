@@ -68,6 +68,11 @@ function reduceKeyDown(state, { payload: { key, data } }) {
   }
 }
 
+const reduceSetOnChange = (state, { payload: { onChange } }) => ({
+  ...state,
+  onChange
+});
+
 /** */
 const reducer = (state, action) => {
   switch (action.type) {
@@ -92,6 +97,9 @@ const reducer = (state, action) => {
     }
     case actions.ON_WHEEL_DOWN: {
       return validateVisibleLines(changeOnWheelDown(state, action));
+    }
+    case actions.SET_ON_CHANGE: {
+      return reduceSetOnChange(state, action);
     }
     default:
       return state;

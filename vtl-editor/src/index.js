@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { render } from "react-dom";
-import { VtlEditor } from "./editor";
+import { VtlEditor, createSourceHistoryManager } from "./editor";
 import "./application.scss";
 import "./vtl-tokens.scss";
 
@@ -23,21 +23,49 @@ const Paragraphe = () => (
 
 const fetchContent = () => fetch("/rule.vtl").then(response => response.text());
 
-function onChange(source, action) {
-  console.log(action);
-}
-
 const App = () => {
   const [source, setSource] = useState("");
+  const [history, setHistory] = useState(undefined);
+  const [shortcuts, setShortcuts] = useState({});
+
+  const onChange = useCallback(
+    (newSource, events) => {
+      if (history) {
+        history.pushHistory(events);
+      }
+      setSource(newSource);
+    },
+    [history]
+  );
+
   useEffect(() => {
-    fetchContent().then(rule => setSource(rule));
+    fetchContent().then(rule => {
+      setSource(rule);
+      setHistory(createSourceHistoryManager(rule));
+    });
   }, []);
+
+  useEffect(() => {
+    if (history) {
+      setShortcuts({
+        "ctrl|z": () => {
+          setSource(history.replayExceptLast());
+          return true;
+        }
+      });
+    }
+  }, [history]);
+
   return (
     <div className="application">
       <div className="container">
         <Paragraphe />
         <div className="editor">
-          <VtlEditor source={source} onChange={onChange} />
+          <VtlEditor
+            source={source}
+            onChange={onChange}
+            shortcuts={shortcuts}
+          />
         </div>
         <Paragraphe />
       </div>

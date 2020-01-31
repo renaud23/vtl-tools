@@ -108,3 +108,12 @@ export const onKeyShortcut = (pattern, data = {}) => ({
     ...data
   }
 });
+
+/** */
+export const SET_ON_CHANGE = "vtl-editor/set-on-change";
+export const setOnChange = onChange => ({
+  type: SET_ON_CHANGE,
+  payload: {
+    onChange
+  }
+});

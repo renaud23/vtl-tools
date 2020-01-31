@@ -14,15 +14,14 @@ function EditorContainer({
   source: sourceFromProps,
   fontMetric,
   zIndex,
-  onChange
+  onChange,
+  shortcuts
 }) {
   const [state, dispatch] = useReducer(reducers, {
     ...initialState,
     zIndex,
-    fontMetric,
-    onChange
+    fontMetric
   });
-
   const { source } = state;
 
   useEffect(() => {
@@ -32,19 +31,23 @@ function EditorContainer({
   }, [sourceFromProps]);
 
   useEffect(() => {
+    dispatch(actions.setOnChange(onChange));
+  }, [onChange]);
+
+  useEffect(() => {
     parseVtl(source, ({ tokens = [] } = {}) => {
       dispatch(actions.parsingEnd(tokens, stringHash(source)));
     });
   }, [source]);
 
   return (
-    <EditorContext.Provider value={{ state, dispatch }}>
+    <EditorContext.Provider value={{ state, dispatch, shortcuts }}>
       <Editor />
     </EditorContext.Provider>
   );
 }
 
-function EditorRoot({ source, zIndex, onChange }) {
+function EditorRoot({ source, zIndex, onChange, shortcuts }) {
   const [fontMetric, setFontMetric] = useState(undefined);
 
   return fontMetric ? (
@@ -53,6 +56,7 @@ function EditorRoot({ source, zIndex, onChange }) {
       fontMetric={fontMetric}
       zIndex={zIndex}
       onChange={onChange}
+      shortcuts={shortcuts}
     />
   ) : (
     <FontMetric onLoad={fm => setFontMetric(fm)} />
@@ -62,8 +66,14 @@ function EditorRoot({ source, zIndex, onChange }) {
 EditorRoot.propTypes = {
   content: PropTypes.string,
   zIndex: PropTypes.number,
-  onChange: () => null
+  shortcuts: PropTypes.object,
+  onChange: PropTypes.func
 };
-EditorRoot.defaultProps = { source: "", zIndex: 0, onChange: PropTypes.func };
+EditorRoot.defaultProps = {
+  source: "",
+  zIndex: 0,
+  onChange: () => null,
+  shortcuts: {}
+};
 
 export default EditorRoot;

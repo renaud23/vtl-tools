@@ -11,6 +11,7 @@ export default {
   waiting: false,
   maxLengthRow: 0,
   post: undefined,
+  onChange: () => null,
   /** selection */
   overlaySize: { width: undefined, height: undefined },
   cursor: undefined,
