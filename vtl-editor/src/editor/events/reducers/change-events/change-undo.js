@@ -41,12 +41,12 @@ function getCursor(source, pos) {
 }
 
 function reduceDeleteFragment(source, diff) {
-  const { start, stop, fragment } = diff;
+  const { start, fragment } = diff;
   return `${source.substr(0, start)}${fragment}${source.substr(start)}`;
 }
 
 function reduceInsertFragment(source, diff) {
-  const { start, stop, fragment } = diff;
+  const { start, stop } = diff;
   return `${source.substr(0, start)}${source.substr(stop + 1)}`;
 }
 
@@ -60,7 +60,6 @@ function reduceDiff(source, diff) {
     default:
       return source;
   }
-  return source;
 }
 
 export function undo(state) {

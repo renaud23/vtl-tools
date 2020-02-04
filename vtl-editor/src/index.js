@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { render } from "react-dom";
+import FileBar from "./file-bar";
 import { VtlEditor } from "./editor";
 import "./application.scss";
 import "./vtl-tokens.scss";
@@ -23,26 +24,54 @@ const Paragraphe = () => (
 
 const fetchContent = () => fetch("/rule.vtl").then(response => response.text());
 
+const FILES = [
+  { name: "rule 1", source: "first", history: [] },
+  { name: "rule 2", source: "two", history: [] }
+];
+
+const SOURCES = {};
+SOURCES[0] = "fsfsdf";
+SOURCES[1] = "aaaaaa";
+
 const App = () => {
   const [source, setSource] = useState("");
-  const [history] = useState([]);
+  const [active, setActive] = useState(0);
+  const [files, setFiles] = useState(FILES);
+  const [history, setHistory] = useState([]);
+  const [loaded, setLoaded] = useState(false);
   const [cursor] = useState({ row: 0, index: 0 });
 
-  const onChange = useCallback(
-    (newSource, history, { cursor, anchor, extent }) => {},
-    []
-  );
+  const onChange = useCallback((src, history) => {
+    // console.log(active);
+    // SOURCES[active] = src;
+    // console.log(active, src);
+    // setSource(src);
+  }, []);
 
   useEffect(() => {
-    fetchContent().then(rule => {
-      setSource(rule);
-    });
-  }, []);
+    if (!loaded) {
+      fetchContent().then(rule => {
+        setFiles([...files, { name: "from file" }]);
+        setSource(rule);
+        SOURCES[files.length] = rule;
+        setActive(files.length);
+      });
+      setLoaded(true);
+    }
+  }, [files, loaded]);
 
   return (
     <div className="application">
       <div className="container">
         <Paragraphe />
+        <FileBar
+          files={files}
+          active={active}
+          onSelect={(i, name) => {
+            setActive(i);
+            setSource(SOURCES[i] || "");
+          }}
+        />
         <div className="editor">
           <VtlEditor
             source={source}

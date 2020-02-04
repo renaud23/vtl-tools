@@ -1,0 +1,19 @@
+$fileBarBackgroundColor: rgb(77, 77, 69);
+$editorBackgroundColor: rgb(44, 44, 36);
+$editorColor: ivory;
+
+.vtl-file-bar {
+  width: 100%;
+  height: 35px;
+  background-color: $fileBarBackgroundColor;
+  color: $editorColor;
+  .vtl-file-bar-item {
+    display: inline-block;
+    padding: 0 12px;
+    height: 100%;
+    cursor: pointer;
+    &.active {
+      background-color: $editorBackgroundColor;
+    }
+  }
+}
