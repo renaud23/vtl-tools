@@ -39,7 +39,6 @@ const reduceUpdateSource = (state, { payload: { source } }) => {
   return {
     ...state,
     source,
-    origin: source,
     lines,
     maxLengthRow
   };
