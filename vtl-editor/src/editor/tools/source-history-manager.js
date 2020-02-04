@@ -11,7 +11,7 @@ function computeInsertFragment(source, diff) {
 
 function computeDeleteFragment(source, diff) {
   const { start, stop } = diff;
-  return `${source.substr(0, start)}${source.substr(stop)}`;
+  return `${source.substr(0, start)}${source.substr(stop + 1)}`;
 }
 
 function computeDiff(origin, diff) {
