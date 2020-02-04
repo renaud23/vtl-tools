@@ -1,15 +1,15 @@
 /** */
 export const DELETE_FRAGMENT = "source-edit/delete-fragment";
-export const deleteFragment = (start, stop) => ({
+export const deleteFragment = (start, stop, fragment) => ({
   type: DELETE_FRAGMENT,
-  payload: { start, stop }
+  payload: { start, stop, fragment }
 });
 
 /** */
 export const INSERT_FRAGMENT = "source-edit/insert-fragment";
-export const insertFragment = (start, fragment) => ({
+export const insertFragment = (start, stop, fragment) => ({
   type: INSERT_FRAGMENT,
-  payload: { start, fragment }
+  payload: { start, stop, fragment }
 });
 
 /**

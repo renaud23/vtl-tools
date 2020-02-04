@@ -7,7 +7,7 @@ function changeInsertChar(state, char) {
   const { row, index } = cursor;
   const [{ pos }] = computeSourcePosition(lines, cursor);
   const nextCursor = { row, index: index + 1 };
-  const event = insertFragment(pos, char);
+  const event = insertFragment(pos, pos, char);
 
   const next = {
     ...state,

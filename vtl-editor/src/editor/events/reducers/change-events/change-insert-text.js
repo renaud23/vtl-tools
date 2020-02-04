@@ -18,8 +18,7 @@ function changeInsertText(state, text) {
         ? tmp[tmp.length - 1].length
         : index + tmp[tmp.length - 1].length
   };
-  const event = insertFragment(pos, text);
-
+  const event = insertFragment(pos, pos + text.length - 1, text);
   const next = {
     ...state,
     source: `${source.substr(0, pos)}${text}${source.substr(pos)}`,

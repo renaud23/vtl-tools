@@ -11,7 +11,12 @@ function changeDeleteSelection(state) {
     last
   );
 
-  const event = deleteFragment(start, stop - 1);
+  const event = deleteFragment(
+    start,
+    stop - 1,
+    source.substr(start, stop - start)
+  );
+
   const nextSource = `${source.substr(0, start)}${source.substr(stop)}`;
   const next = {
     ...state,
