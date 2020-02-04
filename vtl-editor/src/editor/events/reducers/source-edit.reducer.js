@@ -22,6 +22,9 @@ const reduceKeyDown = (state, { payload: { key } }) => {
     case KEY.DELETE: {
       return changeKeyDelete(state);
     }
+    case KEY.TAB: {
+      return changeInsertChar(changeDeleteSelection(state), "\t");
+    }
     default:
       return state;
   }
@@ -36,6 +39,7 @@ const reduceUpdateSource = (state, { payload: { source } }) => {
   return {
     ...state,
     source,
+    origin: source,
     lines,
     maxLengthRow
   };

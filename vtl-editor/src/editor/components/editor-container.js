@@ -10,18 +10,40 @@ import FontMetric from "./font-metric";
 const parseVtl = createVtlTaksManager();
 
 /** */
-function EditorContainer({ content, fontMetric, zIndex }) {
+function EditorContainer({
+  source: sourceFromProps,
+  fontMetric,
+  zIndex,
+  cursor,
+  onChange,
+  shortcuts,
+  history
+}) {
   const [state, dispatch] = useReducer(reducers, {
     ...initialState,
     zIndex,
     fontMetric
   });
-
   const { source } = state;
 
   useEffect(() => {
-    dispatch(actions.updateSource(content));
-  }, [content]);
+    if (sourceFromProps) {
+      dispatch(actions.updateSource(sourceFromProps));
+    }
+  }, [sourceFromProps]);
+
+  useEffect(() => {
+    dispatch(actions.setOnChange(onChange));
+  }, [onChange]);
+
+  useEffect(() => {
+    if (cursor) {
+      const { row, index } = cursor;
+      dispatch(actions.setCursor(row, index));
+    } else {
+      dispatch(actions.setCursor(undefined));
+    }
+  }, [cursor]);
 
   useEffect(() => {
     parseVtl(source, ({ tokens = [] } = {}) => {
@@ -29,21 +51,28 @@ function EditorContainer({ content, fontMetric, zIndex }) {
     });
   }, [source]);
 
+  useEffect(() => {
+    dispatch(actions.setHistory(history));
+  }, [history]);
+
   return (
-    <EditorContext.Provider value={{ state, dispatch }}>
+    <EditorContext.Provider value={{ state, dispatch, shortcuts }}>
       <Editor />
     </EditorContext.Provider>
   );
 }
 
-function EditorRoot({ content, zIndex }) {
+function EditorRoot({ source, zIndex, onChange, shortcuts, cursor, history }) {
   const [fontMetric, setFontMetric] = useState(undefined);
-
   return fontMetric ? (
     <EditorContainer
-      content={content}
+      source={source}
       fontMetric={fontMetric}
       zIndex={zIndex}
+      onChange={onChange}
+      shortcuts={shortcuts}
+      cursor={cursor}
+      history={history}
     />
   ) : (
     <FontMetric onLoad={fm => setFontMetric(fm)} />
@@ -52,8 +81,24 @@ function EditorRoot({ content, zIndex }) {
 
 EditorRoot.propTypes = {
   content: PropTypes.string,
-  zIndex: PropTypes.number
+  zIndex: PropTypes.number,
+  shortcuts: PropTypes.object,
+  onChange: PropTypes.func,
+  history: PropTypes.arrayOf(
+    PropTypes.shape({ type: PropTypes.string.isRequired })
+  ),
+  cursor: PropTypes.shape({
+    row: PropTypes.number.isRequired,
+    index: PropTypes.number.isRequired
+  })
 };
-EditorRoot.defaultProps = { content: "", zIndex: 0 };
+EditorRoot.defaultProps = {
+  source: "",
+  zIndex: 0,
+  onChange: () => null,
+  shortcuts: {},
+  cursor: undefined,
+  history: []
+};
 
 export default EditorRoot;

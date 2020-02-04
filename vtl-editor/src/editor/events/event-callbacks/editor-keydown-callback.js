@@ -41,9 +41,11 @@ const keyDownShorcutCallback = (state, dispatch, shortcutPatterns) => e => {
   if (ctrlKey || altKey || shiftKey) {
     if (key !== KEY.ALT && key !== KEY.SHIFT && key !== KEY.CONTROL) {
       stopAndPrevent(e);
-      return shortcutPatterns
+      const what = shortcutPatterns
         .get({ altKey, shiftKey, ctrlKey, key })
         .execute(state, dispatch);
+
+      return what;
     }
   }
   return false;

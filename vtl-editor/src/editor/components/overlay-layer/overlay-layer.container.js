@@ -15,9 +15,7 @@ import Cursor from "./cursor";
 import Indentation from "./indentation";
 import Selection from "./selection";
 
-import { createDefaultShortcuts } from "../../tools";
-
-const shorcuts = createDefaultShortcuts();
+import { composeShortcuts } from "../../tools";
 
 const computeVerticalScrollrange = (height, fontMetric) => {
   const offset = Math.round(height / fontMetric.height);
@@ -60,7 +58,8 @@ const getCursorPosition = ({
 
 /* **/
 function OverlayLayerContainer() {
-  const { state, dispatch } = useContext(EditorContext);
+  const { state, dispatch, shortcuts } = useContext(EditorContext);
+
   const {
     fontMetric,
     zIndex,
@@ -70,6 +69,7 @@ function OverlayLayerContainer() {
   } = state;
   const [drag, setDrag] = useState(false);
   const [dragOutDirection, setDragOutDirection] = useState(undefined);
+  const [mergedShortcuts, setMergedShortcuts] = useState({});
   const containerEl = useRef();
 
   useInterval(
@@ -94,6 +94,10 @@ function OverlayLayerContainer() {
       );
     }
   }, [containerEl, fontMetric, dispatch]);
+
+  useEffect(() => {
+    setMergedShortcuts(composeShortcuts(shortcuts));
+  }, [shortcuts]);
 
   useEffect(() => {
     const mousemove = e => {
@@ -178,7 +182,7 @@ function OverlayLayerContainer() {
       onDoubleClick={e => {
         dispatch(actions.doubleClick());
       }}
-      onKeydown={createKeydownCallback(state, dispatch, shorcuts)}
+      onKeydown={createKeydownCallback(state, dispatch, mergedShortcuts)}
     >
       <HorizontalScrollrange />
       <VerticalScrollrange />

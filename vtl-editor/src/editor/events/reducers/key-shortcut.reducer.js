@@ -1,10 +1,9 @@
 import * as actions from "../actions";
-import { updateState, computeSourcePosition } from "../../tools";
-import { changeDeleteSelection } from "./change-events";
+import { changeDeleteSelection, changeInsertText } from "./change-events";
+import { changeUndo } from "./change-events";
 
 function reduceCut(state, action) {
-  const next = updateState(changeDeleteSelection(state));
-
+  const next = changeDeleteSelection(state);
   return { ...next, waiting: true };
 }
 
@@ -19,18 +18,13 @@ function reduceSelectAll(state, action) {
 
 function reducePaste(state, { payload: { text } }) {
   if (text) {
-    const next = changeDeleteSelection(state);
-    const { source, cursor, lines } = next;
-    const [{ pos }] = computeSourcePosition(lines, cursor);
-    const nextSource = `${source.substr(0, pos)}${text}${source.substr(pos)}`;
-
-    return { ...next, post: undefined, source: nextSource, highlights: [] };
+    return changeInsertText(changeDeleteSelection(state), text);
   }
   return state;
 }
 
 /** */
-const reducer = (state, action) => {
+function reducer(state, action) {
   if (action.type === actions.ON_KEY_SHORTCUT) {
     const {
       payload: { pattern }
@@ -39,15 +33,20 @@ const reducer = (state, action) => {
       case "ctrl|a": {
         return reduceSelectAll(state, action);
       }
-      case "ctrl|x":
+      case "ctrl|x": {
         return reduceCut(state, action);
-      case "ctrl|v":
+      }
+      case "ctrl|v": {
         return reducePaste(state, action);
+      }
+      case "ctrl|z": {
+        return changeUndo(state, action);
+      }
       default:
     }
   }
 
   return state;
-};
+}
 
 export default reducer;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { render } from "react-dom";
 import { VtlEditor } from "./editor";
 import "./application.scss";
@@ -24,16 +24,32 @@ const Paragraphe = () => (
 const fetchContent = () => fetch("/rule.vtl").then(response => response.text());
 
 const App = () => {
-  const [content, setContent] = useState("");
+  const [source, setSource] = useState("");
+  const [history] = useState([]);
+  const [cursor] = useState({ row: 0, index: 0 });
+
+  const onChange = useCallback(
+    (newSource, history, { cursor, anchor, extent }) => {},
+    []
+  );
+
   useEffect(() => {
-    fetchContent().then(rule => setContent(rule));
+    fetchContent().then(rule => {
+      setSource(rule);
+    });
   }, []);
+
   return (
     <div className="application">
       <div className="container">
         <Paragraphe />
         <div className="editor">
-          <VtlEditor content={content} />
+          <VtlEditor
+            source={source}
+            onChange={onChange}
+            cursor={cursor}
+            history={history}
+          />
         </div>
         <Paragraphe />
       </div>

@@ -2,6 +2,7 @@ export default {
   /** general */
   zIndex: 0,
   source: "",
+  origin: "",
   lines: [""],
   visibles: [{ value: "", start: 0, stopb: 0, row: 0, tokens: [] }],
   tokens: [],
@@ -11,11 +12,14 @@ export default {
   waiting: false,
   maxLengthRow: 0,
   post: undefined,
+  onChange: () => null,
   /** selection */
   overlaySize: { width: undefined, height: undefined },
   cursor: undefined,
   anchor: undefined,
   extent: undefined,
   /** */
-  highlights: []
+  highlights: [],
+  /** */
+  history: []
 };

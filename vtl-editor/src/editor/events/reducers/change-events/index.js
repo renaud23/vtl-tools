@@ -6,6 +6,8 @@ export { default as changeKeyBackSpace } from "./change-key-back-space";
 export { default as changeKeyDelete } from "./change-key-delete";
 export { default as changeDoubleClick } from "./change-double-click";
 export { default as changeKeyTab } from "./change-key-tab";
+export { default as changeInsertText } from "./change-insert-text";
+export { default as changeUndo } from "./change-undo";
 export * from "./change-key-end-home";
 export * from "./change-key-page";
 export * from "./change-on-wheel";

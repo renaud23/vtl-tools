@@ -1,5 +1,6 @@
 import changeDeleteSelection from "./change-delete-selection";
 import { computeSourcePosition, getLineSeparator } from "../../../tools";
+import { deleteFragment, appendTemporyChange } from "../source-events";
 
 function changeBackSpaceKey(state) {
   const { anchor, extent, cursor, lines, source } = state;
@@ -11,7 +12,8 @@ function changeBackSpaceKey(state) {
     const { row, index } = cursor;
     const length = index ? 1 : getLineSeparator().length;
     const nextSource = `${source.substr(0, pos - length)}${source.substr(pos)}`;
-    return {
+    const event = deleteFragment(pos - length, pos - 1);
+    const next = {
       ...state,
       source: nextSource,
       waiting: true,
@@ -22,6 +24,7 @@ function changeBackSpaceKey(state) {
         }
       }
     };
+    return appendTemporyChange(next, event);
   }
   return state;
 }

@@ -10,8 +10,7 @@ import {
   changeKeyPageUp,
   changeKeyPageDown,
   changeOnWheelUp,
-  changeOnWheelDown,
-  changeKeyTab
+  changeOnWheelDown
 } from "./change-events";
 import { KEY } from "../event-callbacks";
 
@@ -63,13 +62,29 @@ function reduceKeyDown(state, { payload: { key, data } }) {
     case KEY.PAGE_DOWN: {
       return changeKeyPageDown(state, data);
     }
-    case KEY.TAB: {
-      return changeKeyTab(state, data);
-    }
+
     default:
       return state;
   }
 }
+
+const reduceSetOnChange = (state, { payload: { onChange } }) => ({
+  ...state,
+  onChange
+});
+
+const reduceSetCursor = (state, { payload: { row, index } }) => {
+  return {
+    ...state,
+    cursor:
+      row !== undefined && index !== undefined ? { row, index } : undefined
+  };
+};
+
+const reduceSetHistory = (state, { payload: { history } }) => ({
+  ...state,
+  history
+});
 
 /** */
 const reducer = (state, action) => {
@@ -95,6 +110,15 @@ const reducer = (state, action) => {
     }
     case actions.ON_WHEEL_DOWN: {
       return validateVisibleLines(changeOnWheelDown(state, action));
+    }
+    case actions.SET_ON_CHANGE: {
+      return reduceSetOnChange(state, action);
+    }
+    case actions.SET_CURSOR: {
+      return reduceSetCursor(state, action);
+    }
+    case actions.setHistory: {
+      return reduceSetHistory(state, action);
     }
     default:
       return state;
