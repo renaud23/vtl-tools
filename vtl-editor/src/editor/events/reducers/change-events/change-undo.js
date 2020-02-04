@@ -1,8 +1,5 @@
-import {
-  DELETE_FRAGMENT,
-  INSERT_FRAGMENT
-} from "../events/reducers/source-events";
-import { getLineSeparator } from "./split-lines";
+import { DELETE_FRAGMENT, INSERT_FRAGMENT } from "../source-events";
+import { getLineSeparator } from "../../../tools/split-lines";
 
 function computeInsertFragment(source, diff) {
   const { start, fragment } = diff;
@@ -30,14 +27,6 @@ function computeDiff(origin, diff) {
   return next;
 }
 
-const pushHistory = stack => events => {
-  stack.push(events);
-};
-
-const logHistory = stack => () => console.log(stack);
-
-const isChanges = stack => () => stack.length > 0;
-
 function getCursor(source, pos) {
   return source.split(getLineSeparator()).reduce(
     ({ row, index, acc }, l, i) => {
@@ -51,36 +40,39 @@ function getCursor(source, pos) {
   );
 }
 
-const undo = (origin, stack) => () => {
-  if (stack.length) {
-    const source = stack.reduce((next, diff, i) => {
-      if (i < stack.length - 1) {
-        return computeDiff(next, diff);
-      }
-      return next;
-    }, origin);
+export function undo(state) {
+  const { origin, history } = state;
+  const source = history.reduce((current, diff, i) => {
+    if (i < history.length - 1) {
+      return computeDiff(current, diff);
+    }
+    return current;
+  }, origin);
 
-    const last = stack.pop();
+  const nextHistory = [...history];
+  const omitted = nextHistory.pop();
 
-    const { row, index } = getCursor(
-      origin,
-      last.reduce((a, { payload: { start } }) => start, 0)
-    );
+  const { row, index } = getCursor(
+    source,
+    omitted.reduce((a, { payload: { start } }) => start, 0)
+  );
 
-    return { source, cursor: { row, index } };
-  }
-  return { source: origin };
-};
-
-function createHistoryManager(source) {
-  const stack = [];
-
-  return {
-    pushHistory: pushHistory(stack),
-    logHistory: logHistory(stack),
-    isChanges: isChanges(stack),
-    undo: undo(source, stack)
+  const next = {
+    ...state,
+    source,
+    history: nextHistory,
+    cursor: { row, index }
   };
+
+  return next;
 }
 
-export default createHistoryManager;
+function changeUndo(state) {
+  const { history } = state;
+  if (history.length) {
+    return undo(state);
+  }
+  return state;
+}
+
+export default changeUndo;

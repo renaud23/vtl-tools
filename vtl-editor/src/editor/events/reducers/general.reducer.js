@@ -81,6 +81,11 @@ const reduceSetCursor = (state, { payload: { row, index } }) => {
   };
 };
 
+const reduceSetHistory = (state, { payload: { history } }) => ({
+  ...state,
+  history
+});
+
 /** */
 const reducer = (state, action) => {
   switch (action.type) {
@@ -111,6 +116,9 @@ const reducer = (state, action) => {
     }
     case actions.SET_CURSOR: {
       return reduceSetCursor(state, action);
+    }
+    case actions.setHistory: {
+      return reduceSetHistory(state, action);
     }
     default:
       return state;

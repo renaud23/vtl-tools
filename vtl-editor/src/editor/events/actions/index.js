@@ -132,3 +132,12 @@ export const setCursor = (row, index) => ({
     index
   }
 });
+
+/** */
+export const SET_HISTORY = "vtl-editor/set-history";
+export const setHistory = history => ({
+  type: SET_HISTORY,
+  payload: {
+    history
+  }
+});

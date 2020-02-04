@@ -17,27 +17,25 @@ export const insertFragment = (start, fragment) => ({
  * @param {*} state
  * @param {*} event
  */
-export function produceSourceEvent(state, event) {
-  if (Array.isArray(state.sourceEvents)) {
-    state.sourceEvents.push(event);
-  } else {
-    state.sourceEvents = [event];
+export function appendTemporyChange(state, event) {
+  if (event) {
+    const { temporyChanges } = state;
+    if (temporyChanges) {
+      return { ...state, temporyChanges: [...temporyChanges, event] };
+    }
+    return { ...state, temporyChanges: [event] };
   }
   return state;
 }
 
-/**
- *
- */
-export function consumeSourceEvents(state) {
-  const { onChange, cursor, anchor, extent } = state;
-  if (typeof onChange === "function") {
-    onChange(state.source, state.sourceEvents, { cursor, anchor, extent });
+export function mergeTemporyChanges(state) {
+  const { temporyChanges, history } = state;
+  if (temporyChanges) {
+    return {
+      ...state,
+      temporyChanges: undefined,
+      history: [...history, temporyChanges]
+    };
   }
-  state.sourceEvents = undefined;
   return state;
 }
-
-export const createConsumeReducer = reducer => (state, action) => {
-  return consumeSourceEvents(reducer(state, action));
-};

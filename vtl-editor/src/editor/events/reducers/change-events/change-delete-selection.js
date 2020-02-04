@@ -1,5 +1,5 @@
 import { computeSourcePosition, orderingSelection } from "../../../tools";
-import { produceSourceEvent, deleteFragment } from "../source-events";
+import { deleteFragment, appendTemporyChange } from "../source-events";
 
 function changeDeleteSelection(state) {
   const { anchor, extent, lines, source } = state;
@@ -21,7 +21,7 @@ function changeDeleteSelection(state) {
     post: { cursor: first }
   };
 
-  return produceSourceEvent(next, event);
+  return appendTemporyChange(next, event);
 }
 
 export default changeDeleteSelection;

@@ -3,7 +3,7 @@ import {
   computeSourcePosition,
   updateState
 } from "../../../tools";
-import { produceSourceEvent, insertFragment } from "../source-events";
+import { insertFragment, appendTemporyChange } from "../source-events";
 
 function keyEnter(state) {
   const update = updateState(state);
@@ -23,7 +23,7 @@ function keyEnter(state) {
     post: { cursor: { row: row + 1, index: 0 } }
   };
 
-  return produceSourceEvent(next, event);
+  return appendTemporyChange(next, event);
 }
 
 export default keyEnter;

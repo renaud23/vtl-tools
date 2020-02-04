@@ -1,7 +1,7 @@
 import changeDeleteSelection from "./change-delete-selection";
 import { computeSourcePosition } from "../../../tools";
 import { getLineSeparator } from "../../../tools";
-import { produceSourceEvent, deleteFragment } from "../source-events";
+import { deleteFragment, appendTemporyChange } from "../source-events";
 
 function changeKeyDelete(state) {
   const { anchor, extent, cursor, lines, source } = state;
@@ -18,7 +18,7 @@ function changeKeyDelete(state) {
       waiting: true,
       source: nextSource
     };
-    return produceSourceEvent(next, event);
+    return appendTemporyChange(next, event);
   }
   return state;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { render } from "react-dom";
-import { VtlEditor, createSourceHistoryManager } from "./editor";
+import { VtlEditor } from "./editor";
 import "./application.scss";
 import "./vtl-tokens.scss";
 
@@ -25,42 +25,19 @@ const fetchContent = () => fetch("/rule.vtl").then(response => response.text());
 
 const App = () => {
   const [source, setSource] = useState("");
-  const [history, setHistory] = useState(undefined);
-  const [cursor, setCursor] = useState({ row: 0, index: 0 });
-  const [shortcuts, setShortcuts] = useState({});
+  const [history] = useState([]);
+  const [cursor] = useState({ row: 0, index: 0 });
 
   const onChange = useCallback(
-    (newSource, events, { cursor, anchor, extent }) => {
-      if (history) {
-        history.pushHistory(events);
-      }
-      setSource(newSource);
-      setCursor(cursor);
-    },
-    [history]
+    (newSource, history, { cursor, anchor, extent }) => {},
+    []
   );
 
   useEffect(() => {
     fetchContent().then(rule => {
       setSource(rule);
-      setHistory(createSourceHistoryManager(rule));
     });
   }, []);
-
-  useEffect(() => {
-    if (history) {
-      setShortcuts({
-        "ctrl|z": () => {
-          if (history.isChanges()) {
-            const { source: ns, cursor: nc } = history.undo();
-            setSource(ns);
-            setCursor(nc);
-          }
-          return true;
-        }
-      });
-    }
-  }, [history]);
 
   return (
     <div className="application">
@@ -70,8 +47,8 @@ const App = () => {
           <VtlEditor
             source={source}
             onChange={onChange}
-            shortcuts={shortcuts}
             cursor={cursor}
+            history={history}
           />
         </div>
         <Paragraphe />

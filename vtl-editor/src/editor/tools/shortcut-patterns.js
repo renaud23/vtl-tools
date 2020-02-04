@@ -3,13 +3,13 @@ import { actions } from "../events";
 import { getSelection } from "./selection-tools";
 const SHORT_CUTS = new Map();
 
-/* */
+/** */
 const unmappedPattern = pattern => () => {
   console.debug(`unmapped pattern: ${pattern}`);
   return false;
 };
 
-/* copy to clipboard */
+/** copy to clipboard */
 const copy = state => {
   const selection = getSelection(state);
   if (selection) {
@@ -18,7 +18,7 @@ const copy = state => {
   return true;
 };
 
-/* cut to clipboard */
+/**  cut to clipboard */
 const cut = (state, dispatch) => {
   const selection = getSelection(state);
   if (selection) {
@@ -28,17 +28,23 @@ const cut = (state, dispatch) => {
   return true;
 };
 
-/* paste clipboard */
+/**  paste clipboard */
 const paste = (state, dispatch) => {
-  clipboard.readText().then(function(text) {
+  clipboard.readText().then(text => {
     dispatch(actions.onKeyShortcut("ctrl|v", { text }));
   });
   return true;
 };
 
-/* select all */
+/** select all */
 const selectAll = (state, dispatch) => {
   dispatch(actions.onKeyShortcut("ctrl|a"));
+  return true;
+};
+
+/** undo */
+const undo = (state, dispatch) => {
+  dispatch(actions.onKeyShortcut("ctrl|z"));
   return true;
 };
 
@@ -47,12 +53,7 @@ SHORT_CUTS.set("ctrl|x", cut);
 SHORT_CUTS.set("ctrl|c", copy);
 SHORT_CUTS.set("ctrl|v", paste);
 SHORT_CUTS.set("ctrl|a", selectAll);
-// SHORT_CUTS.set("ctrl|ArrowLeft", controlLeft);
-// SHORT_CUTS.set("ctrl|ArrowRight", controlRight);
-// SHORT_CUTS.set("shift|ArrowLeft", shiftLeft);
-// SHORT_CUTS.set("shift|ArrowRight", shiftRight);
-// SHORT_CUTS.set("shift|ArrowUp", shiftUp);
-// SHORT_CUTS.set("shift|ArrowDown", shiftDown);
+SHORT_CUTS.set("ctrl|z", undo);
 
 const getPattern = ({ altKey, shiftKey, ctrlKey, key }) =>
   `${altKey ? "alt|" : ""}${shiftKey ? "shift|" : ""}${
@@ -79,7 +80,6 @@ export const composeShortcuts = (patterns = {}, erase = false) => {
 
     return map;
   }, new Map(SHORT_CUTS));
-
   return createShortcutsProvider(newMap);
 };
 

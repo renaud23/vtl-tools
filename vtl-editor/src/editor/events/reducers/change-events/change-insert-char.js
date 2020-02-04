@@ -1,5 +1,5 @@
 import { computeSourcePosition, updateState } from "../../../tools";
-import { produceSourceEvent, insertFragment } from "../source-events";
+import { insertFragment, appendTemporyChange } from "../source-events";
 
 function changeInsertChar(state, char) {
   const update = updateState(state);
@@ -16,7 +16,7 @@ function changeInsertChar(state, char) {
     waiting: true
   };
 
-  return produceSourceEvent(next, event);
+  return appendTemporyChange(next, event);
 }
 
 export default changeInsertChar;

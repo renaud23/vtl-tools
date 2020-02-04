@@ -2,6 +2,7 @@ export default {
   /** general */
   zIndex: 0,
   source: "",
+  origin: "",
   lines: [""],
   visibles: [{ value: "", start: 0, stopb: 0, row: 0, tokens: [] }],
   tokens: [],
@@ -18,5 +19,7 @@ export default {
   anchor: undefined,
   extent: undefined,
   /** */
-  highlights: []
+  highlights: [],
+  /** */
+  history: []
 };

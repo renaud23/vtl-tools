@@ -1,6 +1,6 @@
 import changeDeleteSelection from "./change-delete-selection";
 import { computeSourcePosition, getLineSeparator } from "../../../tools";
-import { produceSourceEvent, deleteFragment } from "../source-events";
+import { deleteFragment, appendTemporyChange } from "../source-events";
 
 function changeBackSpaceKey(state) {
   const { anchor, extent, cursor, lines, source } = state;
@@ -24,7 +24,7 @@ function changeBackSpaceKey(state) {
         }
       }
     };
-    return produceSourceEvent(next, event);
+    return appendTemporyChange(next, event);
   }
   return state;
 }
