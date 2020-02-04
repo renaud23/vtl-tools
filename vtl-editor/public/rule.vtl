@@ -1,13 +1,8 @@
-/*
-	* VTL rule
-	*
-*/
-if VAR_A = "toto"
-	then "première possibilité"
-	else "une autre possibilité";
-// Fin de ma première règle VTL.
-
-/* Une ligne de commentaire simple doit toujours ce terminer par un saut de ligne, sinon le tokenizer ne la reconnait pas en tant que telle. */
-
-/* une règle doit pouvoir s'écrire sur une seule ligne */if VAR_A = "toto" then "première possibilité" else "une autre possibilité"; // et les tokens doivent tous être présents.
-
+/* 
+	* Règle VTL.
+	*/
+value_1 := "valeur 1";
+value_2 := "valeur 2";
+if var = "toto"
+	then value_1
+	else value_2;
