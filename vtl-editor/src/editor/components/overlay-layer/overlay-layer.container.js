@@ -65,7 +65,8 @@ function OverlayLayerContainer() {
     zIndex,
     verticalScrollrange,
     horizontalScrollrange,
-    lines
+    lines,
+    cursor
   } = state;
   const [drag, setDrag] = useState(false);
   const [dragOutDirection, setDragOutDirection] = useState(undefined);
@@ -154,6 +155,12 @@ function OverlayLayerContainer() {
       });
     }
   }, [containerEl, dispatch]);
+
+  useEffect(() => {
+    if (containerEl.current && cursor) {
+      containerEl.current.focus();
+    }
+  }, [containerEl, cursor]);
 
   return (
     <Overlay

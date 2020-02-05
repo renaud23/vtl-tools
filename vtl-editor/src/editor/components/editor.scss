@@ -117,7 +117,7 @@ $editorBackgroundColor: rgb(44, 44, 36);
       overflow: hidden;
 
       &:focus {
-        outline: none;
+        outline: solid red 1px;
       }
     }
 
