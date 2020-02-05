@@ -5,7 +5,7 @@ function getCursor(source, pos) {
   return source.split(getLineSeparator()).reduce(
     ({ row, index, acc }, l, i) => {
       const nextAcc = acc + l.length;
-      if (acc && pos >= acc && pos <= nextAcc) {
+      if (pos >= acc && pos <= nextAcc) {
         return { row: i, index: pos - acc };
       }
       return { row, index, acc: nextAcc + getLineSeparator().length };
@@ -48,7 +48,6 @@ export function undo(state) {
       source,
       last.reduce((a, { payload: { start } }) => start, 0)
     );
-
     return { ...state, source: ns, history: nh, cursor };
   }
 
