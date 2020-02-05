@@ -68,23 +68,32 @@ function reduceKeyDown(state, { payload: { key, data } }) {
   }
 }
 
-const reduceSetOnChange = (state, { payload: { onChange } }) => ({
-  ...state,
-  onChange
-});
+const reduceSetState = (state, { payload: { state: newState } }) => {
+  if (newState) {
+    const {
+      anchor = undefined,
+      extent = undefined,
+      cursor = undefined,
+      history = [],
+      highlights = [],
+      verticalScrollrange = state.verticalScrollrange,
+      horizontalScrollrange = state.horizontalScrollrange
+    } = newState;
 
-const reduceSetCursor = (state, { payload: { row, index } }) => {
-  return {
-    ...state,
-    cursor:
-      row !== undefined && index !== undefined ? { row, index } : undefined
-  };
+    return {
+      ...state,
+      anchor,
+      extent,
+      cursor,
+      history,
+      verticalScrollrange,
+      horizontalScrollrange,
+      highlights
+    };
+  }
+
+  return state;
 };
-
-const reduceSetHistory = (state, { payload: { history } }) => ({
-  ...state,
-  history
-});
 
 /** */
 const reducer = (state, action) => {
@@ -111,14 +120,8 @@ const reducer = (state, action) => {
     case actions.ON_WHEEL_DOWN: {
       return validateVisibleLines(changeOnWheelDown(state, action));
     }
-    case actions.SET_ON_CHANGE: {
-      return reduceSetOnChange(state, action);
-    }
-    case actions.SET_CURSOR: {
-      return reduceSetCursor(state, action);
-    }
-    case actions.setHistory: {
-      return reduceSetHistory(state, action);
+    case actions.SET_STATE: {
+      return reduceSetState(state, action);
     }
     default:
       return state;

@@ -24,37 +24,38 @@ const Paragraphe = () => (
 
 const fetchContent = () => fetch("/rule.vtl").then(response => response.text());
 
-const FILES = [
-  { name: "rule 1", source: "first", history: [] },
-  { name: "rule 2", source: "two", history: [] }
-];
+const createFile = (name, source) => ({
+  name,
+  source,
+  history: [],
+  state: { cursor: undefined, extent: undefined, anchor: undefined }
+});
 
-const SOURCES = {};
-SOURCES[0] = "fsfsdf";
-SOURCES[1] = "aaaaaa";
+const FILES = [
+  createFile("first file", "a := 5;"),
+  createFile("other one", "toto")
+];
 
 const App = () => {
   const [source, setSource] = useState("");
+  const [state, setState] = useState(undefined);
   const [active, setActive] = useState(0);
   const [files, setFiles] = useState(FILES);
-  const [history, setHistory] = useState([]);
   const [loaded, setLoaded] = useState(false);
-  const [cursor] = useState({ row: 0, index: 0 });
 
-  const onChange = useCallback((src, history) => {
-    // console.log(active);
-    // SOURCES[active] = src;
-    // console.log(active, src);
-    // setSource(src);
+  const onChange = useCallback(src => {
+    setSource(src);
+  }, []);
+
+  const onStateChange = useCallback(s => {
+    setState({ ...s });
   }, []);
 
   useEffect(() => {
     if (!loaded) {
       fetchContent().then(rule => {
-        setFiles([...files, { name: "from file" }]);
-        setSource(rule);
-        SOURCES[files.length] = rule;
-        setActive(files.length);
+        setFiles([...files, createFile("from file", rule)]);
+        // setActive(files.length);
       });
       setLoaded(true);
     }
@@ -64,20 +65,28 @@ const App = () => {
     <div className="application">
       <div className="container">
         <Paragraphe />
+
         <FileBar
           files={files}
           active={active}
-          onSelect={(i, name) => {
-            setActive(i);
-            setSource(SOURCES[i] || "");
+          onSelect={(index, name) => {
+            const nf = files.map(f => {
+              if (f.name === files[active].name) {
+                return { ...f, source, state };
+              }
+              return f;
+            });
+            setFiles(nf);
+            setActive(index);
           }}
         />
+
         <div className="editor">
           <VtlEditor
-            source={source}
+            source={files[active].source}
             onChange={onChange}
-            cursor={cursor}
-            history={history}
+            onStateChange={onStateChange}
+            state={files[active].state}
           />
         </div>
         <Paragraphe />
