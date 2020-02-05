@@ -109,35 +109,13 @@ export const onKeyShortcut = (pattern, data = {}) => ({
   }
 });
 
-/*
- *
- *
- */
-
 /** */
-export const SET_ON_CHANGE = "vtl-editor/set-on-change";
-export const setOnChange = onChange => ({
-  type: SET_ON_CHANGE,
-  payload: {
-    onChange
-  }
-});
-
-/** */
-export const SET_CURSOR = "vtl-editor/set-cursor";
-export const setCursor = (row, index) => ({
-  type: SET_CURSOR,
-  payload: {
-    row,
-    index
-  }
-});
-
-/** */
-export const SET_HISTORY = "vtl-editor/set-history";
-export const setHistory = history => ({
-  type: SET_HISTORY,
-  payload: {
-    history
-  }
-});
+export const SET_STATE = "vtl-editor/set-state";
+export const setState = state => {
+  return {
+    type: SET_STATE,
+    payload: {
+      state
+    }
+  };
+};
