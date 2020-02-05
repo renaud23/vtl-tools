@@ -17,24 +17,18 @@ function EditorContainer({
   cursor,
   onChange,
   shortcuts,
-  history
+  history: historyFromProps
 }) {
   const [state, dispatch] = useReducer(reducers, {
     ...initialState,
     zIndex,
     fontMetric
   });
-  const { source } = state;
+  const { source, history } = state;
 
   useEffect(() => {
-    if (sourceFromProps) {
-      dispatch(actions.updateSource(sourceFromProps));
-    }
+    dispatch(actions.updateSource(sourceFromProps));
   }, [sourceFromProps]);
-
-  useEffect(() => {
-    dispatch(actions.setOnChange(onChange));
-  }, [onChange]);
 
   useEffect(() => {
     if (cursor) {
@@ -52,8 +46,14 @@ function EditorContainer({
   }, [source]);
 
   useEffect(() => {
-    dispatch(actions.setHistory(history));
-  }, [history]);
+    if (source !== sourceFromProps) {
+      onChange(source, history);
+    }
+  }, [sourceFromProps, source, history, onChange]);
+
+  useEffect(() => {
+    dispatch(actions.setHistory(historyFromProps));
+  }, [historyFromProps]);
 
   return (
     <EditorContext.Provider value={{ state, dispatch, shortcuts }}>

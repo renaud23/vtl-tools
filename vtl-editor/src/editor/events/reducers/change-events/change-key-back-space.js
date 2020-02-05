@@ -11,8 +11,9 @@ function changeBackSpaceKey(state) {
   if (pos > 0) {
     const { row, index } = cursor;
     const length = index ? 1 : getLineSeparator().length;
+    const fragment = index ? source.charAt(pos) : getLineSeparator();
     const nextSource = `${source.substr(0, pos - length)}${source.substr(pos)}`;
-    const event = deleteFragment(pos - length, pos - 1);
+    const event = deleteFragment(pos - length, pos - 1, fragment);
     const next = {
       ...state,
       source: nextSource,

@@ -9,7 +9,11 @@ function keyEnter(state) {
   const update = updateState(state);
   const { cursor, lines, source } = update;
   const [{ pos, row }] = computeSourcePosition(lines, cursor);
-  const event = insertFragment(pos, getLineSeparator());
+  const event = insertFragment(
+    pos,
+    pos + getLineSeparator().length - 1,
+    getLineSeparator()
+  );
 
   const nextSource = `${source.substr(
     0,

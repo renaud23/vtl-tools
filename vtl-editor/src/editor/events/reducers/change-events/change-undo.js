@@ -1,31 +1,31 @@
 import { DELETE_FRAGMENT, INSERT_FRAGMENT } from "../source-events";
 import { getLineSeparator } from "../../../tools/split-lines";
 
-function computeInsertFragment(source, diff) {
-  const { start, fragment } = diff;
-  return `${source.substr(0, start)}${fragment}${source.substr(start)}`;
-}
+// function computeInsertFragment(source, diff) {
+//   const { start, fragment } = diff;
+//   return `${source.substr(0, start)}${fragment}${source.substr(start)}`;
+// }
 
-function computeDeleteFragment(source, diff) {
-  const { start, stop } = diff;
-  return `${source.substr(0, start)}${source.substr(stop + 1)}`;
-}
+// function computeDeleteFragment(source, diff) {
+//   const { start, stop } = diff;
+//   return `${source.substr(0, start)}${source.substr(stop + 1)}`;
+// }
 
-function computeDiff(origin, diff) {
-  const next = diff.reduce((source, one, i) => {
-    const { type, payload } = one;
-    switch (type) {
-      case DELETE_FRAGMENT:
-        return computeDeleteFragment(source, payload);
-      case INSERT_FRAGMENT:
-        return computeInsertFragment(source, payload);
-      default:
-        return source;
-    }
-  }, origin);
+// function computeDiff(origin, diff) {
+//   const next = diff.reduce((source, one, i) => {
+//     const { type, payload } = one;
+//     switch (type) {
+//       case DELETE_FRAGMENT:
+//         return computeDeleteFragment(source, payload);
+//       case INSERT_FRAGMENT:
+//         return computeInsertFragment(source, payload);
+//       default:
+//         return source;
+//     }
+//   }, origin);
 
-  return next;
-}
+//   return next;
+// }
 
 function getCursor(source, pos) {
   return source.split(getLineSeparator()).reduce(
@@ -40,31 +40,45 @@ function getCursor(source, pos) {
   );
 }
 
+function reduceDeleteFragment(source, diff) {
+  const { start, fragment } = diff;
+  return `${source.substr(0, start)}${fragment}${source.substr(start)}`;
+}
+
+function reduceInsertFragment(source, diff) {
+  const { start, stop } = diff;
+  return `${source.substr(0, start)}${source.substr(stop + 1)}`;
+}
+
+function reduceDiff(source, diff) {
+  const { type, payload } = diff;
+  switch (type) {
+    case DELETE_FRAGMENT:
+      return reduceDeleteFragment(source, payload);
+    case INSERT_FRAGMENT:
+      return reduceInsertFragment(source, payload);
+    default:
+      return source;
+  }
+}
+
 export function undo(state) {
-  const { origin, history } = state;
-  const source = history.reduce((current, diff, i) => {
-    if (i < history.length - 1) {
-      return computeDiff(current, diff);
-    }
-    return current;
-  }, origin);
+  const { source, history } = state;
+  if (history.length) {
+    const nh = [...history];
+    const last = nh.pop();
+    const ns = last
+      .reverse()
+      .reduce((curr, diff) => reduceDiff(curr, diff), source);
+    const cursor = getCursor(
+      source,
+      last.reduce((a, { payload: { start } }) => start, 0)
+    );
 
-  const nextHistory = [...history];
-  const omitted = nextHistory.pop();
+    return { ...state, source: ns, history: nh, cursor };
+  }
 
-  const { row, index } = getCursor(
-    source,
-    omitted.reduce((a, { payload: { start } }) => start, 0)
-  );
-
-  const next = {
-    ...state,
-    source,
-    history: nextHistory,
-    cursor: { row, index }
-  };
-
-  return next;
+  return state;
 }
 
 function changeUndo(state) {

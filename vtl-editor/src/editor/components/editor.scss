@@ -114,7 +114,6 @@ $editorBackgroundColor: rgb(44, 44, 36);
       width: 100%;
       height: 100%;
       cursor: text;
-
       overflow: hidden;
 
       &:focus {
@@ -133,7 +132,7 @@ $editorBackgroundColor: rgb(44, 44, 36);
       height: $lineHeight;
       background-color: transparent;
       margin: 2px;
-      border-left: solid 1px rgba(150, 150, 150, 0.2);
+      border-left: solid 1px rgba(150, 150, 150, 0.6);
     }
 
     .vtl-editor-highlight {
