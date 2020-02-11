@@ -13,8 +13,8 @@ const isInRange = (i, { start, offset }) =>
  * @param {*} lines
  * @param {*} hRange
  */
-const getVisibleLines = vRange => lines => {
-  const { stack } = lines.reduce(
+const getVisibleLines = vRange => source => {
+  const { stack } = source.split(getLineSeparator()).reduce(
     ({ stack, next }, l, i) => ({
       stack: isInRange(i, vRange)
         ? [
@@ -37,8 +37,8 @@ const getVisibleLines = vRange => lines => {
 };
 
 const computeVisibleLines = state => {
-  const { lines, verticalScrollrange } = state;
-  return { ...state, visibles: getVisibleLines(verticalScrollrange)(lines) };
+  const { source, verticalScrollrange } = state;
+  return { ...state, visibles: getVisibleLines(verticalScrollrange)(source) };
 };
 
 export default computeVisibleLines;

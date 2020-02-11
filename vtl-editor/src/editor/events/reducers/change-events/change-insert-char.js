@@ -13,7 +13,7 @@ function changeInsertChar(state, char) {
     ...state,
     source: `${source.substr(0, pos)}${char}${source.substr(pos)}`,
     post: { cursor: nextCursor },
-    waiting: true
+    waiting: false
   };
 
   return appendTemporyChange(next, event);
