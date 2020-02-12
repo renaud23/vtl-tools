@@ -1,5 +1,3 @@
-import { alterTokens } from "./alter-tokens";
-
 /** */
 export const DELETE_FRAGMENT = "source-edit/delete-fragment";
 export const deleteFragment = (start, stop, fragment) => ({
@@ -33,11 +31,9 @@ export function appendTemporyChange(state, event) {
 export function mergeTemporyChanges(state) {
   const { temporyChanges, history } = state;
   if (temporyChanges) {
-    const tokens = alterTokens(state, temporyChanges);
     return {
       ...state,
       temporyChanges: undefined,
-      tokens,
       history: [...history, temporyChanges]
     };
   }
