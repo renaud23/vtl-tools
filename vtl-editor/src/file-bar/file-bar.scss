@@ -3,7 +3,7 @@ $editorBackgroundColor: rgb(44, 44, 36);
 $editorColor: ivory;
 
 .vtl-file-bar {
-  width: 100%;
+  width: calc(100% + 1px);
   height: 35px;
   background-color: $fileBarBackgroundColor;
   color: $editorColor;

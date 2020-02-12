@@ -6,12 +6,13 @@ import {
   changeDeleteSelection,
   changeKeyEnter,
   changeKeyBackSpace,
-  changeKeyDelete
+  changeKeyDelete,
+  changeKeyTab
 } from "./change-events";
 import { updateState } from "../../tools";
 import { validateVisibleLines, validateScrollrange } from "./state-validator";
 
-const reduceKeyDown = (state, { payload: { key } }) => {
+const reduceKeyDown = (state, { payload: { key, data } }) => {
   switch (key) {
     case KEY.ENTER: {
       return changeKeyEnter(changeDeleteSelection(state));
@@ -23,7 +24,7 @@ const reduceKeyDown = (state, { payload: { key } }) => {
       return changeKeyDelete(state);
     }
     case KEY.TAB: {
-      return changeInsertChar(changeDeleteSelection(state), "\t");
+      return changeKeyTab(state, data);
     }
     default:
       return state;

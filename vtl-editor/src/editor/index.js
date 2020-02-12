@@ -1,1 +1,1 @@
-export { default as VtlEditor } from "./components/editor-container";
+export { default } from "./components/editor-container";
