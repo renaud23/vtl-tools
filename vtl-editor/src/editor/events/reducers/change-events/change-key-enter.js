@@ -1,13 +1,8 @@
-import {
-  getLineSeparator,
-  computeSourcePosition,
-  updateState
-} from "../../../tools";
+import { getLineSeparator, computeSourcePosition } from "../../../tools";
 import { insertFragment, appendTemporyChange } from "../source-events";
 
 function keyEnter(state) {
-  const update = updateState(state);
-  const { cursor, lines, source } = update;
+  const { cursor, lines, source } = state;
   const [{ pos, row }] = computeSourcePosition(lines, cursor);
   const event = insertFragment(
     pos,
@@ -21,7 +16,7 @@ function keyEnter(state) {
   )}${getLineSeparator()}${source.substr(pos)}`;
 
   const next = {
-    ...update,
+    ...state,
     source: nextSource,
     waiting: true,
     post: { cursor: { row: row + 1, index: 0 } }

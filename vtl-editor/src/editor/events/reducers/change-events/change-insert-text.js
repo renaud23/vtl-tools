@@ -1,14 +1,8 @@
-import {
-  computeSourcePosition,
-  updateState,
-  getLineSeparator,
-  getCursor
-} from "../../../tools";
+import { computeSourcePosition, getLineSeparator } from "../../../tools";
 import { insertFragment, appendTemporyChange } from "../source-events";
 
 function changeInsertText(state, text) {
-  const update = updateState(state);
-  const { source, lines, cursor } = update;
+  const { source, lines, cursor } = state;
   const { row, index } = cursor;
   const [{ pos }] = computeSourcePosition(lines, cursor);
   const tmp = text.split(getLineSeparator());
@@ -25,7 +19,6 @@ function changeInsertText(state, text) {
     ...state,
     source: nextSource,
     post: { cursor: nextCursor },
-    cursor: getCursor(nextSource, pos),
     waiting: true
   };
 

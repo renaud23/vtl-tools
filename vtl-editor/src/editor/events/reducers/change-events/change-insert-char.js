@@ -1,9 +1,8 @@
-import { computeSourcePosition, updateState } from "../../../tools";
+import { computeSourcePosition } from "../../../tools";
 import { insertFragment, appendTemporyChange } from "../source-events";
 
 function changeInsertChar(state, char) {
-  const update = updateState(state);
-  const { source, lines, cursor } = update;
+  const { source, lines, cursor } = state;
   const { row, index } = cursor;
   const [{ pos }] = computeSourcePosition(lines, cursor);
   const nextCursor = { row, index: index + 1 };

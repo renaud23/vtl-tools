@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import postTask from "./worker-task";
-import stringHash from "string-hash";
+// import stringHash from "string-hash";
 import "./console.scss";
 
 function Errors({ errors = [] }) {
@@ -12,20 +12,21 @@ function Errors({ errors = [] }) {
   ));
 }
 
-function getErrors() {}
+// function getErrors() {}
 
 function Console({ source, filter }) {
   const [errors, setErrors] = useState({});
+
   useEffect(() => {
     postTask(source, `Parse#${new Date().getTime()}`).then(
       ({ errors: errs }) => {
-        setErrors({
+        setErrors(errors => ({
           ...errors,
           [filter]: errors[filter] ? [...errors[filter], ...errs] : errs
-        });
+        }));
       }
     );
-  }, [source]);
+  }, [source, filter]);
 
   return (
     <div className="vtl-console">

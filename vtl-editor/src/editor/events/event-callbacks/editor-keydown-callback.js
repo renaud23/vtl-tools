@@ -21,15 +21,19 @@ const keyDownCallback = (state, dispatch) => e => {
   stopAndPrevent(e);
 
   const { waiting } = state;
-  if (waiting) return;
+  if (waiting) return true;
+  if (KEY.isUnbindedKey(e.key)) return false;
   if (could) {
     could = false;
-    window.setTimeout(() => (could = true), 20);
-    if (KEY.isUnbindedKey(e.key)) return false;
+    window.setTimeout(() => {
+      could = true;
+    }, 20);
+
     if (KEY.isCharCode(e.key)) {
       dispatch(actions.charDown(e.key));
       return false;
     }
+
     dispatch(actions.keyDown(e.key, { shiftKey: e.shiftKey }));
     return false;
   }
@@ -38,13 +42,14 @@ const keyDownCallback = (state, dispatch) => e => {
 /* */
 const keyDownShorcutCallback = (state, dispatch, shortcutPatterns) => e => {
   const { altKey, shiftKey, ctrlKey, key } = e;
+  const { waiting } = state;
+  if (waiting) return true;
   if (ctrlKey || altKey || shiftKey) {
     if (key !== KEY.ALT && key !== KEY.SHIFT && key !== KEY.CONTROL) {
       stopAndPrevent(e);
       const what = shortcutPatterns
         .get({ altKey, shiftKey, ctrlKey, key })
         .execute(state, dispatch);
-
       return what;
     }
   }

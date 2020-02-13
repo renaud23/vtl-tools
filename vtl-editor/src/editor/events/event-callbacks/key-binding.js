@@ -47,7 +47,9 @@ const UNBINDED_KEY = [
   "AudioVolumeMute",
   "AudioVolumeDown",
   "AudioVolumeUp",
-  "NumLock"
+  "NumLock",
+  "Control",
+  "Shift"
 ];
 
 /* */

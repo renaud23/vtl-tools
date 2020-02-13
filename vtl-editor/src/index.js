@@ -17,7 +17,7 @@ const createFile = (name, source) => ({
 
 const FILES = [
   createFile("first file", "a := 5;"),
-  createFile("other one", "toto")
+  createFile("other one", "// No one is innocent !\r\ncalc(50);")
 ];
 
 const App = () => {

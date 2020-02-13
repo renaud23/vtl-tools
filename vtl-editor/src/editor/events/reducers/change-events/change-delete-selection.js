@@ -23,7 +23,8 @@ function changeDeleteSelection(state) {
     source: nextSource,
     anchor: undefined,
     extent: undefined,
-    post: { cursor: first }
+    cursor: first
+    // post: { cursor: first }
   };
 
   return appendTemporyChange(next, event);
