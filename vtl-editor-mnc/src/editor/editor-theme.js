@@ -24,7 +24,9 @@ const THEME = {
     { token: "number.float", foreground: "ccffb3" },
     { token: "number.hex", foreground: "ccffb3" },
     /* delimiters */
-    { token: "delimiter", foreground: "ffff00" }
+    { token: "delimiter", foreground: "ffff00" },
+    /* */
+    { token: "defaultToken", foreground: "aaaabb" }
   ]
 };
 

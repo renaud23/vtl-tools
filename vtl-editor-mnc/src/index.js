@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import Editor from "./editor";
+import "./application.scss";
 
 function App() {
   const [source, setSource] = useState("");
@@ -12,7 +13,7 @@ function App() {
       });
   }, []);
   return (
-    <div classNAme="application">
+    <div className="application">
       <Editor source={source} />
     </div>
   );

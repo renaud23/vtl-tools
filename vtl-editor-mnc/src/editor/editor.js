@@ -1,33 +1,52 @@
-import React from "react";
-import MonacoEditor from "react-monaco-editor";
+import React, { useRef, useState, useEffect } from "react";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+// import MonacoEditor from "react-monaco-editor";
 import monarch from "./editor-monarch";
 import theme from "./editor-theme";
+import createFoldingProvider from "./editor-folding-range";
 import "./editor.scss";
 
 const VTL_LANGUAGE_ID = "vtlLanguage";
 const VTL_THEME_DEFAULT = "vtlTheme";
 
-function onMount(monaco) {
-  monaco.languages.register({ id: VTL_LANGUAGE_ID });
-  monaco.languages.setMonarchTokensProvider(VTL_LANGUAGE_ID, monarch);
-  monaco.editor.defineTheme(VTL_THEME_DEFAULT, theme);
-}
+monaco.languages.register({ id: VTL_LANGUAGE_ID });
+monaco.languages.setMonarchTokensProvider(VTL_LANGUAGE_ID, monarch);
+monaco.languages.registerFoldingRangeProvider(
+  VTL_LANGUAGE_ID,
+  createFoldingProvider(monaco)
+);
+monaco.editor.defineTheme(VTL_THEME_DEFAULT, theme);
 
-function Editor({ source = "" }) {
-  return (
-    <div className="editor">
-      <MonacoEditor
-        width="800"
-        height="600"
-        language="vtlLanguage"
-        theme="vtlTheme"
-        value={source}
-        options={{}}
-        onChange={() => null}
-        editorWillMount={onMount}
-      />
-    </div>
-  );
+function Editor({ source = "", onChange = () => null }) {
+  const editorEl = useRef();
+  const [editor, setEditor] = useState(undefined);
+
+  useEffect(() => {
+    if (editor) {
+      editor.onDidChangeModelContent(() => {
+        onChange(editor.getValue());
+      });
+    }
+  }, [onChange, editor]);
+
+  useEffect(() => {
+    if (editorEl.current) {
+      const e = monaco.editor.create(editorEl.current, {
+        language: VTL_LANGUAGE_ID
+      });
+      monaco.editor.setTheme(VTL_THEME_DEFAULT);
+
+      setEditor(e);
+    }
+  }, [editorEl]);
+
+  useEffect(() => {
+    if (editor) {
+      editor.setValue(source);
+    }
+  }, [source, editor]);
+
+  return <div className="editor" ref={editorEl}></div>;
 }
 
 export default Editor;
