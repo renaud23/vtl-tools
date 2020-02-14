@@ -30,19 +30,21 @@ const parse = (code, level = "start") => {
 };
 
 class VtlErrorsListener {
-  // reportAmbiguity: ƒ (recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs)
-  // reportAttemptingFullContext: ƒ (recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs)
-  // reportContextSensitivity: ƒ (recognizer, dfa, startIndex, stopIndex, prediction, configs)
-  // syntaxError: ƒ (recognizer, offendingSymbol, line, column, msg, e)
-  // constructor: ƒ ErrorListener()
-  //  const errors = [];
-  //   reportAmbiguity() {}
-  //   reportAttemptingFullContext() {}
-  //   reportContextSensitivity() {}
-  //   syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
-  //     console.debug("%csyntaxError", "color: red;", msg, line, column);
-  //     this.errors.push({ msg, line, column, stack: e });
-  //   }
+  //   reportAmbiguity: ƒ (recognizer, dfa, startIndex, stopIndex, exact, ambigAlts, configs)
+  //   reportAttemptingFullContext: ƒ (recognizer, dfa, startIndex, stopIndex, conflictingAlts, configs)
+  //   reportContextSensitivity: ƒ (recognizer, dfa, startIndex, stopIndex, prediction, configs)
+  //   syntaxError: ƒ (recognizer, offendingSymbol, line, column, msg, e)
+  //   constructor: ƒ ErrorListener()
+  constructor() {
+    this.errors = [];
+  }
+  reportAmbiguity() {}
+  reportAttemptingFullContext() {}
+  reportContextSensitivity() {}
+  syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
+    // console.debug("%csyntaxError", "color: red;", msg, line, column);
+    this.errors.push({ msg, line, column, stack: e });
+  }
 }
 
 class VtlInspector extends VtlListener {
