@@ -1,12 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import Editor from "./editor";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+function App() {
+  const [source, setSource] = useState("");
+  useEffect(function() {
+    fetch("/rule.vtl")
+      .then(r => r.text())
+      .then(rule => {
+        setSource(rule);
+      });
+  }, []);
+  return (
+    <div classNAme="application">
+      <Editor source={source} />
+    </div>
+  );
+}
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+ReactDOM.render(<App />, document.getElementById("root"));
