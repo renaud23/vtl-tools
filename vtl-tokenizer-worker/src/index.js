@@ -6,7 +6,7 @@ const antlr4 = require("antlr4/index");
 (function() {
   onmessage = function(e) {
     const { action, content, root, id } = e.data;
-    if (action && content) {
+    if (action) {
       switch (action) {
         case "tokenize":
           postMessage({
@@ -16,6 +16,10 @@ const antlr4 = require("antlr4/index");
           break;
         case "parse":
           postMessage({ ...vtl.parse(content, root), id });
+          break;
+        case "dictionnary":
+          postMessage({ dictionnary: vtl.getDictionnary() });
+          break;
         default:
       }
     }
