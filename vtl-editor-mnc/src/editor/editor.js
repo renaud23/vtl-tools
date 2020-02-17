@@ -46,7 +46,7 @@ function Editor({ source = "", onChange = () => null }) {
     }
   }, [source, editor]);
 
-  return <div className="editor" ref={editorEl}></div>;
+  return <div className="vtl-editoe-mnc" ref={editorEl}></div>;
 }
 
 export default Editor;
