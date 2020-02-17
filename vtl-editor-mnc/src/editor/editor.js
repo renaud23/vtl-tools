@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-// import MonacoEditor from "react-monaco-editor";
+import monaco from "./monaco.min";
+
 import monarch from "./editor-monarch";
 import theme from "./editor-theme";
 import createFoldingProvider from "./editor-folding-range";
