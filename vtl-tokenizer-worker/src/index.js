@@ -15,12 +15,15 @@ const antlr4 = require("antlr4/index");
           });
           break;
         case "parse":
-          postMessage({ ...vtl.parse(content, root), id });
+          postMessage(
+            content ? { ...vtl.parse(content, root), id } : { errors: [], id }
+          );
           break;
         case "dictionnary":
           postMessage({ dictionnary: vtl.getDictionnary() });
           break;
         default:
+          postMessage({});
       }
     }
   };
